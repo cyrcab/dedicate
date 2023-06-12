@@ -8,10 +8,18 @@
     "install:dependencies": "lerna bootstrap",
     "test:front": "lerna run test --scope=front-end",
     "test": "lerna run test",
-    "commit": "git add . && git-cz"
+    "commit": "git add . && git-cz",
+    "lint": "lerna run lint",
+    "lint:front": "lerna run lint --scope=front-end"
   },
   "devDependencies": {
     "git-cz": "^4.9.0",
+    "husky": "^8.0.3",
     "lerna": "^6.6.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint && yarn test"
+    }
   }
 }
