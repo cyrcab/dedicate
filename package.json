@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "install:dependencies": "lerna bootstrap",
+    "install:dependencies": "lerna bootstrap && husky install",
     "test:front": "lerna run test --scope=front-end",
     "test": "lerna run test",
     "commit": "git add . && git-cz",
@@ -16,10 +16,5 @@
     "git-cz": "^4.9.0",
     "husky": "^8.0.3",
     "lerna": "^6.6.2"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "yarn lint && yarn test"
-    }
   }
 }
