@@ -6,7 +6,8 @@
   ],
   "scripts": {
     "install:dependencies": "lerna bootstrap",
-    "test:front": "lerna run test --scope:front-end"
+    "test:front": "lerna run test --scope=front-end",
+    "test": "lerna run test"
   },
   "devDependencies": {
     "lerna": "^6.6.2"
