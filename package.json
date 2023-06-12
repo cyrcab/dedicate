@@ -1,0 +1,14 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "install:dependencies": "lerna bootstrap",
+    "test:front": "lerna run test --scope:front-end"
+  },
+  "devDependencies": {
+    "lerna": "^6.6.2"
+  }
+}
