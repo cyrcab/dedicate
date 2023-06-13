@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Role {
+  id      Int    @id @default(autoincrement())
+  refRole String
+  users   User[]
+}
+
+model User {
+  id           Int          @id @default(autoincrement())
+  nom          String
+  prenom       String
+  mail         String       @unique
+  password     String
+  dateN        DateTime?
+  photo        String?
+  typePaiement String?
+  Role         Role         @relation(fields: [roleId], references: [id])
+  roleId       Int
+  appartient   Appartient[]
+  events       Event[]
+  enchere      Enchere[]
+}
+
+model Appartient {
+  idUser          Int
+  idEtablissement Int
+  refPoste        String
+  User            User          @relation(fields: [idUser], references: [id])
+  Etablissement   Etablissement @relation(fields: [idEtablissement], references: [id])
+
+  @@id([idUser, idEtablissement])
+}
+
+model Etablissement {
+  id         Int          @id @default(autoincrement())
+  lieu       String
+  nom        String
+  adresse    String
+  appartient Appartient[]
+  events     Event[]
+}
+
+model Diffuser {
+  idMusique Int
+  idEvent   Int
+  slot      Int
+  musique   Musique @relation(fields: [idMusique], references: [id])
+  Event     Event   @relation(fields: [idEvent], references: [id])
+
+  @@id([idMusique, idEvent])
+}
+
+model Musique {
+  id       Int        @id @default(autoincrement())
+  titre    String
+  artiste  String
+  count    Int
+  diffuser Diffuser[]
+  enchere  Enchere[]
+}
+
+model Event {
+  id              Int            @id @default(autoincrement())
+  nom             String
+  lieu            String
+  date            DateTime
+  type            String
+  prix            Float
+  nbSlots         Int
+  idUser          Int?
+  idEtablissement Int?
+  User            User?          @relation(fields: [idUser], references: [id])
+  Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
+  diffuser        Diffuser[]
+  enchere         Enchere[]
+}
+
+model Enchere {
+  id        Int     @id @default(autoincrement())
+  prix      Float
+  idUser    Int
+  idMusique Int
+  idEvent   Int
+  User      User    @relation(fields: [idUser], references: [id])
+  Musique   Musique @relation(fields: [idMusique], references: [id])
+  Event     Event   @relation(fields: [idEvent], references: [id])
+}
