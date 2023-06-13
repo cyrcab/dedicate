@@ -3,7 +3,7 @@ module.exports = {
   format: '{type}{scope}: {emoji}{subject}',
   list: ['test', 'feat', 'fix', 'docs', 'refactor', 'style'],
   maxMessageLength: 100,
-  minMessageLength: 15,
+  minMessageLength: 10,
   questions: ['type', 'scope', 'subject', 'body', 'breaking', 'issues', 'lerna'],
   scopes: ["web-app", "mobile-app", "backend"],
   types: {
