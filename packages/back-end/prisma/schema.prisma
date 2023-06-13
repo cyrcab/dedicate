@@ -12,7 +12,7 @@ datasource db {
 
 model Role {
   id      Int    @id @default(autoincrement())
-  refRole String
+  refRole String @unique
   users   User[]
 }
 
@@ -35,7 +35,7 @@ model User {
 model Appartient {
   idUser          Int
   idEtablissement Int
-  refPoste        String
+  refPoste        String?
   User            User          @relation(fields: [idUser], references: [id])
   Etablissement   Etablissement @relation(fields: [idEtablissement], references: [id])
 
@@ -44,7 +44,6 @@ model Appartient {
 
 model Etablissement {
   id         Int          @id @default(autoincrement())
-  lieu       String
   nom        String
   adresse    String
   appartient Appartient[]
