@@ -5,7 +5,7 @@
     "packages/*"
   ],
   "scripts": {
-    "install:dependencies": "lerna bootstrap && husky install",
+    "install:dependencies": "npm i --dev lerna && lerna bootstrap && husky install",
     "test:front": "lerna run test --scope=front-end",
     "test": "lerna run test",
     "commit": "git add . && git-cz",
