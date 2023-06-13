@@ -2136,11 +2136,6 @@
     tmp "~0.2.1"
     tslib "^2.3.0"
 
-"@nrwl/nx-darwin-arm64@15.9.4":
-  version "15.9.4"
-  resolved "https://registry.npmjs.org/@nrwl/nx-darwin-arm64/-/nx-darwin-arm64-15.9.4.tgz"
-  integrity sha512-XnvrnT9BJsgThY/4xUcYtE077ERq/img8CkRj7MOOBNOh0/nVcR4LGbBKDHtwE3HPk0ikyS/SxRyNa9msvi3QQ==
-
 "@nrwl/tao@15.9.4":
   version "15.9.4"
   resolved "https://registry.npmjs.org/@nrwl/tao/-/tao-15.9.4.tgz"
@@ -6056,7 +6051,7 @@ fresh@0.5.2:
   resolved "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz"
   integrity sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==
 
-"front-end@file:/Users/cyrilcabrolier/Development/epitech/project/T-YEP-600-TLS-6-1-finalproject-aurelien.schmit/packages/front-end":
+"front-end@file:C:\\Users\\coren\\Desktop\\ProjetFinAnnée\\T-YEP-600-TLS-6-1-finalproject-aurelien.schmit\\packages\\front-end":
   version "0.1.0"
   resolved "file:packages/front-end"
   dependencies:
@@ -6129,11 +6124,6 @@ fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"
   integrity sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==
-
-fsevents@^2.3.2, fsevents@~2.3.2:
-  version "2.3.2"
-  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.2.tgz"
-  integrity sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==
 
 function-bind@^1.1.1:
   version "1.1.1"
