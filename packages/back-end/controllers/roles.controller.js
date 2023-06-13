@@ -67,4 +67,18 @@ module.exports.updateRole = async (req, res) => {
 
 module.exports.deleteRole = async (req, res) => {
     const { id } = req.params;
+    const role = await prismaRole.findUnique({
+        where: {
+            id: parseInt(id)
+        }
+    })
+    if (!role) {
+        return res.status(404).json({ message: "Ce rôle n'existe pas" });
+    }
+    const deleteRole = await prismaRole.delete({
+        where: {
+            id: parseInt(id)
+        }
+    })
+    res.status(200).json({ message: "Le rôle a bien été supprimé", data: deleteRole });
 }
