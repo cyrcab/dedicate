@@ -1,9 +1,6 @@
 const router = require('express').Router();
 const userController = require('../controllers/user.controller');
-const {
-    authTokenAdmin,
-    checkMe
-} = require('../middleware/auth.middleware');
+const { authTokenAdmin, checkMe } = require('../middleware/auth.middleware');
 
 router.get('/', authTokenAdmin, userController.getAllUsers);
 router.get('/:id', checkMe, userController.getUser);
