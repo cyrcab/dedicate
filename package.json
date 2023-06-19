@@ -8,6 +8,7 @@
     "install:all": "npm i --dev lerna && lerna bootstrap && husky install",
     "start:front": "lerna run start --scope=front-end",
     "start:back": "lerna run start --scope=back-end",
+    "start:app": "cd packages/app-mobile/ && npm run start",
     "test:front": "lerna run test --scope=front-end",
     "test": "lerna run test",
     "commit": "git add . && git-cz",
@@ -15,6 +16,7 @@
     "lint:front": "lerna run lint --scope=front-end"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "git-cz": "^4.9.0",
     "husky": "^8.0.3",
     "lerna": "^6.6.2"

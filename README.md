@@ -1,6 +1,6 @@
 ## Installation des dépendances
 ```
-  yarn install:dependencies
+  yarn install:all
 ```
 ## Lancement de l'application
 ```
