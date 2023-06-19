@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 
 const userRoutes = require('./routes/user.route');
 const roleRoutes = require('./routes/roles.route');
+const etablissementRoutes = require('./routes/etablissement.route');
+const authRoutes = require('./routes/auth.route');
 
 const app = express();
 
@@ -25,6 +27,8 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
+app.use('/api/etablissements', etablissementRoutes);
+app.use('/api/auth', authRoutes);
 
 app.listen(5001, () => {
     console.log('Server started on port 5001');

@@ -42,6 +42,9 @@ module.exports.getRole = async (req, res) => {
 
 module.exports.updateRole = async (req, res) => {
     const { id } = req.params;
+    if (id === "1" || id === "2") {
+        return res.status(400).json({ message: "Vous ne pouvez pas modifier ce rôle" });
+    }
     const { nom } = req.body;
     if (!nom) {
         return res.status(400).json({ message: "Veuillez remplir tous les champs" });
@@ -67,6 +70,9 @@ module.exports.updateRole = async (req, res) => {
 
 module.exports.deleteRole = async (req, res) => {
     const { id } = req.params;
+    if (id === "1" || id === "2") {
+        return res.status(400).json({ message: "Vous ne pouvez pas supprimer ce rôle" });
+    }
     const role = await prismaRole.findUnique({
         where: {
             id: parseInt(id)
