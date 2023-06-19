@@ -16,3 +16,8 @@
 ```
   yarn test:front
 ```
+
+## Installation d'un module dans un package (lerna)
+```
+  npm run lerna add {module} --scope={packages}
+```
