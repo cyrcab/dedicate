@@ -6,10 +6,10 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { TextInput, Button, Snackbar } from "react-native-paper";
 import axios from "axios";
-import { useDispatch } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -21,20 +21,30 @@ export default function Login() {
     Keyboard.dismiss();
   };
 
+  const [visible, setVisible] = useState(false);
+  const [messageError, setMessageError] = useState("");
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
+
   const handleLogin = () => {
     const data = {
       email: email,
       password: mdp,
     };
 
-    axios.post("http://10.15.193.112:5001/api/auth/login", data)
-      .then(response => {
-        dispatch({ type: 'SET_USER_DATA', payload: response.data })
-        AsyncStorage.setItem('token', response.data.token);
-        AsyncStorage.setItem('userId', JSON.stringify(response.data.data.id));
+    axios
+      .post("http://10.15.193.112:5001/api/auth/login", data)
+      .then((response) => {
+        dispatch({ type: "SET_USER_DATA", payload: response.data });
+        AsyncStorage.setItem("token", response.data.token);
+        AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
+        console.log("test", response.data.token);
       })
-      .catch(error => {
-        console.error(error);
+      .catch((error) => {
+        setMessageError(error.response.data.message);
+        setVisible(true);
       });
   };
 
@@ -68,6 +78,9 @@ export default function Login() {
         >
           Se connecter
         </Button>
+        <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
+          {messageError}
+        </Snackbar>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
