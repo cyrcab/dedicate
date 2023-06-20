@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
 import Login from './src/pages/Login';
 import Register from './src/pages/Register';
+import Profile from './src/pages/Profile';
 import { colors } from './src/theme';
 import { Provider } from 'react-redux';
 import store from './src/store/store';
@@ -20,9 +21,10 @@ function App() {
     <Provider store={store}>
       <PaperProvider theme={theme}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Register">
+          <Stack.Navigator initialRouteName="Profile">
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Profile" component={Profile} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
