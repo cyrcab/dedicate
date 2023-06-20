@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+
 const prismaRole = new PrismaClient().Role;
 
 module.exports.createRole = async (req, res) => {
@@ -19,7 +20,7 @@ module.exports.createRole = async (req, res) => {
       refRole: nom,
     },
   });
-  res.status(201).json({ message: 'Le rôle a bien été créé', data: newRole });
+  return res.status(201).json({ message: 'Le rôle a bien été créé', data: newRole });
 };
 
 module.exports.getRoles = async (req, res) => {
@@ -31,13 +32,13 @@ module.exports.getRole = async (req, res) => {
   const { id } = req.params;
   const role = await prismaRole.findUnique({
     where: {
-      id: parseInt(id),
+      id: parseInt(id, 10)(id, 10),
     },
   });
   if (!role) {
     return res.status(404).json({ message: "Ce rôle n'existe pas" });
   }
-  res.status(200).json({ data: role });
+  return res.status(200).json({ data: role });
 };
 
 module.exports.updateRole = async (req, res) => {
@@ -51,7 +52,7 @@ module.exports.updateRole = async (req, res) => {
   }
   const role = await prismaRole.findUnique({
     where: {
-      id: parseInt(id),
+      id: parseInt(id, 10),
     },
   });
   if (!role) {
@@ -59,13 +60,13 @@ module.exports.updateRole = async (req, res) => {
   }
   const updateRole = await prismaRole.update({
     where: {
-      id: parseInt(id),
+      id: parseInt(id, 10),
     },
     data: {
       refRole: nom,
     },
   });
-  res.status(200).json({ message: 'Le rôle a bien été modifié', data: updateRole });
+  return res.status(200).json({ message: 'Le rôle a bien été modifié', data: updateRole });
 };
 
 module.exports.deleteRole = async (req, res) => {
@@ -75,7 +76,7 @@ module.exports.deleteRole = async (req, res) => {
   }
   const role = await prismaRole.findUnique({
     where: {
-      id: parseInt(id),
+      id: parseInt(id, 10),
     },
   });
   if (!role) {
@@ -83,8 +84,8 @@ module.exports.deleteRole = async (req, res) => {
   }
   const deleteRole = await prismaRole.delete({
     where: {
-      id: parseInt(id),
+      id: parseInt(id, 10),
     },
   });
-  res.status(200).json({ message: 'Le rôle a bien été supprimé', data: deleteRole });
+  return res.status(200).json({ message: 'Le rôle a bien été supprimé', data: deleteRole });
 };

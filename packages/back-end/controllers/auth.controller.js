@@ -1,16 +1,24 @@
 const { PrismaClient } = require('@prisma/client');
+
 const prismaUser = new PrismaClient().User;
 const prismaEta = new PrismaClient().Etablissement;
 const prismaRole = new PrismaClient().Role;
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+// eslint-disable-next-line import/no-extraneous-dependencies
 require('dotenv').config();
 
 const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 const regexTel = /^[0-9]{10}$/;
 
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '86400s' });
+}
+
 module.exports.registerEta = async (req, res) => {
-  const { nom, prenom, email, tel, nomEta, adresse, password } = req.body;
+  const {
+    nom, prenom, email, tel, nomEta, adresse, password,
+  } = req.body;
   if (!nom || !prenom || !email || !tel || !nomEta || !adresse || !password) {
     return res.status(400).json({ message: 'Veuillez remplir tous les champs' });
   }
@@ -24,7 +32,7 @@ module.exports.registerEta = async (req, res) => {
 
   const user = await prismaUser.findFirst({
     where: {
-      OR: [{ mail: email }, { tel: tel }],
+      OR: [{ mail: email }, { tel }],
     },
   });
   if (user) {
@@ -37,16 +45,16 @@ module.exports.registerEta = async (req, res) => {
     const newEta = await prismaEta.create({
       data: {
         nom: nomEta,
-        adresse: adresse,
+        adresse,
       },
     });
 
     const newUser = await prismaUser.create({
       data: {
-        nom: nom,
-        prenom: prenom,
+        nom,
+        prenom,
         mail: email,
-        tel: tel,
+        tel,
         password: hash,
         Role: {
           connect: {
@@ -61,7 +69,7 @@ module.exports.registerEta = async (req, res) => {
       },
     });
     delete newUser.password;
-    res.status(201).json({ message: 'Votre compte a bien été créé', data: newUser });
+    return res.status(201).json({ message: 'Votre compte a bien été créé', data: newUser });
   } catch (err) {
     return res
       .status(500)
@@ -70,7 +78,9 @@ module.exports.registerEta = async (req, res) => {
 };
 
 module.exports.register = async (req, res) => {
-  const { nom, prenom, email, tel, password } = req.body;
+  const {
+    nom, prenom, email, tel, password,
+  } = req.body;
 
   if (!nom || !prenom || !email || !tel || !password) {
     return res.status(400).json({ message: 'Veuillez remplir tous les champs' });
@@ -85,7 +95,7 @@ module.exports.register = async (req, res) => {
 
   const user = await prismaUser.findFirst({
     where: {
-      OR: [{ mail: email }, { tel: tel }],
+      OR: [{ mail: email }, { tel }],
     },
   });
   if (user) {
@@ -98,10 +108,10 @@ module.exports.register = async (req, res) => {
   try {
     const newUser = await prismaUser.create({
       data: {
-        nom: nom,
-        prenom: prenom,
+        nom,
+        prenom,
         mail: email,
-        tel: tel,
+        tel,
         password: hash,
         Role: {
           connect: {
@@ -111,7 +121,7 @@ module.exports.register = async (req, res) => {
       },
     });
     delete newUser.password;
-    res.status(201).json({ message: 'Votre compte a bien été créé', data: newUser });
+    return res.status(201).json({ message: 'Votre compte a bien été créé', data: newUser });
   } catch (err) {
     return res
       .status(500)
@@ -150,7 +160,7 @@ module.exports.loginUser = async (req, res) => {
   }
   delete user.password;
   const token = generateAccessToken({ id: user.id, role: user.roleId, refRole: refRole.refRole });
-  res.status(200).json({ message: 'Vous êtes connecté', token: token, data: user });
+  return res.status(200).json({ message: 'Vous êtes connecté', token, data: user });
 };
 
 module.exports.loginEta = async (req, res) => {
@@ -184,11 +194,10 @@ module.exports.loginEta = async (req, res) => {
   }
   delete user.password;
   const token = generateAccessToken({ id: user.id, role: user.roleId, refRole: refRole.refRole });
-  res
-    .status(200)
-    .json({ message: 'Vous êtes connecté', token: token, data: user, refRole: user.roleId });
+  return res.status(200).json({
+    message: 'Vous êtes connecté',
+    token,
+    data: user,
+    refRole: user.roleId,
+  });
 };
-
-function generateAccessToken(user) {
-  return jwt.sign(user, process.env.TOKEN_SECRET, { expiresIn: '86400s' });
-}

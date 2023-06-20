@@ -1,15 +1,17 @@
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
+
+// eslint-disable-next-line no-unused-vars
 const prismaUser = new PrismaClient().User;
 
 module.exports.authTokenUser = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (user.getUser.refRole != 'Client') {
+    if (user.getUser.refRole !== 'Client') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
     if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
@@ -19,13 +21,13 @@ module.exports.authTokenUser = (req, res, next) => {
 };
 
 module.exports.authTokenEta = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (user.getUser.refRole != 'Gerant') {
+    if (user.getUser.refRole !== 'Gerant') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
     if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
@@ -35,13 +37,13 @@ module.exports.authTokenEta = (req, res, next) => {
 };
 
 module.exports.authTokenAdmin = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (user.refRole != 'SuperAdmin') {
+    if (user.refRole !== 'SuperAdmin') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
     if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
@@ -51,7 +53,7 @@ module.exports.authTokenAdmin = (req, res, next) => {
 };
 
 module.exports.checkMe = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
+  const authHeader = req.headers.authorization;
   const token = authHeader && authHeader.split(' ')[1];
   if (token == null) {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
@@ -59,7 +61,7 @@ module.exports.checkMe = (req, res, next) => {
 
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
     if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
-    if (user.id !== parseInt(req.params.id)) {
+    if (user.id !== parseInt(req.params.id, 10)) {
       if (user.refRole.toLowerCase() !== 'superadmin') {
         return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
       }
