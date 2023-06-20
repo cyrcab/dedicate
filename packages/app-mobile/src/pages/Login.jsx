@@ -24,8 +24,6 @@ export default function Login() {
   const [visible, setVisible] = useState(false);
   const [messageError, setMessageError] = useState("");
 
-  const onToggleSnackBar = () => setVisible(!visible);
-
   const onDismissSnackBar = () => setVisible(false);
 
   const handleLogin = () => {
