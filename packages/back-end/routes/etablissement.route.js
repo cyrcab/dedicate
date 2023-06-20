@@ -1,9 +1,9 @@
 const router = require('express').Router();
+// eslint-disable-next-line no-unused-vars
 const etablissementController = require('../controllers/etablissement.controller');
 const {
-    authTokenAdmin,
-    checkMe,
-    authTokenEta
+  authTokenAdmin,
+  authTokenEta,
 } = require('../middleware/auth.middleware');
 
 router.get('/', authTokenAdmin, etablissementController.getAll);

@@ -13,7 +13,8 @@
     "test": "lerna run test",
     "commit": "git add . && git-cz",
     "lint": "lerna run lint",
-    "lint:front": "lerna run lint --scope=front-end"
+    "lint:front": "lerna run lint --scope=front-end",
+    "lint:back": "lerna run lint --scope=back-end"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
