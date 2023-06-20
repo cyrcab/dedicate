@@ -5,11 +5,13 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  View,
+  Text,
 } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import axios from "axios";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
 
@@ -62,6 +64,15 @@ export default function Login() {
         >
           Se connecter
         </Button>
+        <View style={styles.registerContainer}>
+          <Text>Vous n'avez pas de compte ? </Text>
+          <Text
+            style={styles.registerLink}
+            onPress={() => navigation.navigate('Register')}
+          >
+            Allez vous faire foutre
+          </Text>
+        </View>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -78,5 +89,13 @@ const styles = StyleSheet.create({
   },
   connexionButton: {
     marginTop: 10,
+  },
+  registerContainer: {
+    flexDirection: 'row',
+    marginTop: 15,
+  },
+  registerLink: {
+    color: 'blue',
+    textDecorationLine: 'underline',
   },
 });
