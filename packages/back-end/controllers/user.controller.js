@@ -100,6 +100,22 @@ module.exports.updateUser = async (req, res) => {
     res.status(200).json({ message: "Utilisateur modifié", data: updatedUser });
 }
 
+module.exports.updatePassword = async (req, res) => {
+    const { id } = req.params;
+    const { password } = req.body;
+    if (!password) {
+        return res.status(400).json({ message: "Missing field" });
+    }
+    const user = await prismaUser.findUnique({
+        where: {
+            id: parseInt(id)
+        }
+    });
+    if (!user) {
+        return res.status(404).json({ message: "Cet utilisateur n'exiiste" })
+    }
+}
+
 module.exports.deleteUser = async (req, res) => {
     const { id } = req.params;
     if (!id) {

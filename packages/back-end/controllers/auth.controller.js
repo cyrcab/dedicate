@@ -64,7 +64,16 @@ module.exports.registerEta = async (req, res) => {
             }
         });
         delete newUser.password;
-        res.status(201).json({ message: "Votre compte a bien été créé", data: newUser });
+        const refRole = await prismaRole.findFirst({
+            where: {
+                id: newUser.roleId
+            }
+        });
+        if (!refRole) {
+            return res.status(400).json({ message: "Identifiant incorect" });
+        }
+        const token = generateAccessToken({ id: user.id, role: user.roleId, refRole: refRole.refRole });
+        return res.status(201).json({ message: "Votre compte a bien été créé", data: newUser, token: token });
     }
     catch (err) {
         return res.status(500).json({ message: "Erreur lors de la création de l'utilisateur", data: err });
@@ -116,7 +125,16 @@ module.exports.register = async (req, res) => {
             }
         });
         delete newUser.password;
-        res.status(201).json({ message: "Votre compte a bien été créé", data: newUser });
+        const refRole = await prismaRole.findFirst({
+            where: {
+                id: newUser.roleId
+            }
+        });
+        if (!refRole) {
+            return res.status(400).json({ message: "Identifiant incorect" });
+        }
+        const token = generateAccessToken({ id: user.id, role: user.roleId, refRole: refRole.refRole });
+        res.status(201).json({ message: "Votre compte a bien été créé", data: newUser, token: token });
     }
     catch (err) {
         return res.status(500).json({ message: "Erreur lors de la création de l'utilisateur", data: err });

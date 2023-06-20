@@ -27,11 +27,8 @@ app.use((req, res, next) => {
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
-<<<<<<< HEAD
 app.use('/api/etablissements', etablissementRoutes);
 app.use('/api/auth', authRoutes);
-=======
->>>>>>> 8beb16a10d34106d6642cfca9df44effefbee991
 
 app.listen(5001, () => {
     console.log('Server started on port 5001');
