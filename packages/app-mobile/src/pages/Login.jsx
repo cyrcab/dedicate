@@ -1,3 +1,4 @@
+import styles from './styles';
 import React, { useState } from "react";
 import {
   TouchableWithoutFeedback,
@@ -5,13 +6,15 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
+  View,
+  Text,
 } from "react-native";
 import { TextInput, Button, Snackbar } from "react-native-paper";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
 
@@ -78,24 +81,19 @@ export default function Login() {
         >
           Se connecter
         </Button>
-        <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
+        <View style={styles.registerContainer}>
+          <Text>Vous n'avez pas de compte ? </Text>
+          <Text
+            style={styles.registerLink}
+            onPress={() => navigation.navigate('Register')}
+          >
+            Allez vous faire foutre
+          </Text>
+        </View>
+         <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
           {messageError}
         </Snackbar>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textInput: {
-    width: "50%",
-  },
-  connexionButton: {
-    marginTop: 10,
-  },
-});
