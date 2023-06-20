@@ -1,3 +1,4 @@
+import styles from './styles';
 import React, { useState } from "react";
 import {
   TouchableWithoutFeedback,
@@ -77,25 +78,3 @@ export default function Login({ navigation }) {
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textInput: {
-    width: "50%",
-  },
-  connexionButton: {
-    marginTop: 10,
-  },
-  registerContainer: {
-    flexDirection: 'row',
-    marginTop: 15,
-  },
-  registerLink: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-  },
-});
