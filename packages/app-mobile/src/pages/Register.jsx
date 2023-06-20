@@ -112,4 +112,3 @@ export default function Register() {
       marginTop: 10,
     },
   });
-  
