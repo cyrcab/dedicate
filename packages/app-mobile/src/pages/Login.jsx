@@ -8,10 +8,14 @@ import {
 } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import axios from "axios";
+import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
+
+  const dispatch = useDispatch();
 
   const dismissKeyboard = () => {
     Keyboard.dismiss();
@@ -25,7 +29,9 @@ export default function Login() {
 
     axios.post("http://10.15.193.112:5001/api/auth/login", data)
       .then(response => {
-        console.log(response.data);
+        dispatch({ type: 'SET_USER_DATA', payload: response.data })
+        AsyncStorage.setItem('token', response.data.token);
+        AsyncStorage.setItem('userId', JSON.stringify(response.data.data.id));
       })
       .catch(error => {
         console.error(error);
