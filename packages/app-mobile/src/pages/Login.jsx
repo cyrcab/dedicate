@@ -9,16 +9,27 @@ import {
   View,
   Text,
 } from "react-native";
-import { TextInput, Button } from "react-native-paper";
+import { TextInput, Button, Snackbar } from "react-native-paper";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
 
+  const dispatch = useDispatch();
+
   const dismissKeyboard = () => {
     Keyboard.dismiss();
   };
+
+  const [visible, setVisible] = useState(false);
+  const [messageError, setMessageError] = useState("");
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
 
   const handleLogin = () => {
     const data = {
@@ -26,12 +37,17 @@ export default function Login({ navigation }) {
       password: mdp,
     };
 
-    axios.post("http://10.15.193.112:5001/api/auth/login", data)
-      .then(response => {
-        console.log(response.data);
+    axios
+      .post("http://10.15.193.112:5001/api/auth/login", data)
+      .then((response) => {
+        dispatch({ type: "SET_USER_DATA", payload: response.data });
+        AsyncStorage.setItem("token", response.data.token);
+        AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
+        console.log("test", response.data.token);
       })
-      .catch(error => {
-        console.error(error);
+      .catch((error) => {
+        setMessageError(error.response.data.message);
+        setVisible(true);
       });
   };
 
@@ -74,6 +90,9 @@ export default function Login({ navigation }) {
             Allez vous faire foutre
           </Text>
         </View>
+         <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
+          {messageError}
+        </Snackbar>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

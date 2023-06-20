@@ -5,6 +5,8 @@ import {  MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-pape
 import Login from './src/pages/Login';
 import Register from './src/pages/Register';
 import { colors } from './src/theme';
+import { Provider } from 'react-redux';
+import store from "./src/store/store"
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +17,7 @@ const theme = {
 
 function App() {
   return (
+    <Provider store={store}>
     <PaperProvider theme={theme}>
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
@@ -23,6 +26,7 @@ function App() {
       </Stack.Navigator>
     </NavigationContainer>
     </PaperProvider>
+    </Provider>
   );
 }
 
