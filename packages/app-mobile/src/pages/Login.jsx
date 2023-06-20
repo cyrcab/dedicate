@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import styles from './styles';
+import React, { useState } from 'react';
 import {
   TouchableWithoutFeedback,
   Keyboard,
@@ -7,15 +8,15 @@ import {
   Platform,
   View,
   Text,
-} from "react-native";
-import { TextInput, Button, Snackbar } from "react-native-paper";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from 'react-native';
+import { TextInput, Button, Snackbar } from 'react-native-paper';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [mdp, setMdp] = useState("");
+  const [email, setEmail] = useState('');
+  const [mdp, setMdp] = useState('');
 
   const dispatch = useDispatch();
 
@@ -24,7 +25,7 @@ export default function Login({ navigation }) {
   };
 
   const [visible, setVisible] = useState(false);
-  const [messageError, setMessageError] = useState("");
+  const [messageError, setMessageError] = useState('');
 
   const onToggleSnackBar = () => setVisible(!visible);
 
@@ -37,12 +38,12 @@ export default function Login({ navigation }) {
     };
 
     axios
-      .post("http://10.15.193.112:5001/api/auth/login", data)
+      .post('http://10.15.193.112:5001/api/auth/login', data)
       .then((response) => {
-        dispatch({ type: "SET_USER_DATA", payload: response.data });
-        AsyncStorage.setItem("token", response.data.token);
-        AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
-        console.log("test", response.data.token);
+        dispatch({ type: 'SET_USER_DATA', payload: response.data });
+        AsyncStorage.setItem('token', response.data.token);
+        AsyncStorage.setItem('userId', JSON.stringify(response.data.data.id));
+        console.log('test', response.data.token);
       })
       .catch((error) => {
         setMessageError(error.response.data.message);
@@ -53,7 +54,7 @@ export default function Login({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}
       >
         <TextInput
@@ -85,10 +86,7 @@ export default function Login({ navigation }) {
         </Snackbar>
         <View style={styles.registerContainer}>
           <Text>Vous n'avez pas de compte ? </Text>
-          <Text
-            style={styles.registerLink}
-            onPress={() => navigation.navigate('Register')}
-          >
+          <Text style={styles.registerLink} onPress={() => navigation.navigate('Register')}>
             Allez vous faire foutre
           </Text>
         </View>
@@ -96,25 +94,3 @@ export default function Login({ navigation }) {
     </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textInput: {
-    width: "50%",
-  },
-  connexionButton: {
-    marginTop: 10,
-  },
-  registerContainer: {
-    flexDirection: 'row',
-    marginTop: 15,
-  },
-  registerLink: {
-    color: 'blue',
-    textDecorationLine: 'underline',
-  },
-});
