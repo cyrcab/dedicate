@@ -19,5 +19,5 @@
 
 ## Installation d'un module dans un package (lerna)
 ```
-  npm run lerna add {module} --scope={packages}
+  npx lerna add {module} --scope={packages}
 ```

@@ -12,43 +12,34 @@ datasource db {
 
 model Role {
   id      Int    @id @default(autoincrement())
-  refRole String
+  refRole String @unique
   users   User[]
 }
 
 model User {
-  id           Int          @id @default(autoincrement())
-  nom          String
-  prenom       String
-  mail         String       @unique
-  password     String
-  dateN        DateTime?
-  photo        String?
-  typePaiement String?
-  Role         Role         @relation(fields: [roleId], references: [id])
-  roleId       Int
-  appartient   Appartient[]
-  events       Event[]
-  enchere      Enchere[]
-}
-
-model Appartient {
-  idUser          Int
-  idEtablissement Int
-  refPoste        String
-  User            User          @relation(fields: [idUser], references: [id])
-  Etablissement   Etablissement @relation(fields: [idEtablissement], references: [id])
-
-  @@id([idUser, idEtablissement])
+  id              Int            @id @default(autoincrement())
+  nom             String
+  prenom          String
+  mail            String         @unique
+  tel             String         @unique
+  password        String
+  dateN           DateTime?
+  photo           String?
+  typePaiement    String?
+  Role            Role           @relation(fields: [roleId], references: [id])
+  roleId          Int
+  idEtablissement Int?
+  Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
+  enchere         Enchere[]
+  events          Event[]        @relation("EventUser")
 }
 
 model Etablissement {
-  id         Int          @id @default(autoincrement())
-  lieu       String
-  nom        String
-  adresse    String
-  appartient Appartient[]
-  events     Event[]
+  id      Int     @id @default(autoincrement())
+  nom     String
+  adresse String
+  events  Event[]
+  User    User[]
 }
 
 model Diffuser {
@@ -78,12 +69,11 @@ model Event {
   type            String
   prix            Float
   nbSlots         Int
-  idUser          Int?
   idEtablissement Int?
-  User            User?          @relation(fields: [idUser], references: [id])
   Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
   diffuser        Diffuser[]
   enchere         Enchere[]
+  User            User[]         @relation("EventUser")
 }
 
 model Enchere {
