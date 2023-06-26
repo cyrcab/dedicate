@@ -14,7 +14,10 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 export default function Login({ navigation }) {
+
+
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
 
@@ -36,12 +39,16 @@ export default function Login({ navigation }) {
     };
 
     axios
-      .post("http://10.15.193.112:5001/api/auth/login", data)
+      .post("http://10.15.192.229:5001/api/auth/login", data)
       .then((response) => {
+
+
         dispatch({ type: "SET_USER_DATA", payload: response.data });
         AsyncStorage.setItem("token", response.data.token);
         AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
         console.log("test", response.data.token);
+
+
       })
       .catch((error) => {
         setMessageError(error.response.data.message);
@@ -85,10 +92,20 @@ export default function Login({ navigation }) {
             style={styles.registerLink}
             onPress={() => navigation.navigate('Register')}
           >
-            Allez vous faire foutre
+            S'inscrire !
           </Text>
         </View>
-         <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
+
+        {/* button to go to Home */}
+        <Button
+          mode="contained"
+          onPress={() => navigation.navigate('App')}
+          style={styles.connexionButton}
+        >
+          Home
+        </Button>
+
+        <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
           {messageError}
         </Snackbar>
       </KeyboardAvoidingView>

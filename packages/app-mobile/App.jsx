@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper';
@@ -7,6 +7,10 @@ import Register from './src/pages/Register';
 import { colors } from './src/theme';
 import { Provider } from 'react-redux';
 import store from './src/store/store';
+
+import AppNavigator from './src/navigation/AppNavigator';
+import AuthNavigator from './src/navigation/AuthNavigator';
+import MainNavigator from './src/navigation/MainNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,8 +25,9 @@ function App() {
       <PaperProvider theme={theme}>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Register">
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="Auth" component={AuthNavigator} options={{ headerShown: false }} />
+            <Stack.Screen name="App" component={AppNavigator} options={{ headerShown: false }} />
+            <Stack.Screen name="Main" component={MainNavigator} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
