@@ -91,16 +91,6 @@ export default function Login({ navigation }) {
             S'inscrire !
           </Text>
         </View>
-
-        {/* button to go to Home */}
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('App')}
-          style={styles.connexionButton}
-        >
-          Home
-        </Button>
-
         <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
           {messageError}
         </Snackbar>
