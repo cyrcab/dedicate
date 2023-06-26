@@ -10,6 +10,7 @@ import { TextInput, Button, Snackbar } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { backendUrl } from "../backendUrl";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -42,7 +43,7 @@ export default function Register() {
     };
 
     axios
-      .post("http://10.15.193.112:5001/api/auth/register", data)
+      .post(backendUrl +"auth/register", data)
       .then((response) => {
         dispatch({ type: "SET_USER_DATA", payload: response.data });
         AsyncStorage.setItem("token", response.data.token);

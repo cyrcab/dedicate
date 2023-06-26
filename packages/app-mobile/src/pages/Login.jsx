@@ -13,6 +13,7 @@ import { TextInput, Button, Snackbar } from "react-native-paper";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { backendUrl } from '../backendUrl';
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -36,12 +37,11 @@ export default function Login({ navigation }) {
     };
 
     axios
-      .post("http://10.15.193.112:5001/api/auth/login", data)
+      .post(backendUrl + "auth/login", data)
       .then((response) => {
-        dispatch({ type: "SET_USER_DATA", payload: response.data });
-        AsyncStorage.setItem("token", response.data.token);
-        AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
-        console.log("test", response.data.token);
+          dispatch({ type: "SET_USER_DATA", payload: response.data });
+          AsyncStorage.setItem("token", response.data.token);
+          AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
       })
       .catch((error) => {
         setMessageError(error.response.data.message);

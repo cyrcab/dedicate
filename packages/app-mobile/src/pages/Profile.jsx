@@ -1,21 +1,40 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Image } from "react-native";
 import { Card, IconButton, Avatar } from "react-native-paper";
+import { axiosApiInstance } from "../../axios.config";
+import { backendUrl } from "../backendUrl";
 
 const ProfilePage = () => {
-  const [user, setUser] = useState({
-    firstName: "John",
-    lastName: "Doe",
-  });
+  const [user, setUser] = useState({});
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
   };
 
+  const profileInfo = () => {
+    axiosApiInstance
+      .get(backendUrl + "users/" + "9")
+      .then((data) => {
+        setUser(data.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    profileInfo();
+  }, []);
+
   return (
     <View style={{ flex: 1, padding: 16 }}>
       <View
-        style={{ flexDirection: "row", alignItems: "center",justifyContent: "space-around",  marginBottom: 16 }}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-around",
+          marginBottom: 16,
+        }}
       >
         <Avatar.Image size={100} source={require("../../assets/oclub.png")} />
         <IconButton
@@ -26,7 +45,7 @@ const ProfilePage = () => {
       </View>
 
       <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 16 }}>
-        {user.firstName} {user.lastName}
+        {user.nom} {user.prenom}
       </Text>
 
       <Text>Vos derniers événements</Text>
