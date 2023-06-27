@@ -5,6 +5,7 @@ const userRoutes = require('./routes/user.route');
 const roleRoutes = require('./routes/roles.route');
 const etablissementRoutes = require('./routes/etablissement.route');
 const authRoutes = require('./routes/auth.route');
+const eventRoutes = require('./routes/event.route');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/etablissements', etablissementRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/events', eventRoutes);
 
 app.listen(5001, () => {
   console.log('Server started on port 5001');

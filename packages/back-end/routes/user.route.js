@@ -5,6 +5,7 @@ const { authTokenAdmin, checkMe } = require('../middleware/auth.middleware');
 router.get('/', authTokenAdmin, userController.getAllUsers);
 router.get('/:id', checkMe, userController.getUser);
 router.put('/:id', checkMe, userController.updateUser);
+// router.put('/password/:id', checkMe, userController.updatePassword);
 router.delete('/:id', checkMe, userController.deleteUser);
 
 module.exports = router;

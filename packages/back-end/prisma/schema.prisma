@@ -53,12 +53,13 @@ model Diffuser {
 }
 
 model Musique {
-  id       Int        @id @default(autoincrement())
-  titre    String
-  artiste  String
-  count    Int
-  diffuser Diffuser[]
-  enchere  Enchere[]
+  id           Int        @id @default(autoincrement())
+  titre        String
+  artiste      String
+  countVote    Int
+  countDiffuse Int
+  diffuser     Diffuser[]
+  enchere      Enchere[]
 }
 
 model Event {

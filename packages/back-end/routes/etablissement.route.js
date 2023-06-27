@@ -9,5 +9,6 @@ const {
 router.get('/', authTokenAdmin, etablissementController.getAll);
 router.get('/:id', authTokenEta, etablissementController.getOne);
 router.put('/:id', authTokenEta, etablissementController.update);
+router.delete('/:id', authTokenEta, etablissementController.delete);
 
 module.exports = router;
