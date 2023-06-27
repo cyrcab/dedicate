@@ -56,7 +56,7 @@ module.exports.updateUser = async (req, res) => {
   if (email) {
     const emailAlreadyTaken = await prismaUser.findUnique({
       where: {
-        email,
+        mail: email,
       },
     });
     if (emailAlreadyTaken) {
@@ -83,7 +83,7 @@ module.exports.updateUser = async (req, res) => {
     if (!regex.test(email)) {
       return res.status(400).json({ message: 'Email invalide' });
     }
-    data.email = email;
+    data.mail = email;
   }
   if (tel) {
     if (!regexTel.test(tel)) {
@@ -113,7 +113,7 @@ module.exports.updatePassword = async (req, res) => {
     },
   });
   if (!user) {
-    return res.status(404).json({ message: "Cet utilisateur n'exiiste" });
+    return res.status(404).json({ message: "Cet utilisateur n'existe" });
   }
 };
 
