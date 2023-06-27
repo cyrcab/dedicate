@@ -1,5 +1,5 @@
 import React from 'react'
-import Navbar from '../components/navbar'
+import Navbar from '../components/Navbar'
 import Technology from '../components/Technology'
 import Partenaires from '../components/Partenaires'
 import Vision from '../components/Vision'
