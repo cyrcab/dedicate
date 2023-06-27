@@ -1,23 +1,29 @@
 ## Installation des dépendances
 ```
-  yarn install:all
-```
-## Lancement de l'application
-```
-  yarn start
+  npm run install:all
 ```
 
 ## Lancement des tests globaux
 ```
-  yarn test
+  npm run test
 ```
 
-## Lancement des tests front-end (application web)
+## Lancement des tests pour un scope en particulier
 ```
-  yarn test:front
+  npm run test:{nom du package}
+```
+
+## Lancement du linter sur tous les packages
+```
+  npm run lint
+```
+
+## Lancement du linter sur un package en particulier
+```
+  npm run lint:{nom du package}
 ```
 
 ## Installation d'un module dans un package (lerna)
 ```
-  npx lerna add {module} --scope={packages}
+  npx lerna add {module js à installer} --scope={nom du package}
 ```

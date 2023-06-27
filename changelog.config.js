@@ -4,8 +4,8 @@ module.exports = {
   list: ['test', 'feat', 'fix', 'docs', 'refactor', 'style'],
   maxMessageLength: 100,
   minMessageLength: 10,
-  questions: ['type', 'scope', 'subject', 'body', 'breaking', 'issues', 'lerna'],
-  scopes: ["web-app", "mobile-app", "backend"],
+  questions: ['type', 'scope', 'subject', 'body', 'lerna'],
+  scopes: ["web-app", "mobile-app", "backend", "infra", "website"],
   types: {
     docs: {
       description: 'Documentation only changes',
@@ -42,7 +42,6 @@ module.exports = {
       customScope: 'Select the scope this component affects:',
       subject: 'Write a short, imperative mood description of the change:\n',
       body: 'Provide a longer description of the change:\n ',
-      breaking: 'List any breaking changes:\n',
     },
   },
 };

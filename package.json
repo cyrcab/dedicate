@@ -14,7 +14,9 @@
     "commit": "git add . && git-cz",
     "lint": "lerna run lint",
     "lint:front": "lerna run lint --scope=front-end",
-    "lint:back": "lerna run lint --scope=back-end"
+    "lint:back": "lerna run lint --scope=back-end",
+    "init:prisma": "cd packages/back-end/ && npx prisma generate",
+    "build": "lerna run build"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
