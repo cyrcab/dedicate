@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useDispatch, useSelector } from "react-redux";
 import AppNavigator from "../navigation/AppNavigator";
 import AuthNavigator from "../navigation/AuthNavigator";
-import MainNavigator from "../navigation/MainNavigator";
 import jwtDecode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { setSignedIn } from "../store/reducers/reducer";
@@ -52,11 +51,6 @@ export default function Main() {
             options={{ headerShown: false }}
           />
         )}
-        <Stack.Screen
-          name="Main"
-          component={MainNavigator}
-          options={{ headerShown: false }}
-        />
       </Stack.Navigator>
     </NavigationContainer>
   );  

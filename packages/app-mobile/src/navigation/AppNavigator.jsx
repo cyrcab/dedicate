@@ -1,17 +1,17 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { BottomNavigation, Text } from 'react-native-paper';
-
 import Home from '../pages/Home';
-import Settings from '../pages/Settings';
+import Profile from '../pages/Profile'
+import Event from '../pages/Event';
 
 const Tab = createBottomTabNavigator();
 
 
 const AppNavigator = () => (
     <Tab.Navigator initialRouteName="Home">
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Settings" component={Settings} />
+        <Tab.Screen name="Acceuil" component={Home} />
+        <Tab.Screen name="Evénements" component={Event} />
+        <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
 );
 

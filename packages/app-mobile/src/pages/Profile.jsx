@@ -3,9 +3,11 @@ import { View, Text, ScrollView, Image } from "react-native";
 import { Card, IconButton, Avatar } from "react-native-paper";
 import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const ProfilePage = ({navigation}) => {
+const ProfilePage = ({ navigation }) => {
   const [user, setUser] = useState({});
+  const [userId, setUserId] = useState('');
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
@@ -13,7 +15,7 @@ const ProfilePage = ({navigation}) => {
 
   const profileInfo = () => {
     axiosApiInstance
-      .get(backendUrl + "users/" + "9")
+      .get(backendUrl + "users/" + userId)
       .then((data) => {
         setUser(data.data.data);
       })
@@ -23,8 +25,22 @@ const ProfilePage = ({navigation}) => {
   };
 
   useEffect(() => {
-    profileInfo();
+    AsyncStorage.getItem("userId")
+      .then((userId) => {
+        console.log(userId);
+        setUserId(userId);
+      })
+      .catch((error) => {
+        console.log(
+          "Une erreur s'est produite lors de la récupération de userId :",
+          error
+        );
+      });
   }, []);
+
+  useEffect(() => {
+    profileInfo()
+  }, [userId]);
   
 
   return (
@@ -41,7 +57,9 @@ const ProfilePage = ({navigation}) => {
         <IconButton
           icon="cog"
           size={30}
-          onPress={() => navigation.navigate("Modifier profil", {user, setUser})}
+          onPress={() =>
+            navigation.navigate("Modifier profil", { user, setUser })
+          }
         />
       </View>
 

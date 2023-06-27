@@ -45,7 +45,7 @@ export default function Login({ navigation }) {
       .then((response) => {
         dispatch({ type: "SET_USER_DATA", payload: response.data });
         AsyncStorage.setItem("token", response.data.token);
-        AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
+        AsyncStorage.setItem("userId", response.data.data.id.toString());
         dispatch(setSignedIn(true));
       })
       .catch((error) => {

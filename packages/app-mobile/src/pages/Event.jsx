@@ -8,7 +8,7 @@ import { setSignedIn } from "../store/reducers/reducer";
 
 
 
-export default function Home() {
+export default function Event() {
 
     const dispatch = useDispatch();
 
@@ -18,7 +18,7 @@ export default function Home() {
     }
     return (
         <View>
-            <Text>Home</Text>
+            <Text>Event</Text>
             <Button
             onPress={removeAsyncToken}
             >Logout</Button>
