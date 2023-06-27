@@ -77,7 +77,9 @@ module.exports.registerEta = async (req, res) => {
     if (!refRole) {
       return res.status(400).json({ message: 'Identifiant incorect' });
     }
-    const token = generateAccessToken({ id: user.id, role: user.roleId, refRole: refRole.refRole });
+    const token = generateAccessToken({
+      id: newUser.id, role: newUser.roleId, refRole: refRole.refRole,
+    });
     return res.status(201).json({ message: 'Votre compte a bien été créé', data: newUser, token });
   } catch (err) {
     return res
@@ -113,7 +115,6 @@ module.exports.register = async (req, res) => {
 
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
-
   try {
     const newUser = await prismaUser.create({
       data: {
