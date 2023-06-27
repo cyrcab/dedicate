@@ -115,6 +115,15 @@ module.exports.updatePassword = async (req, res) => {
   if (!user) {
     return res.status(404).json({ message: "Cet utilisateur n'existe" });
   }
+  await prismaUser.update({
+    where: {
+      id: parseInt(id, 10),
+    },
+    data: {
+      password,
+    },
+  });
+  return res.status(200).json({ message: 'Mot de passe modifié' });
 };
 
 module.exports.deleteUser = async (req, res) => {
