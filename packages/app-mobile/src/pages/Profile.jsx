@@ -4,7 +4,7 @@ import { Card, IconButton, Avatar } from "react-native-paper";
 import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
 
-const ProfilePage = () => {
+const ProfilePage = ({navigation}) => {
   const [user, setUser] = useState({});
 
   const handleOptionChange = (option) => {
@@ -25,6 +25,7 @@ const ProfilePage = () => {
   useEffect(() => {
     profileInfo();
   }, []);
+  
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
@@ -40,7 +41,7 @@ const ProfilePage = () => {
         <IconButton
           icon="cog"
           size={30}
-          onPress={() => console.log("Pressed")}
+          onPress={() => navigation.navigate("Modifier profil", {user, setUser})}
         />
       </View>
 

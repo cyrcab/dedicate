@@ -7,15 +7,13 @@ export const axiosApiInstance = axios.create();
 axiosApiInstance.interceptors.request.use(
   async (config) => {
     // const token = await AsyncStorage.getItem('token');
-    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwicm9sZSI6MSwicmVmUm9sZSI6IkNsaWVudCIsImlhdCI6MTY4Nzc2Nzg1NSwiZXhwIjoxNjg3ODU0MjU1fQ.hc_IY-A1NNtYWZFD2CmdpeuJ3oemp4WC-oaZbZVlMxI'
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OSwicm9sZSI6MSwicmVmUm9sZSI6IkNsaWVudCIsImlhdCI6MTY4Nzc2Nzg1NSwiZXhwIjoxNjg3ODU0MjU1fQ.hc_IY-A1NNtYWZFD2CmdpeuJ3oemp4WC-oaZbZVlMxI';
     config.headers = {
       Authorization: `Bearer ${token}`,
     };
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error),
 );
 
 // axiosApiInstance.interceptors.response.use((response) => {

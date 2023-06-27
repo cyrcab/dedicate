@@ -5,6 +5,7 @@ import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper
 import Login from './src/pages/Login';
 import Register from './src/pages/Register';
 import Profile from './src/pages/Profile';
+import Settings from './src/pages/Settings';
 import { colors } from './src/theme';
 import { Provider } from 'react-redux';
 import store from './src/store/store';
