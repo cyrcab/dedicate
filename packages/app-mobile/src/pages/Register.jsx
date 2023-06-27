@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { backendUrl } from "../backendUrl";
+import { setSignedIn } from "../store/reducers/reducer";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -25,8 +26,6 @@ export default function Register() {
 
   const [visible, setVisible] = useState(false);
   const [messageError, setMessageError] = useState("");
-
-  const onToggleSnackBar = () => setVisible(!visible);
 
   const onDismissSnackBar = () => setVisible(false);
 
@@ -45,9 +44,12 @@ export default function Register() {
     axios
       .post(backendUrl +"auth/register", data)
       .then((response) => {
+        console.log(response.data);
         dispatch({ type: "SET_USER_DATA", payload: response.data });
         AsyncStorage.setItem("token", response.data.token);
+        console.log(AsyncStorage.getItem('token'));
         AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
+        dispatch(setSignedIn(true));
       })
       .catch((error) => {
         setMessageError(error.response.data.message);
@@ -84,7 +86,7 @@ export default function Register() {
           mode="outlined"
           label="Téléphone"
           placeholder="Entrez votre numéro de téléphone"
-
+          maxLength={10}
         />
         <TextInput
           style={styles.textInput}

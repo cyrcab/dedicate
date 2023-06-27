@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import {
   TouchableWithoutFeedback,
   Keyboard,
-  StyleSheet,
   KeyboardAvoidingView,
   Platform,
   View,
@@ -14,6 +13,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { backendUrl } from '../backendUrl';
+import { setSignedIn } from "../store/reducers/reducer";
+
 
 
 export default function Login({ navigation }) {
@@ -45,10 +46,12 @@ export default function Login({ navigation }) {
         dispatch({ type: "SET_USER_DATA", payload: response.data });
         AsyncStorage.setItem("token", response.data.token);
         AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
+        dispatch(setSignedIn(true));
       })
       .catch((error) => {
         setMessageError(error.response.data.message);
         setVisible(true);
+        console.log(error);
       });
   };
 
