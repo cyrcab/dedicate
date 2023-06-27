@@ -17,7 +17,7 @@ export default function Home() {
         dispatch(setSignedIn(false));
     }
     return (
-        <View>
+        <View style={{display:'flex', height:'100%', alignItems:'center', justifyContent:'center'}}>
             <Text>Home</Text>
             <Button
             onPress={removeAsyncToken}

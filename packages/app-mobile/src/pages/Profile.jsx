@@ -9,10 +9,6 @@ const ProfilePage = ({ navigation }) => {
   const [user, setUser] = useState({});
   const [userId, setUserId] = useState('');
 
-  const handleOptionChange = (option) => {
-    setSelectedOption(option);
-  };
-
   const profileInfo = () => {
     axiosApiInstance
       .get(backendUrl + "users/" + userId)

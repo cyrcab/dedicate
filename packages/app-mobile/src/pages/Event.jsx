@@ -17,7 +17,7 @@ export default function Event() {
         dispatch(setSignedIn(false));
     }
     return (
-        <View>
+        <View style={{display:'flex', height:'100%', alignItems:'center', justifyContent:'center'}}>
             <Text>Event</Text>
             <Button
             onPress={removeAsyncToken}
