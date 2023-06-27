@@ -12,7 +12,7 @@ module.exports.authTokenUser = (req, res, next) => {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (user.getUser.refRole !== 'Client') {
+    if (user.refRole !== 'Client') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
     if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
@@ -28,10 +28,10 @@ module.exports.authTokenEta = (req, res, next) => {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, async (err, user) => {
+    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     if (user.refRole !== 'Gérant' && user.refRole !== 'SuperAdmin') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
-    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     const { id } = req.params;
     let etablissement;
     if (!id && user.refRole === 'Gérant') {
@@ -64,7 +64,7 @@ module.exports.authTokenEta = (req, res, next) => {
       },
     });
     if (testUser.idEtablissement !== etablissement.id) {
-      if (user.getUser.refRole !== 'SuperAdmin') {
+      if (user.refRole !== 'SuperAdmin') {
         return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
       }
     }
@@ -79,11 +79,10 @@ module.exports.authTokenAdmin = (req, res, next) => {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     if (user.refRole !== 'SuperAdmin') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
-    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
-
     next();
   });
 };
@@ -168,4 +167,43 @@ module.exports.checkTokenForParticipeEvent = async (req, res, next) => {
     }
     next();
   });
+};
+
+module.exports.checkTokenForUpdateEvents = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) {
+    return res.status(401).json({ message: "Vous n'êtes pas connecté" });
+  }
+  if (!req.params.idEvent) {
+    return res.status(404).json({ message: "Cet events n'existe pas" });
+  }
+  const event = await prismaEvent.findUnique({
+    where: {
+      id: parseInt(req.params.idEvent, 10),
+    },
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Cet events n'existe pas" });
+  }
+  jwt.verify(token, process.env.TOKEN_SECRET, async (err, user) => {
+    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
+    if (user.refRole.toLowerCase() !== 'gérant' && user.refRole.toLowerCase() !== 'superadmin') {
+      return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
+    }
+    if (user.refRole.toLowerCase() === 'gérant') {
+      const checkUser = await prismaUser.findUnique({
+        where: {
+          id: parseInt(user.id, 10),
+        },
+      });
+      if (!checkUser) {
+        return res.status(404).json({ message: "Cet user n'existe pas" });
+      }
+      if (checkUser.idEtablissement !== event.idEtablissement) {
+        return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
+      }
+    }
+  });
+  next();
 };

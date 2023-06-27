@@ -54,6 +54,12 @@ module.exports.create = async (req, res) => {
       return res.status(400).json({ message: "Cet établissement n'existe pas" });
     }
   }
+  if (prix <= 0) {
+    return res.status(400).json({ message: 'Le prix ne peut pas être négatif ou nul' });
+  }
+  if (nbSlots <= 0) {
+    return res.status(400).json({ message: 'Le nombre de slots ne peut pas être négatif ou nul' });
+  }
 
   const eventData = {
     nom,
@@ -251,6 +257,23 @@ module.exports.addUserToEvent = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
     }
+    // Check if user is already in event
+    const checkUser = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+      include: {
+        User: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    const check = checkUser.User.find((u) => u.id === parseInt(idUser, 10));
+    if (check) {
+      return res.status(400).json({ message: 'Cet utilisateur est déjà dans l\'événement' });
+    }
     const userEvent = await prisma.event.update({
       where: {
         id: parseInt(idEvent, 10),
@@ -264,6 +287,73 @@ module.exports.addUserToEvent = async (req, res) => {
       },
     });
     return res.status(200).json({ message: 'Utilisateur ajouté à l\'événement', data: userEvent });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.update = async (req, res) => {
+  const { idEvent } = req.params;
+  const {
+    nom, date, lieu, type, prix, nbSlots,
+  } = req.body;
+  const data = {};
+  if (!idEvent) {
+    return res.status(400).json({ message: 'Veuillez spécifier un événement' });
+  }
+  try {
+    const event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+    });
+    if (!event) {
+      return res.status(400).json({ message: "Cet événement n'existe pas" });
+    }
+    if (nom) {
+      data.nom = nom;
+    }
+    if (date) {
+      const parsedDate = DateTime.fromFormat(date, 'dd/MM/yyyy HH:mm:ss', { zone: 'Europe/Paris', locale: 'fr-FR' });
+      if (!parsedDate.isValid) {
+        return res.status(400).json({ message: "La date n'est pas valide" });
+      }
+      const currentDate = DateTime.now().setZone('Europe/Paris');
+      if (parsedDate < currentDate) {
+        return res.status(400).json({ message: "La date de l'événement ne peut pas être antérieure à la date actuelle" });
+      }
+    }
+    if (lieu) {
+      data.lieu = lieu;
+    }
+    if (type) {
+      data.type = type;
+    }
+    if (prix) {
+      if (Number.isNaN(prix)) {
+        return res.status(400).json({ message: 'Le prix doit être un nombre' });
+      }
+      if (prix <= 0) {
+        return res.status(400).json({ message: 'Le prix ne peut pas être négatif' });
+      }
+      data.prix = prix;
+    }
+    if (nbSlots) {
+      if (Number.isNaN(nbSlots)) {
+        return res.status(400).json({ message: 'Le nombre de slots doit être un nombre' });
+      }
+      if (nbSlots <= 0) {
+        return res.status(400).json({ message: 'Le nombre de slots ne peut pas être négatif' });
+      }
+      data.nbSlots = nbSlots;
+    }
+    const updatedEvent = await prisma.event.update({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+      data,
+    });
+    return res.status(200).json({ message: 'Événement mis à jour', data: updatedEvent });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
