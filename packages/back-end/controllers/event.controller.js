@@ -72,3 +72,199 @@ module.exports.create = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+module.exports.getAll = async (req, res) => {
+  try {
+    const events = await prisma.event.findMany({
+      include: {
+        Etablissement: true,
+        User: {
+          select: {
+            id: true,
+            nom: true,
+            prenom: true,
+            mail: true,
+            tel: true,
+            Role: {
+              select: {
+                refRole: true,
+              },
+            },
+          },
+        },
+        diffuser: true,
+        enchere: true,
+      },
+    });
+    return res.status(200).json({ message: 'Événements récupérés', data: events });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.getAllOfCompany = async (req, res) => {
+  const { idEtablissement } = req.params;
+  if (!idEtablissement) {
+    return res.status(400).json({ message: 'Veuillez spécifier un établissement' });
+  }
+
+  try {
+    const etablissement = await prisma.etablissement.findUnique({
+      where: {
+        id: parseInt(idEtablissement, 10),
+      },
+    });
+    if (!etablissement) {
+      return res.status(400).json({ message: "Cet établissement n'existe pas" });
+    }
+
+    const events = await prisma.event.findMany({
+      where: {
+        idEtablissement: parseInt(idEtablissement, 10),
+      },
+      include: {
+        diffuser: true,
+        enchere: true,
+      },
+    });
+
+    return res.status(200).json({ message: 'Événements récupérés', data: events });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.getOne = async (req, res) => {
+  const idEvent = req.params.id;
+  if (!idEvent) {
+    return res.status(400).json({ message: 'Veuillez spécifier un événement' });
+  }
+
+  try {
+    const event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+      include: {
+        Etablissement: true,
+        diffuser: true,
+        enchere: true,
+      },
+    });
+    if (!event) {
+      return res.status(400).json({ message: "Cet événement n'existe pas" });
+    }
+
+    return res.status(200).json({ message: 'Événement récupéré', data: event });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.getUserOfEvents = async (req, res) => {
+  const { idEvent } = req.params;
+  if (!idEvent) {
+    return res.status(400).json({ message: 'Veuillez spécifier un evenement' });
+  }
+  try {
+    const event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+    });
+    if (!event) {
+      return res.status(400).json({ message: "Cet evenement n'existe pas" });
+    }
+    const events = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+      include: {
+        User: {
+          select: {
+            nom: true,
+            prenom: true,
+          },
+        },
+        diffuser: true,
+        enchere: true,
+      },
+    });
+    return res.status(200).json({ message: 'Événements récupérés', data: events });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.getMusiqueOfEvent = async (req, res) => {
+  const { idEvent } = req.params;
+  if (!idEvent) {
+    return res.status(400).json({ message: 'Veuillez spécifier un evenement' });
+  }
+  try {
+    const event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+    });
+    if (!event) {
+      return res.status(400).json({ message: "Cet evenement n'existe pas" });
+    }
+    const musiques = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+      include: {
+        diffuser: true,
+      },
+    });
+    return res.status(200).json({ message: 'Musiques récupérées', data: musiques });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.addUserToEvent = async (req, res) => {
+  const { idEvent } = req.params;
+  if (!idEvent) {
+    return res.status(400).json({ message: 'Veuillez spécifier un evenement' });
+  }
+  try {
+    const event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+    });
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(' ')[1];
+    const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
+    const idUser = decoded.id;
+
+    if (!event) {
+      return res.status(400).json({ message: "Cet evenement n'existe pas" });
+    }
+    const user = await prisma.user.findUnique({
+      where: {
+        id: parseInt(idUser, 10),
+      },
+    });
+    if (!user) {
+      return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
+    }
+    const userEvent = await prisma.event.update({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+      data: {
+        User: {
+          connect: {
+            id: parseInt(idUser, 10),
+          },
+        },
+      },
+    });
+    return res.status(200).json({ message: 'Utilisateur ajouté à l\'événement', data: userEvent });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};

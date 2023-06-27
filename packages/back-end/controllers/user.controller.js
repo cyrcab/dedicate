@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcrypt');
 
 const prismaUser = new PrismaClient().User;
 const prismaRole = new PrismaClient().Role;
@@ -115,12 +116,13 @@ module.exports.updatePassword = async (req, res) => {
   if (!user) {
     return res.status(404).json({ message: "Cet utilisateur n'existe" });
   }
-  await prismaUser.update({
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt); await prismaUser.update({
     where: {
       id: parseInt(id, 10),
     },
     data: {
-      password,
+      password: hash,
     },
   });
   return res.status(200).json({ message: 'Mot de passe modifié' });
