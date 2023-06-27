@@ -42,7 +42,6 @@ export default function Settings({ route }) {
     axiosApiInstance
       .put(backendUrl + "users/" + user?.id, updatedUser)
       .then((response) => {
-        console.log(response.data.message);
         setMessageError(response.data.message);
         setVisible(true);
         if (updatedUser.nom) {

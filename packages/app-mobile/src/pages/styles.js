@@ -7,7 +7,7 @@ export default StyleSheet.create({
     justifyContent: 'center',
   },
   textInput: {
-    width: '50%',
+    width: '70%',
   },
   connexionButton: {
     marginTop: 10,

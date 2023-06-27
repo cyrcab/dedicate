@@ -11,10 +11,10 @@ module.exports.authTokenUser = (req, res, next) => {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (user.getUser.refRole !== 'Client') {
+    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
+    if (user.refRole !== 'Client') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
-    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
 
     next();
   });
@@ -27,10 +27,10 @@ module.exports.authTokenEta = (req, res, next) => {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, async (err, user) => {
+    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     if (user.refRole !== 'Gérant') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
-    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     const { id } = req.params;
     let etablissement;
     // return res.status(200).json({ data: user.id });
@@ -66,7 +66,7 @@ module.exports.authTokenEta = (req, res, next) => {
       },
     });
     if (testUser.idEtablissement !== etablissement.id) {
-      if (user.getUser.refRole !== 'SuperAdmin') {
+      if (user.refRole !== 'SuperAdmin') {
         return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
       }
     }
@@ -81,10 +81,10 @@ module.exports.authTokenAdmin = (req, res, next) => {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     if (user.refRole !== 'SuperAdmin') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
-    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
 
     next();
   });
