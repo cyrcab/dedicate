@@ -30,7 +30,6 @@ module.exports.authTokenEta = (req, res, next) => {
   jwt.verify(token, process.env.TOKEN_SECRET, async (err, user) => {
     if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     if (user.refRole !== 'Gérant' && user.refRole !== 'SuperAdmin') {
-
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
     const { id } = req.params;
