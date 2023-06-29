@@ -17,4 +17,20 @@ jobs:
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            sh ~/deploy_backend.sh
+            cd /var/www/dedicate-project/dedicate
+            git checkout dev
+
+            echo "Fetching modifications......"
+            git pull
+
+            echo "Remove unused package"
+            npm prune
+
+            echo "Dependencies installation......"
+            npm run install:all
+
+            echo "Prisma client initialisation......"
+            npm run init:prisma
+
+            echo "Restarting app......"
+            pm2 restart app
