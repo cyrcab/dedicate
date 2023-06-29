@@ -6,6 +6,7 @@
   ],
   "scripts": {
     "install:all": "npm i --dev lerna && lerna bootstrap && husky install",
+    "install:all:build": "npm i --dev lerna && lerna bootstrap",
     "start:front": "lerna run start --scope=front-end",
     "start:back": "lerna run start --scope=back-end",
     "start:app": "cd packages/app-mobile/ && npm run start",
