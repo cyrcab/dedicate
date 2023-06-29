@@ -8,7 +8,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to DigitalOcean Droplet
+      - name: Deploy backend to DigitalOcean Droplet
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.HOST}}
@@ -28,10 +28,13 @@ jobs:
             npm prune
 
             echo "Dependencies installation......"
-            npm run install:all
+            npm run install:all:build
+
+            echo "Build app......"
+            npm run build
 
             echo "Prisma client initialisation......"
             npm run init:prisma
 
             echo "Restarting app......"
-            pm2 restart app
+            pm2 restart all
