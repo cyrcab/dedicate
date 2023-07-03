@@ -34,4 +34,8 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  ReadMoreHeader: {
+    backgroundColor: 'yellow',
+    height: '50%' 
+  }
 });
