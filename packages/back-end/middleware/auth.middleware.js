@@ -98,7 +98,7 @@ module.exports.checkMe = (req, res, next) => {
     if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     if (user.id !== parseInt(req.params.id, 10)) {
       if (user.refRole.toLowerCase() !== 'superadmin') {
-        return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
+        return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça", dataUser: user.id, dataParam: req.params.id });
       }
     }
     next();

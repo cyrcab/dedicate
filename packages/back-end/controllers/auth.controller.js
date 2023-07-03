@@ -17,9 +17,10 @@ function generateAccessToken(user) {
 
 module.exports.registerEta = async (req, res) => {
   const {
-    nom, prenom, email, tel, nomEta, adresse, password,
+    nom, prenom, email, tel, nomEta, adresse, password, ville, codePostal,
   } = req.body;
-  if (!nom || !prenom || !email || !tel || !nomEta || !adresse || !password) {
+  if (!nom || !prenom || !email || !tel || !nomEta
+    || !adresse || !password || !ville || !codePostal) {
     return res.status(400).json({ message: 'Veuillez remplir tous les champs' });
   }
 
@@ -46,6 +47,8 @@ module.exports.registerEta = async (req, res) => {
       data: {
         nom: nomEta,
         adresse,
+        ville,
+        codePostal,
       },
     });
 
@@ -197,7 +200,7 @@ module.exports.loginEta = async (req, res) => {
     return res.status(400).json({ message: 'Identifiant incorect' });
   }
   if ((await user.roleId) === 1) {
-    return res.status(400).json({ message: 'Identifiant incorect' });
+    return res.status(400).json({ message: 'Identifiant incorect', data: user });
   }
   const refRole = await prismaRole.findFirst({
     where: {
