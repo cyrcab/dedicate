@@ -322,6 +322,7 @@ module.exports.update = async (req, res) => {
       if (parsedDate < currentDate) {
         return res.status(400).json({ message: "La date de l'événement ne peut pas être antérieure à la date actuelle" });
       }
+      data.date = parsedDate.setZone('Europe/Paris').plus({ hours: 2 }).toISO();
     }
     if (lieu) {
       data.lieu = lieu;
@@ -343,7 +344,9 @@ module.exports.update = async (req, res) => {
         return res.status(400).json({ message: 'Le nombre de slots doit être un nombre' });
       }
       if (nbSlots <= 0) {
-        return res.status(400).json({ message: 'Le nombre de slots ne peut pas être négatif' });
+        return res.status(400).json({
+          message: 'Le nombre de slots ne peut pas être négatif',
+        });
       }
       data.nbSlots = nbSlots;
     }
@@ -354,6 +357,126 @@ module.exports.update = async (req, res) => {
       data,
     });
     return res.status(200).json({ message: 'Événement mis à jour', data: updatedEvent });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.delete = async (req, res) => {
+  const { idEvent } = req.params;
+  if (!idEvent) {
+    return res.status(400).json({ message: 'Veuillez spécifier un événement' });
+  }
+  try {
+    const event = await prisma.event.findUnique({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+    });
+    if (!event) {
+      return res.status(400).json({ message: "Cet événement n'existe pas" });
+    }
+    const currentDate = DateTime.now().setZone('utc').plus({ hours: 4 }).toISO();
+    const dateEvent = new Date(event.date);
+    const dateEventParsed = DateTime.fromJSDate(dateEvent).setZone('utc').toISO();
+
+    if (dateEventParsed < currentDate) {
+      return res.status(400).json({
+        message: 'Cet événement est dans moins de 2h ou est déjà passé, vous ne pouvez pas le supprimer',
+      });
+    }
+
+    const deletedEvent = await prisma.event.delete({
+      where: {
+        id: parseInt(idEvent, 10),
+      },
+    });
+    return res.status(200).json({ message: 'Événement supprimé', data: deletedEvent });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports.getNextEvent = async (req, res) => {
+  const { ville } = req.params;
+  if (!ville) {
+    try {
+      const events = await prisma.event.findMany({
+        where: {
+          date: {
+            gt: DateTime.now().setZone('utc').plus({ hours: 2 }).toISO(),
+          },
+        },
+        include: {
+          Etablissement: {
+            select: {
+              nom: true,
+              adresse: true,
+              ville: true,
+              codePostal: true,
+            },
+          },
+        },
+        orderBy: {
+          date: 'asc',
+        },
+      });
+      return res.status(200).json({ message: 'Liste des événements', data: events });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  } else {
+    try {
+      const events = await prisma.event.findMany({
+        where: {
+          date: {
+            gt: DateTime.now().setZone('utc').plus({ hours: 2 }).toISO(),
+          },
+          Etablissement: {
+            ville,
+          },
+        },
+        include: {
+          Etablissement: {
+            select: {
+              nom: true,
+              adresse: true,
+              ville: true,
+              codePostal: true,
+            },
+          },
+        },
+        orderBy: {
+          date: 'asc',
+        },
+      });
+      return res.status(200).json({ message: 'Liste des événements', data: events });
+    } catch (err) {
+      return res.status(500).json({ message: err.message });
+    }
+  }
+};
+
+module.exports.getMyEvent = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ message: 'Veuillez spécifier un utilisateur' });
+  }
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        id: parseInt(id, 10),
+      },
+    }).events({
+      include: {
+        diffuser: {
+          include: {
+            musique: true,
+          },
+        },
+      },
+    });
+    return res.status(200).json({ message: 'Liste des événements', data: user });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

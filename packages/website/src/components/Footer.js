@@ -28,7 +28,7 @@ export default function Footer() {
               <a href="#vision-section">Vision</a>
               <a href="#partenaires-section">Partenaires</a>
               <a href="#contact-section">Contact</a>
-          </div>
+        </div>
         <div className="subtitleFooter">Terms Privacy Policy © 2022 Dedicate, Inc. All rights reserved.</div>
       </div>
     

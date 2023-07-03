@@ -12,10 +12,10 @@ module.exports.authTokenUser = (req, res, next) => {
     return res.status(401).json({ message: "Vous n'êtes pas connecté" });
   }
   jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
-    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     if (user.refRole !== 'Client') {
       return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
+    if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
 
     next();
   });
@@ -98,7 +98,7 @@ module.exports.checkMe = (req, res, next) => {
     if (err) return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
     if (user.id !== parseInt(req.params.id, 10)) {
       if (user.refRole.toLowerCase() !== 'superadmin') {
-        return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça" });
+        return res.status(403).json({ message: "Vous n'êtes pas authorisé à faire ça", dataUser: user.id, dataParam: req.params.id });
       }
     }
     next();
