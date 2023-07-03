@@ -2,19 +2,21 @@ import { View } from "react-native";
 import { Card } from "react-native-paper";
 import { Image } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import styles from "../pages/styles";
 
 
-export default function EventsCard() {
+export default function EventsCard({item}) {
   const navigation = useNavigation();
   return (
     <Card
     onPress={() => {
-      navigation.navigate("ReadMore");
+      navigation.navigate("ReadMore", {item});
     }}
+    style={styles.CardEvent}
     >
       <Card.Title
-        title="Oclub"
-        subtitle="Soirée électro-funk"
+        title={item.nom}
+        subtitle={item.type}
         left={() => (
           <Image
             source={require("../../assets/oclub.png")} // Remplacez le chemin par le chemin réel de votre image
