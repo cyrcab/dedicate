@@ -17,5 +17,6 @@ router.get('/users/:idEvent', checkTokenEtaForEvents, eventController.getUserOfE
 router.get('/musiques/:idEvent', checkToken, eventController.getMusiqueOfEvent);
 router.put('/add/:idEvent', checkTokenForParticipeEvent, eventController.addUserToEvent);
 router.put('/:idEvent', checkTokenForUpdateEvents, eventController.update);
+router.delete('/:idEvent', checkTokenForUpdateEvents, eventController.delete);
 
 module.exports = router;
