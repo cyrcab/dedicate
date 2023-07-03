@@ -22,16 +22,16 @@ export default StyleSheet.create({
   },
   settingsButton: {
   },
-  centerView:{
+  centerView: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems:'center',
-    marginBottom: 10
+    alignItems: 'center',
+    marginBottom: 10,
   },
-  centerButton:{
+  centerButton: {
     marginBottom: 10,
     marginTop: 10,
-    alignItems:'center',
-    justifyContent:'center',
-  }
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
