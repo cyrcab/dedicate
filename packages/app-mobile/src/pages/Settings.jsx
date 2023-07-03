@@ -1,16 +1,25 @@
 import React, { useState, useEffect } from "react";
 import {
   View,
-  Button,
   Keyboard,
   ScrollView,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import { Avatar, TextInput, Snackbar, HelperText } from "react-native-paper";
+import {
+  Avatar,
+  TextInput,
+  Snackbar,
+  HelperText,
+  Button,
+} from "react-native-paper";
 import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useDispatch } from "react-redux";
+import { setSignedIn } from "../store/reducers/reducer";
+import styles from "./styles";
 
 export default function Settings({ route }) {
   const { user, setUser } = route.params;
@@ -70,6 +79,16 @@ export default function Settings({ route }) {
     }
     setPasswordError("");
     setConfirmPasswordError("");
+    axiosApiInstance
+    .put(backendUrl + "users/password/" + user?.id, {'password': password})
+    .then((response)=>{
+      console.log(response);
+      setMessageError(response.data.message);
+      setVisible(true);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
   };
 
   const handleInputFocus = (inputName) => {
@@ -102,6 +121,12 @@ export default function Settings({ route }) {
     setPasswordError("");
   };
 
+  const dispatch = useDispatch();
+
+  function removeAsyncToken() {
+    AsyncStorage.removeItem("token");
+    dispatch(setSignedIn(false));
+  }
 
   return (
     <TouchableWithoutFeedback onPress={handleOutsidePress}>
@@ -112,10 +137,12 @@ export default function Settings({ route }) {
       >
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
           <View style={{ flex: 1, padding: 16 }}>
-            <Avatar.Image
-              size={100}
-              source={require("../../assets/oclub.png")}
-            />
+            <View style={styles.centerView}>
+              <Avatar.Image
+                size={100}
+                source={require("../../assets/oclub.png")}
+              />
+            </View>
             <TextInput
               label="Nom"
               value={nom}
@@ -142,10 +169,12 @@ export default function Settings({ route }) {
               onFocus={() => handleInputFocus("email")}
               style={selectedInput === "email" ? { borderColor: "blue" } : null}
             />
-            <Button
-              title="Enregistrer les modifications"
-              onPress={handleSaveChanges}
-            />
+            <View style={styles.centerButton}>
+              <Button onPress={handleSaveChanges} >
+                Enregistrer les modifications
+              </Button>
+            </View>
+
             <TextInput
               label="Nouveau mot de passe"
               value={password}
@@ -171,14 +200,22 @@ export default function Settings({ route }) {
                 {confirmPasswordError}
               </HelperText>
             )}
-
-            <Button
-              title="Enregistrer le nouveau mot de passe"
-              onPress={handleSavePassword}
-            />
+            <View style={styles.centerButton}>
+              <Button
+                onPress={handleSavePassword}
+                style={styles.settingsButton}
+              >
+                Enregistrer le nouveau mot de passe
+              </Button>
+            </View>
             <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
               {messageError}
             </Snackbar>
+            <View style={styles.centerButton}>
+            <Button onPress={removeAsyncToken} mode="contained">
+              Logout
+            </Button>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
