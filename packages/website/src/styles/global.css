@@ -55,9 +55,12 @@ p {
     background-color: rgb(29,231,181);
 }
 
+.navLink {
+    padding-right: 20px;
+}
 .navigation a:hover{
     font-size: 20px;
-    border-bottom: 2px solid black;
+    font-weight: bold;
 }
 
 .links {
@@ -76,12 +79,10 @@ p {
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
 }
 
 .home {
-    height: 50vh;
     display: flex;
     padding: 8vw;
     align-items: center;
@@ -101,13 +102,12 @@ max-width: 100%;
     flex-direction: column;
     justify-content: left;
     text-align: left;
-    gap: 5px;
+    gap: 15px;
     padding: 40px;
     max-width: 50%;
 }
 
 .titleHome{
-    padding-bottom: 20px;
     font-size: 60px;
 }
 
@@ -121,10 +121,8 @@ max-width: 100%;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
     width: 120px;
-    margin-top: 20px;
 }
 
 .partenaires {
@@ -132,7 +130,7 @@ max-width: 100%;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
-    padding: 30px 60px;
+    padding: 8vh;
     gap: 20px;
     background-color: rgb(29,231,181);
 }
@@ -140,6 +138,8 @@ max-width: 100%;
 .listePartenaires{
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
 }
 
@@ -154,9 +154,7 @@ max-width: 100%;
 }
 
 .vision1 {
-    height: 50vh;
     display: flex;
-    margin: 5vh;
     padding: 5vw;
     align-items: center;
     text-align: center;
@@ -175,11 +173,10 @@ max-width: 100%;
 .textVision {
     display: flex;
     flex-direction: column;
-    justify-content: left;
-    text-align: left;
+    justify-content: center;
+    text-align: center;
     gap: 5px;
     padding: 40px;
-    max-width: 50%;
 }
 
 .titleVision{
@@ -197,10 +194,8 @@ max-width: 100%;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
     cursor: pointer;
     width: 120px;
-    margin-top: 20px;
 }
 
 .technology{
@@ -225,7 +220,6 @@ max-width: 100%;
     text-align: center;
     max-width: 300px;
     font-size: large;
-    margin: 20px;
 }
 
 .technologyCardTitle{
@@ -301,13 +295,12 @@ max-width: 100%;
 }
 
 .contactCard{
-    height: 50vh;
-    width: 80vw;
+    width: 100%;
+    padding-top: 5vh;
+    padding-bottom: 5vh;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
-    margin: 5vh;
-    padding: 5vw;
     align-items: center;
     text-align: center;
     border: 2px solid rgb(21,132,126);
@@ -333,7 +326,6 @@ max-width: 100%;
 }
 
 textarea {
-    width: 100%;
     height: 150px;
     padding: 12px 20px;
     box-sizing: border-box;
@@ -361,4 +353,161 @@ textarea {
     gap: 20px;
     width: 30vw;
 
+}
+
+
+.navigation .links {
+    display: block; /* Afficher le menu des liens par défaut */
+}
+
+.navigation .hamburger {
+    display: none; /* Masquer l'icône de hamburger par défaut */
+}
+
+@media screen and (max-width: 950px) {
+    .home {
+        flex-direction: column;
+        overflow: visible;
+      }
+
+      .textHome {
+        flex-direction: column;
+        text-align: center;
+        align-items: center;
+        gap: 5px;
+        padding-top: 40px;
+    }
+
+    .vision1 {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        justify-content: center;
+        max-width: 95%;
+      }
+
+      .vision{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        background-color: whitesmoke;
+    }
+
+      .contactCard{
+        padding-top: 5vh;
+        padding-bottom: 5vh;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        text-align: center;
+        border: 2px solid rgb(21,132,126);
+        background-color: rgb(21,132,126);
+        background-image: url("../images/wave.png");
+        background-repeat: no-repeat;
+        
+    }
+    .technologyCard{
+        padding-top: 5vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+        max-width: 300px;
+        font-size: large;
+    }
+
+    .titleTechnology{
+        font-size: 40px;
+        padding-bottom: 30px;
+    }
+
+    .technology{
+        max-width: 90vw;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        padding: 30px 60px;
+        gap: 20px;
+        background-color: rgb(29,231,181);
+    }
+
+    .textVision {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        width: 100%;
+    }
+
+    .navigation {
+        position: relative;
+      }
+      
+      .navigation .title {
+        display: inline-block;
+        margin-right: 20px;
+      }
+      
+      .navigation .hamburger {
+        display: inline-block;
+        cursor: pointer;
+        font-size: 20px;
+      }
+      
+      .navigation .links {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background-color: rgb(29,231,181);
+        padding: 10px;
+        display: none;
+        transition: all 0.3s ease;
+        z-index: 1;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+
+      }
+      
+      .navigation .links.active {
+        display: block;
+        justify-content: center;
+      }
+      
+      .navigation .links a {
+        display: block;
+        padding: 8px;
+        color: #333;
+        text-decoration: none;
+      }
+
+      /* Ajoutez des styles supplémentaires pour le positionnement, l'espacement, les couleurs, etc. selon vos besoins */
+      
+.technologyCards{
+    flex-direction: column;
+    }
+
+    .footer1 .title {
+        display: none;
+    }
+
+    .footer1 {
+        justify-content: center;
+    }
+
+    .footer2{
+        flex-direction: column;
+        text-align: center;
+        gap: 5px;
+    }
+
+    .contact{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        background-color: rgb(21,132,126);
+    }
 }
