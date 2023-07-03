@@ -80,15 +80,14 @@ export default function Settings({ route }) {
     setPasswordError("");
     setConfirmPasswordError("");
     axiosApiInstance
-    .put(backendUrl + "users/password/" + user?.id, {'password': password})
-    .then((response)=>{
-      console.log(response);
-      setMessageError(response.data.message);
-      setVisible(true);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+      .put(backendUrl + "users/password/" + user?.id, { password: password })
+      .then((response) => {
+        setMessageError(response.data.message);
+        setVisible(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleInputFocus = (inputName) => {
@@ -170,7 +169,7 @@ export default function Settings({ route }) {
               style={selectedInput === "email" ? { borderColor: "blue" } : null}
             />
             <View style={styles.centerButton}>
-              <Button onPress={handleSaveChanges} >
+              <Button onPress={handleSaveChanges}>
                 Enregistrer les modifications
               </Button>
             </View>
@@ -208,16 +207,20 @@ export default function Settings({ route }) {
                 Enregistrer le nouveau mot de passe
               </Button>
             </View>
-            <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
-              {messageError}
-            </Snackbar>
             <View style={styles.centerButton}>
-            <Button onPress={removeAsyncToken} mode="contained">
-              Logout
-            </Button>
+              <Button onPress={removeAsyncToken} mode="contained">
+                Logout
+              </Button>
             </View>
           </View>
         </ScrollView>
+        <Snackbar
+          wrapperStyle={{ top: 0 }}
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+        >
+          {messageError}
+        </Snackbar>
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
