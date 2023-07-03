@@ -1,4 +1,4 @@
-import styles from './styles';
+import styles from "./styles";
 import React, { useState } from "react";
 import {
   TouchableWithoutFeedback,
@@ -12,14 +12,10 @@ import { TextInput, Button, Snackbar } from "react-native-paper";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { backendUrl } from '../backendUrl';
+import { backendUrl } from "../backendUrl";
 import { setSignedIn } from "../store/reducers/reducer";
 
-
-
 export default function Login({ navigation }) {
-
-
   const [email, setEmail] = useState("");
   const [mdp, setMdp] = useState("");
 
@@ -89,12 +85,16 @@ export default function Login({ navigation }) {
           <Text>Vous n'avez pas de compte ? </Text>
           <Text
             style={styles.registerLink}
-            onPress={() => navigation.navigate('Register')}
+            onPress={() => navigation.navigate("Register")}
           >
             S'inscrire !
           </Text>
         </View>
-        <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
+        <Snackbar
+          wrapperStyle={{ top: 0 }}
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+        >
           {messageError}
         </Snackbar>
       </KeyboardAvoidingView>
