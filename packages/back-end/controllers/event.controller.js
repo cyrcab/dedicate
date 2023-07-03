@@ -322,6 +322,7 @@ module.exports.update = async (req, res) => {
       if (parsedDate < currentDate) {
         return res.status(400).json({ message: "La date de l'événement ne peut pas être antérieure à la date actuelle" });
       }
+      data.date = parsedDate.setZone('Europe/Paris').plus({ hours: 2 }).toISO();
     }
     if (lieu) {
       data.lieu = lieu;
@@ -343,7 +344,9 @@ module.exports.update = async (req, res) => {
         return res.status(400).json({ message: 'Le nombre de slots doit être un nombre' });
       }
       if (nbSlots <= 0) {
-        return res.status(400).json({ message: 'Le nombre de slots ne peut pas être négatif' });
+        return res.status(400).json({
+          message: 'Le nombre de slots ne peut pas être négatif',
+        });
       }
       data.nbSlots = nbSlots;
     }
@@ -357,4 +360,42 @@ module.exports.update = async (req, res) => {
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
+};
+
+module.exports.delete = async (req, res) => {
+  const { idEvent } = req.params;
+  if (!idEvent) {
+    return res.status(400).json({ message: 'Veuillez spécifier un événement' });
+  }
+  // try {
+  const event = await prisma.event.findUnique({
+    where: {
+      id: parseInt(idEvent, 10),
+    },
+  });
+  if (!event) {
+    return res.status(400).json({ message: "Cet événement n'existe pas" });
+  }
+  const currentDate = DateTime.now().setZone('Europe/Paris');
+  const parsedDate = event.date;
+  const parsedDateParis = parsedDate.setZone('Europe/Paris');
+
+  if (parsedDateParis < currentDate.plus({ hours: 2 })) {
+    return res.status(400).json({
+      message:
+      'Cet événement est dans moins de 2h ou est déja passé, vous ne pouvez pas le supprimer',
+    });
+  }
+  // return res.status(200).json({
+  // message: 'Événement supprimé', dateNow: parsedDateParis, dateEvent: parsedDate
+  //  });
+  const deletedEvent = await prisma.event.findUnique({
+    where: {
+      id: parseInt(idEvent, 10),
+    },
+  });
+  return res.status(200).json({ message: 'Événement supprimé', data: deletedEvent });
+  // } catch (err) {
+  //   return res.status(500).json({ message: err.message });
+  // }
 };
