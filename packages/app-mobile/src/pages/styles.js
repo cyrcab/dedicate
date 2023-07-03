@@ -37,5 +37,8 @@ export default StyleSheet.create({
   ReadMoreHeader: {
     backgroundColor: 'yellow',
     height: '50%' 
+  },
+  CardEvent: {
+    margin: 10
   }
 });
