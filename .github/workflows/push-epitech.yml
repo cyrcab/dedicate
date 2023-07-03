@@ -1,20 +1,22 @@
 name: Push on Epitech repository
 
 on:
-  pull_request:
+  push:
     branches:
       - dev
 
 jobs:
-  push:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: push to Epitech
-        uses: appleboy/ssh-action@master
+      - uses: actions/checkout@v2
         with:
-          key: ${{secrets.KEY}}
-          script: |
-            git config --global user.email "cyril1.cabrolier@epitech.eu"
-            git config --global user.name "Cyril Cabrolier"
-            git checkout $CI_COMMIT_REF_NAME
-            git push repo="git@github.com:EpitechMscProPromo2025/T-YEP-600-TLS-6-1-finalproject-aurelien.schmit.git" --force
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          ssh-key: ${{secrets.MY_KEY}}
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git checkout $CI_COMMIT_REF_NAME
+          git push --repo="git@github.com:EpitechMscProPromo2025/T-YEP-600-TLS-6-1-finalproject-aurelien.schmit.git" --force
