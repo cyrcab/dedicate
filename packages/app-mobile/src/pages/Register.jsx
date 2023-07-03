@@ -31,7 +31,6 @@ export default function Register() {
 
   const dispatch = useDispatch();
 
-
   const handleLogin = () => {
     const data = {
       email: email,
@@ -42,12 +41,10 @@ export default function Register() {
     };
 
     axios
-      .post(backendUrl +"auth/register", data)
+      .post(backendUrl + "auth/register", data)
       .then((response) => {
-        console.log(response.data);
         dispatch({ type: "SET_USER_DATA", payload: response.data });
         AsyncStorage.setItem("token", response.data.token);
-        console.log(AsyncStorage.getItem('token'));
         AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
         dispatch(setSignedIn(true));
       })
@@ -113,7 +110,11 @@ export default function Register() {
         >
           S'inscrire
         </Button>
-        <Snackbar visible={visible} onDismiss={onDismissSnackBar}>
+        <Snackbar
+          wrapperStyle={{ top: 0 }}
+          visible={visible}
+          onDismiss={onDismissSnackBar}
+        >
           {messageError}
         </Snackbar>
       </KeyboardAvoidingView>

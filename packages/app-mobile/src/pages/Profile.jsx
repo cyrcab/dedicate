@@ -23,7 +23,6 @@ const ProfilePage = ({ navigation }) => {
   useEffect(() => {
     AsyncStorage.getItem("userId")
       .then((userId) => {
-        console.log(userId);
         setUserId(userId);
       })
       .catch((error) => {
