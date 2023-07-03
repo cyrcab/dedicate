@@ -20,4 +20,18 @@ export default StyleSheet.create({
     color: 'blue',
     textDecorationLine: 'underline',
   },
+  settingsButton: {
+  },
+  centerView: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  centerButton: {
+    marginBottom: 10,
+    marginTop: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
