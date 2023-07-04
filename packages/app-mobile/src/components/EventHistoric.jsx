@@ -3,12 +3,12 @@ import { Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import styles from "../pages/styles";
 
-export default function EventsCard({ item }) {
+export default function EventsHistoric({ item }) {
   const navigation = useNavigation();
   return (
     <Card
       onPress={() => {
-        navigation.navigate("ReadMore", { event: item });
+        navigation.navigate("Informations de la soirée", { event: item });
       }}
       style={styles.CardEvent}
     >

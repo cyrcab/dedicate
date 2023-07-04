@@ -1,8 +1,9 @@
 import { View, Text, ScrollView } from "react-native";
 import styles from "./styles";
 import { Avatar, Button } from "react-native-paper";
+import MusicList from "../components/MusicList";
 
-export default function ReadMore({ route }) {
+export default function EventInformation({ route }) {
   const { event } = route.params;
 
   return (
@@ -10,16 +11,11 @@ export default function ReadMore({ route }) {
       <View style={styles.etablissementInformation}>
         <Avatar.Image size={100} source={require("../../assets/oclub.png")} />
         <View style={styles.containerEtablissementInformation}>
-          <Text>{event.Etablissement.nom}</Text>
-          <Text>{event.Etablissement.adresse}</Text>
-          <Text>{event.Etablissement.ville}</Text>
+          <Text>{event.lieu}</Text>
         </View>
       </View>
       <View style={styles.readMorePresentation}>
         <Text style={styles.title}>{event.nom}</Text>
-        <Text style={styles.price}>
-          Prix de base des musiques: {event.prix}€
-        </Text>
       </View>
       <Text style={styles.description}>
         Venez nombreux, super soirée électro !
@@ -30,13 +26,9 @@ export default function ReadMore({ route }) {
           {event.type}
         </Button>
       </View>
-      <Button
-        mode="contained"
-        style={styles.qrCodeButton}
-        onPress={() => console.log('Pressed')}
-      >
-        SCANNEZ LE QR CODE
-      </Button>
+      {event.diffuser?.map((item, index)=> {
+        <MusicList item={item} key={index}/>
+      })}
     </ScrollView>
   );
 }
