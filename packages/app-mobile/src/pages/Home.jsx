@@ -4,7 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import EventsCard from "../components/EventsCard";
 import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
-import { Avatar, Button } from "react-native-paper";
+import CodeQR from "../components/CodeQR";
 
 export default function Home() {
   const [event, setEvent] = useState([]);
@@ -42,14 +42,7 @@ export default function Home() {
           <EventsCard item={item} key={index} />
         ))}
       </ScrollView>
-      <Button
-        icon={"qrcode"}
-        onPress={() => console.log('Button pressed')}
-        mode="contained"
-        style={{ borderRadius: 50, width: 60, height: 62, position:'absolute', bottom:20, left:'41%'}}
-        contentStyle={{ width: 80, height: 60 }}
-        labelStyle={{ fontSize: 40 }}
-      />
+      <CodeQR/>
     </View>
   );
 }
