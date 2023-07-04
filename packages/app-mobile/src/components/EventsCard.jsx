@@ -1,18 +1,17 @@
 import { View } from "react-native";
 import { Card } from "react-native-paper";
 import { Image } from "react-native";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import styles from "../pages/styles";
 
-
-export default function EventsCard({item}) {
+export default function EventsCard({ item }) {
   const navigation = useNavigation();
   return (
     <Card
-    onPress={() => {
-      navigation.navigate("ReadMore", {item});
-    }}
-    style={styles.CardEvent}
+      onPress={() => {
+        navigation.navigate("ReadMore", { event: item });
+      }}
+      style={styles.CardEvent}
     >
       <Card.Title
         title={item.nom}
