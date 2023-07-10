@@ -72,6 +72,8 @@ model Event {
   type            String
   prix            Float
   nbSlots         Int
+  photo           String?
+  description     String?
   idEtablissement Int?
   Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
   diffuser        Diffuser[]
