@@ -87,4 +87,14 @@ export default StyleSheet.create({
     bottom: 20,
     left: '42%',
   },
+  containerEventInformation:{
+    flex: 1,
+    padding: 20
+  },
+  etablissementInformationHistoric:{
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    height: '20%',
+    alignItems: 'center',
+  }
 });

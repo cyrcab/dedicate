@@ -1,12 +1,19 @@
 import { Card, Divider } from "react-native-paper";
+import { Image } from "react-native";
 
-export default function MusicList({}) {
+export default function MusicList({item}) {
+
   return (
     <>
       <Card.Title
-        title="La puissance"
-        subtitle="Rohff"
-        left={(props) => <Avatar.Icon {...props} icon="folder" />}
+        title={item.titre}
+        subtitle={item.artiste}
+        left={() => (
+            <Image
+              source={require("../../assets/oclub.png")} // Remplacez le chemin par le chemin réel de votre image
+              style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
+            />
+          )}
       />
       <Divider />
     </>
