@@ -28,13 +28,6 @@ const HomeStack = () => (
   </Stack.Navigator>
 );
 
-const HomeStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-    <Stack.Screen name="ReadMore" component={ReadMore} />
-  </Stack.Navigator>
-);
-
 const AppNavigator = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
