@@ -3,6 +3,8 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const { DateTime } = require('luxon');
 const jwt = require('jsonwebtoken');
+const QRCode = require('qrcode');
+const fs = require('fs');
 
 module.exports.create = async (req, res) => {
   const {
@@ -24,9 +26,11 @@ module.exports.create = async (req, res) => {
   }
 
   const token = req.headers.authorization.split(' ')[1];
-  const decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-  if (!decodedToken) {
-    return res.status(400).json({ message: "Vous n'êtes pas connecté" });
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+  } catch (err) {
+    return res.status(400).json({ message: "Votre token n'est pas valide" });
   }
 
   const idUser = decodedToken.id;
@@ -71,9 +75,36 @@ module.exports.create = async (req, res) => {
     idEtablissement: idEtablissement ? parseInt(idEtablissement, 10) : user.idEtablissement,
   };
 
+
+
   try {
     const event = await prisma.event.create({ data: eventData });
-    return res.status(201).json({ message: 'Événement créé', data: event });
+
+    // Générer le code QR
+    const qrCodeData = {
+      idEvent: event.id,
+      idEtablissement: event.idEtablissement
+    };
+
+    const qrCodeString = JSON.stringify(qrCodeData);
+    const qrCodeImage = await QRCode.toDataURL(qrCodeString);
+
+    console.log("qrCodeString = " + qrCodeString);
+    console.log("qrCodeImage = " + qrCodeImage);
+
+    // Met à jour l'événement avec le code QR
+    const updatedEvent = await prisma.event.update({
+      where: { id: event.id },
+      data: { qrCode: qrCodeImage },
+    });
+
+    const qrCodeStream = fs.createWriteStream('./qrcodes/path-to-your-file.png');
+    // if (!fs.existsSync('../qrcodes')) {
+    //   fs.mkdirSync('../qrcodes');
+    // }
+    QRCode.toFileStream(qrCodeStream, qrCodeString);
+
+    return res.status(201).json({ message: 'Événement créé', data: updatedEvent });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
