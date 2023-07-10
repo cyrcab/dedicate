@@ -36,7 +36,7 @@ const ProfilePage = ({ navigation }) => {
   useEffect(() => {
     profileInfo()
   }, [userId]);
-  
+
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
