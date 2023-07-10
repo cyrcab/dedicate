@@ -75,22 +75,20 @@ module.exports.create = async (req, res) => {
     idEtablissement: idEtablissement ? parseInt(idEtablissement, 10) : user.idEtablissement,
   };
 
-
-
   try {
     const event = await prisma.event.create({ data: eventData });
 
     // Générer le code QR
     const qrCodeData = {
       idEvent: event.id,
-      idEtablissement: event.idEtablissement
+      idEtablissement: event.idEtablissement,
     };
 
     const qrCodeString = JSON.stringify(qrCodeData);
     const qrCodeImage = await QRCode.toDataURL(qrCodeString);
 
-    console.log("qrCodeString = " + qrCodeString);
-    console.log("qrCodeImage = " + qrCodeImage);
+    console.log(`qrCodeString = ${qrCodeString}`);
+    console.log(`qrCodeImage = ${qrCodeImage}`);
 
     // Met à jour l'événement avec le code QR
     const updatedEvent = await prisma.event.update({
