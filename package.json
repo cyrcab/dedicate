@@ -27,6 +27,7 @@
     "lerna": "^6.6.2"
   },
   "dependencies": {
+    "expo-barcode-scanner": "^12.5.3",
     "yarn": "^1.22.19"
   }
 }
