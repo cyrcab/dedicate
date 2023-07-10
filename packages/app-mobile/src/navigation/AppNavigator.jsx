@@ -22,17 +22,17 @@ const ProfileStack = () => (
   </Stack.Navigator>
 );
 
-const HomeStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-    <Stack.Screen name="ReadMore" component={ReadMore} />
-  </Stack.Navigator>
-);
-
 const EventStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="Event" component={Event} options={{ headerShown: false }}/>
     <Stack.Screen name="SlotsInformation" component={SlotInformation} />
+  </Stack.Navigator>
+);
+
+const HomeStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
+    <Stack.Screen name="ReadMore" component={ReadMore} />
   </Stack.Navigator>
 );
 
