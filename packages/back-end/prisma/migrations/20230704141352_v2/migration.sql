@@ -9,7 +9,4 @@
 -- AlterTable
 ALTER TABLE `event` ADD COLUMN `qrCode` VARCHAR(191) NULL;
 
--- AlterTable
-ALTER TABLE `musique` DROP COLUMN `count`,
-    ADD COLUMN `countDiffuse` INTEGER NOT NULL,
-    ADD COLUMN `countVote` INTEGER NOT NULL;
+
