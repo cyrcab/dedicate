@@ -17,6 +17,7 @@
     "@react-navigation/native-stack": "^6.9.12",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.4.0",
+    "dotenv": "^16.3.1",
     "expo": "~48.0.18",
     "expo-status-bar": "~1.4.4",
     "jwt-decode": "^3.1.2",

@@ -72,7 +72,10 @@ model Event {
   type            String
   prix            Float
   nbSlots         Int
+  photo           String?
+  description     String?
   idEtablissement Int?
+  qrCode          String?  @db.VarChar(1800)
   Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
   diffuser        Diffuser[]
   enchere         Enchere[]
