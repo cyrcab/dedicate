@@ -87,9 +87,6 @@ module.exports.create = async (req, res) => {
     const qrCodeString = JSON.stringify(qrCodeData);
     const qrCodeImage = await QRCode.toDataURL(qrCodeString);
 
-    console.log(`qrCodeString = ${qrCodeString}`);
-    console.log(`qrCodeImage = ${qrCodeImage}`);
-
     // Met à jour l'événement avec le code QR
     const updatedEvent = await prisma.event.update({
       where: { id: event.id },

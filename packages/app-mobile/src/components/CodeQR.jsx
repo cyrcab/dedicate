@@ -4,47 +4,47 @@ import { IconButton, Button } from "react-native-paper";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 export default function CodeQR() {
-  const [scanning, setScanning] = useState(false);
+  const [scanning, setScanning] = useState(false); // utilisez un état local ici
 
   const handleBarCodeScanned = ({ type, data }) => {
     setScanning(false);
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
-  if (scanning) {
-    return (
-      <View style={styles.container}>
-        <BarCodeScanner
-          onBarCodeScanned={handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
-        <IconButton
-          icon="close"
-          color="white"
-          size={24}
-          onPress={() => setScanning(false)}
-          style={styles.closeIcon}
-        />
-      </View>
-    );
-  }
-
   return (
-    <Button
-      icon="qrcode"
-      mode="contained"
-      style={{
-        borderRadius: 50,
-        width: 60,
-        height: 62,
-        position: "absolute",
-        bottom: 20,
-        left: "41%",
-      }}
-      contentStyle={{ width: 80, height: 60 }}
-      labelStyle={{ fontSize: 40 }}
-      onPress={() => setScanning(true)}
-    />
+    <>
+      {scanning && (
+        <View style={styles.container}>
+          <BarCodeScanner
+            onBarCodeScanned={handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+          />
+          <IconButton
+            icon="close"
+            color="white"
+            size={24}
+            onPress={() => setScanning(false)}
+            style={styles.closeIcon}
+          />
+        </View>
+      )}
+
+      <Button
+        icon="qrcode"
+        mode="contained"
+        style={{
+          borderRadius: 50,
+          width: 60,
+          height: 62,
+          position: "absolute",
+          bottom: 20,
+          left: "41%",
+        }}
+        contentStyle={{ width: 80, height: 60 }}
+        labelStyle={{ fontSize: 40 }}
+        onPress={() => setScanning(true)}
+      />
+    </>
   );
 }
 
