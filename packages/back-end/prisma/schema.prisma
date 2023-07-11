@@ -26,6 +26,7 @@ model User {
   dateN           DateTime?
   photo           String?
   typePaiement    String?
+  eventActif      String?
   Role            Role           @relation(fields: [roleId], references: [id])
   roleId          Int
   idEtablissement Int?
@@ -60,6 +61,7 @@ model Musique {
   id           Int        @id @default(autoincrement())
   titre        String
   artiste      String
+  album        String?
   countVote    Int
   countDiffuse Int
   diffuser     Diffuser[]
@@ -77,7 +79,7 @@ model Event {
   photo           String?
   description     String?
   idEtablissement Int?
-  qrCode          String?  @db.VarChar(1800)
+  qrCode          String?        @db.VarChar(1800)
   Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
   diffuser        Diffuser[]
   enchere         Enchere[]
