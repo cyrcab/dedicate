@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+    web-app:
+      container_name: web-app
+      build:
+        context: .
+        dockerfile: ./packages/front-end/Dockerfile
+      volumes:
+        - /app/node_modules
+        - ./packages/front-end:/app
+      ports:
+        - 3000:3000
+
+    api:
+      container_name: api
+      build:
+        context: .
+        dockerfile: ./packages/back-end/Dockerfile
+      volumes:
+        - /app/node_modules
+        - ./packages/back-end:/app
+      ports:
+        - 5001:5001

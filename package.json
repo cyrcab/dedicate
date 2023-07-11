@@ -18,7 +18,8 @@
     "lint:front": "lerna run lint --scope=front-end",
     "lint:back": "lerna run lint --scope=back-end",
     "init:prisma": "cd packages/back-end/ && npx prisma generate",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "build:front": "lerna run build --scope=front-end"
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
