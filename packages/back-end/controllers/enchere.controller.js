@@ -94,7 +94,7 @@ module.exports.vote = async (req, res) => {
         data: {
           titre: nomMusique,
           artiste: artisteMusique,
-          album,
+          album: album,
           countVote: 1,
           countDiffuse: 0,
         },
