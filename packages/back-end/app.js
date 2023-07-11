@@ -1,5 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
 
 const userRoutes = require('./routes/user.route');
 const roleRoutes = require('./routes/roles.route');
@@ -9,6 +11,40 @@ const eventRoutes = require('./routes/event.route');
 const enchereRoutes = require('./routes/enchere.route');
 
 const app = express();
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Dédicate API',
+      version: '1.0.0',
+      description: 'API pour le projet Dédicate',
+    },
+    servers: [
+      {
+        url: 'http://localhost:5001',
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: ['app.js', './routes/*.js'],
+};
+
+const swaggerSpec = swaggerJSDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
