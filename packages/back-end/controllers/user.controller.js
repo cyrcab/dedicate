@@ -43,8 +43,8 @@ module.exports.getUser = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   const { id } = req.params;
   const {
-    nom, prenom, email, tel,
-  } = req.body;
+ nom, prenom, email, tel, 
+} = req.body;
   const data = {};
   const user = await prismaUser.findUnique({
     where: {
@@ -71,7 +71,9 @@ module.exports.updateUser = async (req, res) => {
       },
     });
     if (telAlreadyTaken) {
-      return res.status(400).json({ message: 'Ce numéro de téléphone est déjà utilisé' });
+      return res
+        .status(400)
+        .json({ message: 'Ce numéro de téléphone est déjà utilisé' });
     }
   }
   if (nom) {
@@ -99,7 +101,9 @@ module.exports.updateUser = async (req, res) => {
     data,
   });
   delete updatedUser.password;
-  return res.status(200).json({ message: 'Utilisateur modifié', data: updatedUser });
+  return res
+    .status(200)
+    .json({ message: 'Utilisateur modifié', data: updatedUser });
 };
 
 module.exports.updatePassword = async (req, res) => {
@@ -117,7 +121,8 @@ module.exports.updatePassword = async (req, res) => {
     return res.status(404).json({ message: "Cet utilisateur n'existe" });
   }
   const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(password, salt); await prismaUser.update({
+  const hash = await bcrypt.hash(password, salt);
+  await prismaUser.update({
     where: {
       id: parseInt(id, 10),
     },

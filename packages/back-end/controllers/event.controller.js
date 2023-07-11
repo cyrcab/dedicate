@@ -6,21 +6,29 @@ const jwt = require('jsonwebtoken');
 
 module.exports.create = async (req, res) => {
   const {
-    nom, lieu, date, type, prix, nbSlots, idEtablissement,
-  } = req.body;
+ nom, lieu, date, type, prix, nbSlots, idEtablissement, 
+} = req.body;
 
   if (!nom || !lieu || !date || !type || !prix || !nbSlots) {
-    return res.status(400).json({ message: 'Veuillez remplir tous les champs' });
+    return res
+      .status(400)
+      .json({ message: 'Veuillez remplir tous les champs' });
   }
 
-  const parsedDate = DateTime.fromFormat(date, 'dd/MM/yyyy HH:mm:ss', { zone: 'Europe/Paris', locale: 'fr-FR' });
+  const parsedDate = DateTime.fromFormat(date, 'dd/MM/yyyy HH:mm:ss', {
+    zone: 'Europe/Paris',
+    locale: 'fr-FR',
+  });
   if (!parsedDate.isValid) {
     return res.status(400).json({ message: "La date n'est pas valide" });
   }
 
   const currentDate = DateTime.now().setZone('Europe/Paris');
   if (parsedDate < currentDate) {
-    return res.status(400).json({ message: "La date de l'événement ne peut pas être antérieure à la date actuelle" });
+    return res.status(400).json({
+      message:
+        "La date de l'événement ne peut pas être antérieure à la date actuelle",
+    });
   }
 
   const token = req.headers.authorization.split(' ')[1];
@@ -38,10 +46,15 @@ module.exports.create = async (req, res) => {
 
   if (!user || decodedToken.refRole !== 'Gérant') {
     if (decodedToken.refRole !== 'SuperAdmin') {
-      return res.status(400).json({ message: "Vous n'avez pas les droits pour créer un événement", data: decodedToken.refRole });
+      return res.status(400).json({
+        message: "Vous n'avez pas les droits pour créer un événement",
+        data: decodedToken.refRole,
+      });
     }
     if (!idEtablissement) {
-      return res.status(400).json({ message: 'Vous devez spécifier un établissement' });
+      return res
+        .status(400)
+        .json({ message: 'Vous devez spécifier un établissement' });
     }
 
     const etablissement = await prisma.etablissement.findUnique({
@@ -51,14 +64,20 @@ module.exports.create = async (req, res) => {
     });
 
     if (!etablissement) {
-      return res.status(400).json({ message: "Cet établissement n'existe pas" });
+      return res
+        .status(400)
+        .json({ message: "Cet établissement n'existe pas" });
     }
   }
   if (prix <= 0) {
-    return res.status(400).json({ message: 'Le prix ne peut pas être négatif ou nul' });
+    return res
+      .status(400)
+      .json({ message: 'Le prix ne peut pas être négatif ou nul' });
   }
   if (nbSlots <= 0) {
-    return res.status(400).json({ message: 'Le nombre de slots ne peut pas être négatif ou nul' });
+    return res.status(400).json({
+      message: 'Le nombre de slots ne peut pas être négatif ou nul',
+    });
   }
 
   const eventData = {
@@ -68,7 +87,9 @@ module.exports.create = async (req, res) => {
     type,
     prix,
     nbSlots,
-    idEtablissement: idEtablissement ? parseInt(idEtablissement, 10) : user.idEtablissement,
+    idEtablissement: idEtablissement
+      ? parseInt(idEtablissement, 10)
+      : user.idEtablissement,
   };
 
   try {
@@ -102,7 +123,9 @@ module.exports.getAll = async (req, res) => {
         enchere: true,
       },
     });
-    return res.status(200).json({ message: 'Événements récupérés', data: events });
+    return res
+      .status(200)
+      .json({ message: 'Événements récupérés', data: events });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -111,7 +134,9 @@ module.exports.getAll = async (req, res) => {
 module.exports.getAllOfCompany = async (req, res) => {
   const { idEtablissement } = req.params;
   if (!idEtablissement) {
-    return res.status(400).json({ message: 'Veuillez spécifier un établissement' });
+    return res
+      .status(400)
+      .json({ message: 'Veuillez spécifier un établissement' });
   }
 
   try {
@@ -121,7 +146,9 @@ module.exports.getAllOfCompany = async (req, res) => {
       },
     });
     if (!etablissement) {
-      return res.status(400).json({ message: "Cet établissement n'existe pas" });
+      return res
+        .status(400)
+        .json({ message: "Cet établissement n'existe pas" });
     }
 
     const events = await prisma.event.findMany({
@@ -134,7 +161,9 @@ module.exports.getAllOfCompany = async (req, res) => {
       },
     });
 
-    return res.status(200).json({ message: 'Événements récupérés', data: events });
+    return res
+      .status(200)
+      .json({ message: 'Événements récupérés', data: events });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -196,7 +225,9 @@ module.exports.getUserOfEvents = async (req, res) => {
         enchere: true,
       },
     });
-    return res.status(200).json({ message: 'Événements récupérés', data: events });
+    return res
+      .status(200)
+      .json({ message: 'Événements récupérés', data: events });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -224,7 +255,9 @@ module.exports.getMusiqueOfEvent = async (req, res) => {
         diffuser: true,
       },
     });
-    return res.status(200).json({ message: 'Musiques récupérées', data: musiques });
+    return res
+      .status(200)
+      .json({ message: 'Musiques récupérées', data: musiques });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -272,7 +305,9 @@ module.exports.addUserToEvent = async (req, res) => {
     });
     const check = checkUser.User.find((u) => u.id === parseInt(idUser, 10));
     if (check) {
-      return res.status(400).json({ message: 'Cet utilisateur est déjà dans l\'événement' });
+      return res
+        .status(400)
+        .json({ message: "Cet utilisateur est déjà dans l'événement" });
     }
     const userEvent = await prisma.event.update({
       where: {
@@ -286,7 +321,10 @@ module.exports.addUserToEvent = async (req, res) => {
         },
       },
     });
-    return res.status(200).json({ message: 'Utilisateur ajouté à l\'événement', data: userEvent });
+    return res.status(200).json({
+      message: "Utilisateur ajouté à l'événement",
+      data: userEvent,
+    });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -295,8 +333,8 @@ module.exports.addUserToEvent = async (req, res) => {
 module.exports.update = async (req, res) => {
   const { idEvent } = req.params;
   const {
-    nom, date, lieu, type, prix, nbSlots,
-  } = req.body;
+ nom, date, lieu, type, prix, nbSlots, 
+} = req.body;
   const data = {};
   if (!idEvent) {
     return res.status(400).json({ message: 'Veuillez spécifier un événement' });
@@ -314,13 +352,19 @@ module.exports.update = async (req, res) => {
       data.nom = nom;
     }
     if (date) {
-      const parsedDate = DateTime.fromFormat(date, 'dd/MM/yyyy HH:mm:ss', { zone: 'Europe/Paris', locale: 'fr-FR' });
+      const parsedDate = DateTime.fromFormat(date, 'dd/MM/yyyy HH:mm:ss', {
+        zone: 'Europe/Paris',
+        locale: 'fr-FR',
+      });
       if (!parsedDate.isValid) {
         return res.status(400).json({ message: "La date n'est pas valide" });
       }
       const currentDate = DateTime.now().setZone('Europe/Paris');
       if (parsedDate < currentDate) {
-        return res.status(400).json({ message: "La date de l'événement ne peut pas être antérieure à la date actuelle" });
+        return res.status(400).json({
+          message:
+            "La date de l'événement ne peut pas être antérieure à la date actuelle",
+        });
       }
       data.date = parsedDate.setZone('Europe/Paris').plus({ hours: 2 }).toISO();
     }
@@ -335,13 +379,17 @@ module.exports.update = async (req, res) => {
         return res.status(400).json({ message: 'Le prix doit être un nombre' });
       }
       if (prix <= 0) {
-        return res.status(400).json({ message: 'Le prix ne peut pas être négatif' });
+        return res
+          .status(400)
+          .json({ message: 'Le prix ne peut pas être négatif' });
       }
       data.prix = prix;
     }
     if (nbSlots) {
       if (Number.isNaN(nbSlots)) {
-        return res.status(400).json({ message: 'Le nombre de slots doit être un nombre' });
+        return res.status(400).json({
+          message: 'Le nombre de slots doit être un nombre',
+        });
       }
       if (nbSlots <= 0) {
         return res.status(400).json({
@@ -356,7 +404,9 @@ module.exports.update = async (req, res) => {
       },
       data,
     });
-    return res.status(200).json({ message: 'Événement mis à jour', data: updatedEvent });
+    return res
+      .status(200)
+      .json({ message: 'Événement mis à jour', data: updatedEvent });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -376,13 +426,19 @@ module.exports.delete = async (req, res) => {
     if (!event) {
       return res.status(400).json({ message: "Cet événement n'existe pas" });
     }
-    const currentDate = DateTime.now().setZone('utc').plus({ hours: 4 }).toISO();
+    const currentDate = DateTime.now()
+      .setZone('utc')
+      .plus({ hours: 4 })
+      .toISO();
     const dateEvent = new Date(event.date);
-    const dateEventParsed = DateTime.fromJSDate(dateEvent).setZone('utc').toISO();
+    const dateEventParsed = DateTime.fromJSDate(dateEvent)
+      .setZone('utc')
+      .toISO();
 
     if (dateEventParsed < currentDate) {
       return res.status(400).json({
-        message: 'Cet événement est dans moins de 2h ou est déjà passé, vous ne pouvez pas le supprimer',
+        message:
+          'Cet événement est dans moins de 2h ou est déjà passé, vous ne pouvez pas le supprimer',
       });
     }
 
@@ -391,7 +447,9 @@ module.exports.delete = async (req, res) => {
         id: parseInt(idEvent, 10),
       },
     });
-    return res.status(200).json({ message: 'Événement supprimé', data: deletedEvent });
+    return res
+      .status(200)
+      .json({ message: 'Événement supprimé', data: deletedEvent });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -421,7 +479,9 @@ module.exports.getNextEvent = async (req, res) => {
           date: 'asc',
         },
       });
-      return res.status(200).json({ message: 'Liste des événements', data: events });
+      return res
+        .status(200)
+        .json({ message: 'Liste des événements', data: events });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -450,7 +510,9 @@ module.exports.getNextEvent = async (req, res) => {
           date: 'asc',
         },
       });
-      return res.status(200).json({ message: 'Liste des événements', data: events });
+      return res
+        .status(200)
+        .json({ message: 'Liste des événements', data: events });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -460,23 +522,29 @@ module.exports.getNextEvent = async (req, res) => {
 module.exports.getMyEvent = async (req, res) => {
   const { id } = req.params;
   if (!id) {
-    return res.status(400).json({ message: 'Veuillez spécifier un utilisateur' });
+    return res
+      .status(400)
+      .json({ message: 'Veuillez spécifier un utilisateur' });
   }
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        id: parseInt(id, 10),
-      },
-    }).events({
-      include: {
-        diffuser: {
-          include: {
-            musique: true,
+    const user = await prisma.user
+      .findUnique({
+        where: {
+          id: parseInt(id, 10),
+        },
+      })
+      .events({
+        include: {
+          diffuser: {
+            include: {
+              musique: true,
+            },
           },
         },
-      },
-    });
-    return res.status(200).json({ message: 'Liste des événements', data: user });
+      });
+    return res
+      .status(200)
+      .json({ message: 'Liste des événements', data: user });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }

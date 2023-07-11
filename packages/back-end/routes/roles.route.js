@@ -1,8 +1,6 @@
 const router = require('express').Router();
 const roleController = require('../controllers/roles.controller');
-const {
-  authTokenAdmin,
-} = require('../middleware/auth.middleware');
+const { authTokenAdmin } = require('../middleware/auth.middleware');
 
 router.post('/', authTokenAdmin, roleController.createRole);
 router.get('/', authTokenAdmin, roleController.getRoles);

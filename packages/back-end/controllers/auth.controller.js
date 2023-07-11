@@ -17,18 +17,41 @@ function generateAccessToken(user) {
 
 module.exports.registerEta = async (req, res) => {
   const {
-    nom, prenom, email, tel, nomEta, adresse, password, ville, codePostal,
+    nom,
+    prenom,
+    email,
+    tel,
+    nomEta,
+    adresse,
+    password,
+    ville,
+    codePostal,
   } = req.body;
-  if (!nom || !prenom || !email || !tel || !nomEta
-    || !adresse || !password || !ville || !codePostal) {
-    return res.status(400).json({ message: 'Veuillez remplir tous les champs' });
+  if (
+    !nom ||
+    !prenom ||
+    !email ||
+    !tel ||
+    !nomEta ||
+    !adresse ||
+    !password ||
+    !ville ||
+    !codePostal
+  ) {
+    return res
+      .status(400)
+      .json({ message: 'Veuillez remplir tous les champs' });
   }
 
   if (!regex.test(email)) {
-    return res.status(400).json({ message: "L'adresse email n'est pas valide" });
+    return res
+      .status(400)
+      .json({ message: "L'adresse email n'est pas valide" });
   }
   if (!regexTel.test(tel)) {
-    return res.status(400).json({ message: "Le numéro de téléphone n'est pas valide" });
+    return res
+      .status(400)
+      .json({ message: "Le numéro de téléphone n'est pas valide" });
   }
 
   const user = await prismaUser.findFirst({
@@ -37,7 +60,9 @@ module.exports.registerEta = async (req, res) => {
     },
   });
   if (user) {
-    return res.status(400).json({ message: 'Cet adresse email ou ce téléphone est déjà utilisé' });
+    return res
+      .status(400)
+      .json({ message: 'Cet adresse email ou ce téléphone est déjà utilisé' });
   }
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
@@ -81,30 +106,39 @@ module.exports.registerEta = async (req, res) => {
       return res.status(400).json({ message: 'Identifiant incorect' });
     }
     const token = generateAccessToken({
-      id: newUser.id, role: newUser.roleId, refRole: refRole.refRole,
+      id: newUser.id,
+      role: newUser.roleId,
+      refRole: refRole.refRole,
     });
-    return res.status(201).json({ message: 'Votre compte a bien été créé', data: newUser, token });
-  } catch (err) {
     return res
-      .status(500)
-      .json({ message: "Erreur lors de la création de l'utilisateur", data: err });
+      .status(201)
+      .json({ message: 'Votre compte a bien été créé', data: newUser, token });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Erreur lors de la création de l'utilisateur",
+      data: err,
+    });
   }
 };
 
 module.exports.register = async (req, res) => {
-  const {
-    nom, prenom, email, tel, password,
-  } = req.body;
+  const { nom, prenom, email, tel, password } = req.body;
 
   if (!nom || !prenom || !email || !tel || !password) {
-    return res.status(400).json({ message: 'Veuillez remplir tous les champs' });
+    return res
+      .status(400)
+      .json({ message: 'Veuillez remplir tous les champs' });
   }
 
   if (!regex.test(email)) {
-    return res.status(400).json({ message: "L'adresse email n'est pas valide" });
+    return res
+      .status(400)
+      .json({ message: "L'adresse email n'est pas valide" });
   }
   if (!regexTel.test(tel)) {
-    return res.status(400).json({ message: "Le numéro de téléphone n'est pas valide" });
+    return res
+      .status(400)
+      .json({ message: "Le numéro de téléphone n'est pas valide" });
   }
 
   const user = await prismaUser.findFirst({
@@ -113,7 +147,9 @@ module.exports.register = async (req, res) => {
     },
   });
   if (user) {
-    return res.status(400).json({ message: 'Cet adresse email ou ce téléphone est déjà utilisé' });
+    return res
+      .status(400)
+      .json({ message: 'Cet adresse email ou ce téléphone est déjà utilisé' });
   }
 
   const salt = await bcrypt.genSalt(10);
@@ -143,18 +179,27 @@ module.exports.register = async (req, res) => {
     }
     delete newUser.password;
     const token = generateAccessToken({
-      id: newUser.id, role: newUser.roleId, refRole: refRole.refRole,
+      id: newUser.id,
+      role: newUser.roleId,
+      refRole: refRole.refRole,
     });
-    res.status(201).json({ message: 'Votre compte a bien été créé', data: newUser, token });
+    res
+      .status(201)
+      .json({ message: 'Votre compte a bien été créé', data: newUser, token });
   } catch (err) {
-    return res.status(500).json({ message: "Erreur lors de la création de l'utilisateur", data: err });
+    return res.status(500).json({
+      message: "Erreur lors de la création de l'utilisateur",
+      data: err,
+    });
   }
 };
 
 module.exports.loginUser = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ message: 'Veuillez remplir tous les champs' });
+    return res
+      .status(400)
+      .json({ message: 'Veuillez remplir tous les champs' });
   }
 
   const user = await prismaUser.findFirst({
@@ -181,14 +226,22 @@ module.exports.loginUser = async (req, res) => {
     return res.status(400).json({ message: 'Identifiant incorect' });
   }
   delete user.password;
-  const token = generateAccessToken({ id: user.id, role: user.roleId, refRole: refRole.refRole });
-  return res.status(200).json({ message: 'Vous êtes connecté', token, data: user });
+  const token = generateAccessToken({
+    id: user.id,
+    role: user.roleId,
+    refRole: refRole.refRole,
+  });
+  return res
+    .status(200)
+    .json({ message: 'Vous êtes connecté', token, data: user });
 };
 
 module.exports.loginEta = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json({ message: 'Veuillez remplir tous les champs' });
+    return res
+      .status(400)
+      .json({ message: 'Veuillez remplir tous les champs' });
   }
 
   const user = await prismaUser.findFirst({
@@ -200,7 +253,9 @@ module.exports.loginEta = async (req, res) => {
     return res.status(400).json({ message: 'Identifiant incorect' });
   }
   if ((await user.roleId) === 1) {
-    return res.status(400).json({ message: 'Identifiant incorect', data: user });
+    return res
+      .status(400)
+      .json({ message: 'Identifiant incorect', data: user });
   }
   const refRole = await prismaRole.findFirst({
     where: {
@@ -215,7 +270,11 @@ module.exports.loginEta = async (req, res) => {
     return res.status(400).json({ message: 'Identifiant incorect' });
   }
   delete user.password;
-  const token = generateAccessToken({ id: user.id, role: user.roleId, refRole: refRole.refRole });
+  const token = generateAccessToken({
+    id: user.id,
+    role: user.roleId,
+    refRole: refRole.refRole,
+  });
   return res.status(200).json({
     message: 'Vous êtes connecté',
     token,
