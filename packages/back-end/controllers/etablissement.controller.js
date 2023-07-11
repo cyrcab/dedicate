@@ -41,8 +41,8 @@ module.exports.getOne = async (req, res) => {
 module.exports.update = async (req, res) => {
   const { id } = req.params;
   const {
-    nom, adresse, ville, codePostal,
-  } = req.body;
+ nom, adresse, ville, codePostal, 
+} = req.body;
   const etablissement = await prismaEta.findUnique({
     where: {
       id: parseInt(id, 10),
@@ -70,7 +70,9 @@ module.exports.update = async (req, res) => {
     },
     data,
   });
-  return res.status(200).json({ message: 'Etablissement modifié ', data: updatedEtablissement });
+  return res
+    .status(200)
+    .json({ message: 'Etablissement modifié ', data: updatedEtablissement });
 };
 
 module.exports.delete = async (req, res) => {
