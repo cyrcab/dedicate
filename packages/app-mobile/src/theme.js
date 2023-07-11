@@ -52,5 +52,3 @@ export const colors = {
   "onCustom2": "rgb(255, 255, 255)",
   "custom2Container": "rgb(241, 218, 255)",
   "onCustom2Container": "rgb(45, 0, 79)",
-
-}

@@ -90,14 +90,16 @@ export default StyleSheet.create({
     right: 0,
     zIndex: 1,
   },
-  containerEventInformation:{
+  containerEventInformation: {
     flex: 1,
     padding: 20,
+    padding: 20,
   },
-  etablissementInformationHistoric:{
+  etablissementInformationHistoric: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     height: '20%',
     alignItems: 'center',
+  },
   },
 });
