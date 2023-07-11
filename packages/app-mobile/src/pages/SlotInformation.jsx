@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { View, StyleSheet, Image, ScrollView } from "react-native";
-import { TextInput, Text } from "react-native-paper";
+import { TextInput, Text, Button } from "react-native-paper";
 
-export default function SlotInformation() {
+export default function SlotInformation({}) {
   const [accessToken, setAccessToken] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [tracks, setTracks] = useState([]);
@@ -53,9 +53,12 @@ export default function SlotInformation() {
       console.error(error);
     }
   }
-
   return (
     <View style={styles.container}>
+      <Text>Prix actuel : </Text>
+      <Button>
+        Enchérir
+      </Button>
       <TextInput
         style={styles.input}
         label="Rechercher"
