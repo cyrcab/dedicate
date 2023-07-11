@@ -3,12 +3,24 @@ import { View, StyleSheet } from "react-native";
 import { IconButton, Button } from "react-native-paper";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
+import { axiosApiInstance } from "../../axios.config";
+import { backendUrl } from "../backendUrl";
+
 export default function CodeQR() {
   const [scanning, setScanning] = useState(false); // utilisez un état local ici
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanning(false);
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+
+    const scannedData = JSON.parse(data);
+    try {
+      //console.log(token)
+      console.log(scannedData);
+      axiosApiInstance.post(backendUrl + 'events/add/' + scannedData.idEvent);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
