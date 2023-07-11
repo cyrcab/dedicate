@@ -339,9 +339,9 @@ module.exports.addUserToEvent = async (req, res) => {
         id: parseInt(idUser, 10),
       },
       data: {
-        eventActif: idEvent
-      }
-    })
+        eventActif: idEvent,
+      },
+    });
 
     const userEvent = await prisma.event.update({
       where: {
