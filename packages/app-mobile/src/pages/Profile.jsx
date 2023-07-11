@@ -3,17 +3,30 @@ import { View, Text, ScrollView, Image } from "react-native";
 import { Card, IconButton, Avatar } from "react-native-paper";
 import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
+import EventsHistoric from "../components/EventHistoric";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const ProfilePage = ({ navigation }) => {
   const [user, setUser] = useState({});
-  const [userId, setUserId] = useState('');
+  const [userId, setUserId] = useState("");
+  const [event, setEvent] = useState([]);
 
   const profileInfo = () => {
     axiosApiInstance
       .get(backendUrl + "users/" + userId)
       .then((data) => {
         setUser(data.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const historicalEventInfo = () => {
+    axiosApiInstance
+      .get(backendUrl + "events/me/" + userId)
+      .then((response) => {
+        setEvent(response.data.data);
       })
       .catch((error) => {
         console.log(error);
@@ -34,12 +47,12 @@ const ProfilePage = ({ navigation }) => {
   }, []);
 
   useEffect(() => {
-    profileInfo()
+    profileInfo();
+    historicalEventInfo();
   }, [userId]);
 
-
   return (
-    <View style={{ flex: 1, padding: 16, marginTop: 30}}>
+    <View style={{ flex: 1, padding: 16, marginTop: 30 }}>
       <View
         style={{
           flexDirection: "row",
@@ -65,58 +78,9 @@ const ProfilePage = ({ navigation }) => {
       <Text>Vos derniers événements</Text>
 
       <ScrollView>
-        <Card.Title
-          title="Oclub"
-          subtitle="Soirée électro-funk"
-          left={() => (
-            <Image
-              source={require("../../assets/oclub.png")} // Remplacez le chemin par le chemin réel de votre image
-              style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
-            />
-          )}
-          onPress={() => {
-            console.log("pressed");
-          }}
-        />
-        <Card.Title
-          title="Oclub"
-          subtitle="Soirée électro-funk"
-          left={() => (
-            <Image
-              source={require("../../assets/oclub.png")} // Remplacez le chemin par le chemin réel de votre image
-              style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
-            />
-          )}
-          onPress={() => {
-            console.log("pressed");
-          }}
-        />
-        <Card.Title
-          title="Oclub"
-          subtitle="Soirée électro-funk"
-          left={() => (
-            <Image
-              source={require("../../assets/oclub.png")} // Remplacez le chemin par le chemin réel de votre image
-              style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
-            />
-          )}
-          onPress={() => {
-            console.log("pressed");
-          }}
-        />
-        <Card.Title
-          title="Oclub"
-          subtitle="Soirée électro-funk"
-          left={() => (
-            <Image
-              source={require("../../assets/oclub.png")} // Remplacez le chemin par le chemin réel de votre image
-              style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
-            />
-          )}
-          onPress={() => {
-            console.log("pressed");
-          }}
-        />
+        {event.map((item, index) => (
+          <EventsHistoric item={item} key={index}  />
+        ))}
       </ScrollView>
     </View>
   );

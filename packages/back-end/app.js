@@ -6,6 +6,7 @@ const roleRoutes = require('./routes/roles.route');
 const etablissementRoutes = require('./routes/etablissement.route');
 const authRoutes = require('./routes/auth.route');
 const eventRoutes = require('./routes/event.route');
+const enchereRoutes = require('./routes/enchere.route');
 
 const app = express();
 
@@ -18,7 +19,10 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization',
   );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+  );
   next();
 });
 
@@ -28,6 +32,7 @@ app.use('/api/roles', roleRoutes);
 app.use('/api/etablissements', etablissementRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/encheres', enchereRoutes);
 
 app.listen(5001, () => {
   console.log('Server started on port 5001');
