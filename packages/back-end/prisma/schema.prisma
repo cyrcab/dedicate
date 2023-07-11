@@ -32,6 +32,8 @@ model User {
   Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
   enchere         Enchere[]
   events          Event[]        @relation("EventUser")
+  lastScannedEventId  Int?           
+  LastScannedEvent    Event?     @relation(name: "LastScannedEvent", fields: [lastScannedEventId], references: [id])
 }
 
 model Etablissement {
@@ -80,6 +82,7 @@ model Event {
   diffuser        Diffuser[]
   enchere         Enchere[]
   User            User[]         @relation("EventUser")
+  LastScannedUsers  User[]       @relation("LastScannedEvent")
 }
 
 model Enchere {

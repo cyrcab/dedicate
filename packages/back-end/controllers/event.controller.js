@@ -8,8 +8,8 @@ const fs = require('fs');
 
 module.exports.create = async (req, res) => {
   const {
- nom, lieu, date, type, prix, nbSlots, idEtablissement, 
-} = req.body;
+    nom, lieu, date, type, prix, nbSlots, idEtablissement,
+  } = req.body;
 
   if (!nom || !lieu || !date || !type || !prix || !nbSlots) {
     return res
@@ -291,10 +291,14 @@ module.exports.getMusiqueOfEvent = async (req, res) => {
 
 module.exports.addUserToEvent = async (req, res) => {
   const { idEvent } = req.params;
+  console.log('COUCOU');
+  console.log(req.params);
+  console.log(idEvent);
   if (!idEvent) {
     return res.status(400).json({ message: 'Veuillez spécifier un evenement' });
   }
   try {
+    console.log('COUCOU 1');
     const event = await prisma.event.findUnique({
       where: {
         id: parseInt(idEvent, 10),
@@ -304,18 +308,22 @@ module.exports.addUserToEvent = async (req, res) => {
     const token = authHeader && authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
     const idUser = decoded.id;
-
+    console.log('COUCOU 2 ');
     if (!event) {
+      console.log('COUCOU 3');
       return res.status(400).json({ message: "Cet evenement n'existe pas" });
     }
+    console.log('COUCOU 4');
     const user = await prisma.user.findUnique({
       where: {
         id: parseInt(idUser, 10),
       },
     });
     if (!user) {
+      console.log('COUCOU 5');
       return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
     }
+    console.log('COUCOU 6');
     // Check if user is already in event
     const checkUser = await prisma.event.findUnique({
       where: {
@@ -329,12 +337,15 @@ module.exports.addUserToEvent = async (req, res) => {
         },
       },
     });
+    console.log('COUCOU 7');
     const check = checkUser.User.find((u) => u.id === parseInt(idUser, 10));
     if (check) {
+      console.log('COUCOU 8');
       return res
         .status(400)
         .json({ message: "Cet utilisateur est déjà dans l'événement" });
     }
+    console.log('COUCOU 8.1');
     const userEvent = await prisma.event.update({
       where: {
         id: parseInt(idEvent, 10),
@@ -347,20 +358,34 @@ module.exports.addUserToEvent = async (req, res) => {
         },
       },
     });
+    console.log('COUCOU 9');
+    console.log('Updating user with idUser:', idUser, ' and idEvent:', idEvent);
+    // Update the user's lastScannedEventId
+    await prisma.user.update({
+      where: {
+        id: parseInt(idUser, 10),
+      },
+      data: {
+        lastScannedEventId: parseInt(idEvent, 10),
+      },
+    });
+    console.log('COUCOU 10');
     return res.status(200).json({
       message: "Utilisateur ajouté à l'événement",
       data: userEvent,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ message: err.message });
   }
 };
 
+
 module.exports.update = async (req, res) => {
   const { idEvent } = req.params;
   const {
- nom, date, lieu, type, prix, nbSlots, 
-} = req.body;
+    nom, date, lieu, type, prix, nbSlots,
+  } = req.body;
   const data = {};
   if (!idEvent) {
     return res.status(400).json({ message: 'Veuillez spécifier un événement' });
