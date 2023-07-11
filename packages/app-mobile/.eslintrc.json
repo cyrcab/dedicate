@@ -4,7 +4,7 @@
     "commonjs": true,
     "es2021": true
   },
-  "extends": "airbnb-base",
+  "extends": ["airbnb-base", "prettier"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest"
@@ -12,7 +12,7 @@
   "ignorePatterns": ["node_modules/", "assets/"],
   "rules": {
     "comma-dangle": 1,
-    "object-curly-newline": 1,
+    "object-curly-newline": 0,
     "import/newline-after-import": 1,
     "object-shorthand": 1,
     "no-param-reassign": 1,
