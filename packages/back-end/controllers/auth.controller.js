@@ -28,15 +28,15 @@ module.exports.registerEta = async (req, res) => {
     codePostal,
   } = req.body;
   if (
-    !nom ||
-    !prenom ||
-    !email ||
-    !tel ||
-    !nomEta ||
-    !adresse ||
-    !password ||
-    !ville ||
-    !codePostal
+    !nom
+    || !prenom
+    || !email
+    || !tel
+    || !nomEta
+    || !adresse
+    || !password
+    || !ville
+    || !codePostal
   ) {
     return res
       .status(400)
