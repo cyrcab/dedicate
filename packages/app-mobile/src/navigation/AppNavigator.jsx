@@ -36,6 +36,13 @@ const HomeStack = () => (
   </Stack.Navigator>
 );
 
+const EventStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Event" component={Event} options={{ headerShown: false }}/>
+    <Stack.Screen name="SlotsInformation" component={SlotInformation} />
+  </Stack.Navigator>
+);
+
 const AppNavigator = () => (
   <Tab.Navigator
     screenOptions={({ route }) => ({
