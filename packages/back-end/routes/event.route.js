@@ -9,7 +9,6 @@ const {
   checkTokenForUpdateEvents,
   checkMe,
 } = require('../middleware/auth.middleware');
-/* eslint-disable */
 /**
  * @swagger
  * tags:
