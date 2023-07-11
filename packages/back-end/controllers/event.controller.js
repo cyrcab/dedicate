@@ -580,9 +580,9 @@ module.exports.getMyEvent = async (req, res) => {
       })
       .events({
         include: {
-          diffuser: {
+          enchere: {
             include: {
-              musique: true,
+              Musique: true,
             },
           },
         },

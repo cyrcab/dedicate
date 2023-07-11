@@ -51,7 +51,7 @@ export default function Event({ navigation }) {
             subtitle={item.Musique.titre}
             left={() => (
               <Image
-                source={require("../../assets/oclub.png")} // Remplacez le chemin par le chemin réel de votre image
+                source={{uri : item.Musique.album}} // Remplacez le chemin par le chemin réel de votre image
                 style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
               />
             )}
