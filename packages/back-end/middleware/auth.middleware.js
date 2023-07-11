@@ -243,8 +243,8 @@ module.exports.checkTokenForUpdateEvents = async (req, res, next) => {
         .json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
     if (
-      user.refRole.toLowerCase() !== 'gérant' &&
-      user.refRole.toLowerCase() !== 'superadmin'
+      user.refRole.toLowerCase() !== 'gérant'
+      && user.refRole.toLowerCase() !== 'superadmin'
     ) {
       return res
         .status(403)

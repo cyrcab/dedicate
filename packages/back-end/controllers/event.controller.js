@@ -8,10 +8,10 @@ const fs = require('fs');
 
 module.exports.create = async (req, res) => {
   const {
-    nom, lieu, date, type, prix, nbSlots, idEtablissement,
+    nom, lieu, date, type, prix, nbSlots, idEtablissement, description,
   } = req.body;
 
-  if (!nom || !lieu || !date || !type || !prix || !nbSlots) {
+  if (!nom || !lieu || !date || !type || !prix || !nbSlots || !description) {
     return res
       .status(400)
       .json({ message: 'Veuillez remplir tous les champs' });
@@ -38,7 +38,7 @@ module.exports.create = async (req, res) => {
   try {
     decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
   } catch (err) {
-    return res.status(400).json({ message: "Votre token n'est pas valide" });
+    return res.status(401).json({ message: "Votre token n'est pas valide" });
   }
 
   const idUser = decodedToken.id;
@@ -50,7 +50,7 @@ module.exports.create = async (req, res) => {
 
   if (!user || decodedToken.refRole !== 'Gérant') {
     if (decodedToken.refRole !== 'SuperAdmin') {
-      return res.status(400).json({
+      return res.status(403).json({
         message: "Vous n'avez pas les droits pour créer un événement",
         data: decodedToken.refRole,
       });
@@ -91,6 +91,7 @@ module.exports.create = async (req, res) => {
     type,
     prix,
     nbSlots,
+    description,
     idEtablissement: idEtablissement
       ? parseInt(idEtablissement, 10)
       : user.idEtablissement,
@@ -149,6 +150,10 @@ module.exports.getAll = async (req, res) => {
         enchere: true,
       },
     });
+    events.forEach((event) => {
+      delete event.qrCode;
+    });
+
     return res
       .status(200)
       .json({ message: 'Événements récupérés', data: events });
@@ -186,6 +191,16 @@ module.exports.getAllOfCompany = async (req, res) => {
         enchere: true,
       },
     });
+
+    events.forEach((event) => {
+      delete event.qrCode;
+    });
+
+    if (!events.length) {
+      return res
+        .status(400)
+        .json({ message: "Cet établissement n'a pas d'événements" });
+    }
 
     return res
       .status(200)
@@ -234,7 +249,7 @@ module.exports.getUserOfEvents = async (req, res) => {
       },
     });
     if (!event) {
-      return res.status(400).json({ message: "Cet evenement n'existe pas" });
+      return res.status(404).json({ message: "Cet evenement n'existe pas" });
     }
     const events = await prisma.event.findUnique({
       where: {
@@ -253,7 +268,7 @@ module.exports.getUserOfEvents = async (req, res) => {
     });
     return res
       .status(200)
-      .json({ message: 'Événements récupérés', data: events });
+      .json({ message: 'Infos événements récupérés', data: events });
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
@@ -550,11 +565,16 @@ module.exports.getNextEvent = async (req, res) => {
               codePostal: true,
             },
           },
+
         },
         orderBy: {
           date: 'asc',
         },
       });
+      events.forEach((event) => {
+        delete event.qrCode;
+      });
+
       return res
         .status(200)
         .json({ message: 'Liste des événements', data: events });
@@ -585,8 +605,12 @@ module.exports.getMyEvent = async (req, res) => {
               Musique: true,
             },
           },
+
         },
       });
+    if (!user) {
+      return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
+    }
     return res
       .status(200)
       .json({ message: 'Liste des événements', data: user });
