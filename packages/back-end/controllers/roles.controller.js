@@ -56,10 +56,10 @@ module.exports.updateRole = async (req, res) => {
     return res.status(404).json({ message: "Ce rôle n'existe pas" });
   }
   if (
-    role.refRole === 'Gerant' ||
-    role.refRole === 'Client' ||
-    role.refRole === 'SuperAdmin' ||
-    role.refRole === 'Supprime'
+    role.refRole === 'Gerant'
+    || role.refRole === 'Client'
+    || role.refRole === 'SuperAdmin'
+    || role.refRole === 'Supprime'
   ) {
     return res
       .status(400)
