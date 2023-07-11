@@ -43,8 +43,8 @@ module.exports.getUser = async (req, res) => {
 module.exports.updateUser = async (req, res) => {
   const { id } = req.params;
   const {
- nom, prenom, email, tel, 
-} = req.body;
+    nom, prenom, email, tel,
+  } = req.body;
   const data = {};
   const user = await prismaUser.findUnique({
     where: {

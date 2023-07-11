@@ -112,7 +112,37 @@ router.get('/:id', checkMe, userController.getUser);
  *        description: Erreur du serveur
  */
 router.put('/:id', checkMe, userController.updateUser);
+
 router.put('/password/:id', checkMe, userController.updatePassword);
+
+/**
+ * @swagger
+ * /api/users/{id}:
+ *  delete:
+ *   summary: Supprime un utilisateur
+ *   description: Supprime un utilisateur en fonction de son id si l'utilisateur est admin ou si c'est lui-même
+ *   security:
+ *     - bearerAuth: []
+ *   tags: [Users]
+ *   parameters:
+ *     - in: path
+ *       name: id
+ *       required: true
+ *       description: L'id de l'utilisateur
+ *       schema:
+ *         type: integer
+ *   responses:
+ *    200:
+ *     description: Succès
+ *    401:
+ *     description: Vous n'êtes pas connecté
+ *    403:
+ *     description: Vous n'êtes pas authorisé à faire ça
+ *    404:
+ *     description: Cet utilisateur n'existe pas
+ *    500:
+ *     description: Erreur du serveur
+ */
 router.delete('/:id', checkMe, userController.deleteUser);
 
 module.exports = router;
