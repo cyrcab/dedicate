@@ -35,7 +35,7 @@ export const colors = {
     "level2": "rgb(247, 235, 245)",
     "level3": "rgb(244, 229, 242)",
     "level4": "rgb(243, 228, 240)",
-    "level5": "rgb(241, 224, 238)"
+    "level5": "rgb(241, 224, 238)",
   },
   "surfaceDisabled": "rgba(31, 26, 29, 0.12)",
   "onSurfaceDisabled": "rgba(31, 26, 29, 0.38)",
@@ -51,6 +51,6 @@ export const colors = {
   "custom2": "rgb(118, 75, 155)",
   "onCustom2": "rgb(255, 255, 255)",
   "custom2Container": "rgb(241, 218, 255)",
-  "onCustom2Container": "rgb(45, 0, 79)"
+  "onCustom2Container": "rgb(45, 0, 79)",
 
 }
