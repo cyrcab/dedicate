@@ -6,8 +6,10 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
 
+import styles from "../pages/styles";
+
 export default function CodeQR() {
-  const [scanning, setScanning] = useState(false); // utilisez un état local ici
+  const [scanning, setScanning] = useState(false);
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanning(false);
@@ -15,8 +17,6 @@ export default function CodeQR() {
 
     const scannedData = JSON.parse(data);
     try {
-      //console.log(token)
-      //console.log(scannedData);
       axiosApiInstance.post(backendUrl + 'events/add/' + scannedData.idEvent);
     } catch (err) {
       console.error(err);
@@ -26,7 +26,7 @@ export default function CodeQR() {
   return (
     <>
       {scanning && (
-        <View style={styles.container}>
+        <View style={styles.containerCodeQR}>
           <BarCodeScanner
             onBarCodeScanned={handleBarCodeScanned}
             style={StyleSheet.absoluteFillObject}
@@ -36,7 +36,7 @@ export default function CodeQR() {
             color="white"
             size={24}
             onPress={() => setScanning(false)}
-            style={styles.closeIcon}
+            style={styles.closeIconCodeQR}
           />
         </View>
       )}
@@ -44,14 +44,7 @@ export default function CodeQR() {
       <Button
         icon="qrcode"
         mode="contained"
-        style={{
-          borderRadius: 50,
-          width: 60,
-          height: 62,
-          position: "absolute",
-          bottom: 20,
-          left: "41%",
-        }}
+        style={styles.buttonCodeQR}
         contentStyle={{ width: 80, height: 60 }}
         labelStyle={{ fontSize: 40 }}
         onPress={() => setScanning(true)}
@@ -59,19 +52,3 @@ export default function CodeQR() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-  },
-  closeIcon: {
-    position: "absolute",
-    top: 50,
-    right: 20,
-  },
-});
