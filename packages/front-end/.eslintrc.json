@@ -11,12 +11,15 @@
   },
   "ignorePatterns": ["node_modules/"],
   "rules": {
+    "linebreak-style": ["error", "windows"],
     "comma-dangle": 1,
     "object-curly-newline": 0,
     "import/newline-after-import": 1,
     "object-shorthand": 1,
     "no-param-reassign": 1,
     "consistent-return": 1,
-    "react/react-in-jsx-scope": 0
+    "react/react-in-jsx-scope": 0,
+    "import/no-unresolved": 0,
+    "import/extensions": 0
   }
 }
