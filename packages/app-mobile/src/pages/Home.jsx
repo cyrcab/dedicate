@@ -6,6 +6,8 @@ import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
 import CodeQR from "../components/CodeQR";
 
+import styles from "./styles";
+
 export default function Home() {
   const [event, setEvent] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -27,13 +29,13 @@ export default function Home() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.logo}>DEDICATE</Text>
-        <FontAwesome name="search" size={24} style={styles.searchIcon} />
+    <View style={styles.containerHome}>
+      <View style={styles.headerHome}>
+        <Text style={styles.logoHome}>DEDICATE</Text>
+        <FontAwesome name="search" size={24} style={styles.searchIconHome} />
       </View>
       <ScrollView
-        style={styles.eventList}
+        style={styles.eventListHome}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -42,37 +44,8 @@ export default function Home() {
           <EventsCard item={item} key={index} />
         ))}
       </ScrollView>
-      <CodeQR/>
+      <CodeQR />
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    marginTop: 30,
-  },
-  logo: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  searchIcon: {
-    marginLeft: 16,
-  },
-  eventList: {
-    flex: 1,
-    paddingHorizontal: 16,
-    paddingTop: 16,
-  },
-  eventItem: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-});
