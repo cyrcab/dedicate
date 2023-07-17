@@ -288,5 +288,6 @@ router.post(
 );
 router.put('/:idEvent', checkTokenForUpdateEvents, eventController.update);
 router.delete('/:idEvent', checkTokenForUpdateEvents, eventController.delete);
+router.get('/eventActif/me', checkToken, eventController.getEventActif)
 
 module.exports = router;
