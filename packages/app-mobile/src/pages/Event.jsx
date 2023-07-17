@@ -4,6 +4,8 @@ import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
 import { Button, Card } from "react-native-paper";
 
+import styles from "./styles";
+
 export default function Event({ navigation }) {
   const idEvent = "1";
   const [music, setMusic] = useState([]);
@@ -37,13 +39,13 @@ export default function Event({ navigation }) {
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.eventName}>{event.nom}</Text>
+    <ScrollView contentContainerStyle={styles.containerEvent}>
+      <Text style={styles.eventNameEvent}>{event.nom}</Text>
 
       {music.map((item, index) => (
         <Card
           key={index}
-          style={styles.card}
+          style={styles.cardEvent}
           onPress={() => navigation.navigate("SlotsInformation")}
         >
           <Card.Title
@@ -62,7 +64,7 @@ export default function Event({ navigation }) {
 
       <Button
         mode="contained"
-        style={styles.button}
+        style={styles.buttonEvent}
         onPress={() => navigation.navigate("SlotsInformation")}
       >
         Ajoutez un titre
@@ -70,26 +72,3 @@ export default function Event({ navigation }) {
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    alignItems: "center",
-    padding: 20,
-  },
-  eventName: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 20,
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  card: {
-    width: "90%", // ou la largeur souhaitée
-    marginBottom: 10,
-  },
-  button: {
-    width: "auto",
-    alignSelf: "center",
-  },
-});
