@@ -5,7 +5,7 @@ import Home from './components/pages/home';
 import Playlist from './components/pages/playlist/index';
 import MyEvents from './components/pages/myEvents/index';
 import Profile from './components/pages/profile/index';
-import Layout from './components/pages/layout/index';
+import Layout from './components/layout/index';
 import Users from './components/pages/users/index';
 import Settings from './components/pages/settings/index';
 import MyEventsDetails from './components/pages/myEvents/component/MyEventsDetails';

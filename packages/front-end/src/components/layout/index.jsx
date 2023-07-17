@@ -1,9 +1,8 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { Grid } from '@mui/material';
-import Header from '../../header/Header';
-import Sidebar from '../../sidebar/Sidebar';
-import './style/layout.css';
+import { Grid, Box } from '@mui/material';
+import Header from '../header/Header';
+import Sidebar from '../sidebar/Sidebar';
 
 export default function Layout({ children }) {
   const activeTab = 'New events';
@@ -17,8 +16,8 @@ export default function Layout({ children }) {
         <Grid item xs={12} height={'10%'}>
           <Header activeTab={activeTab} />
         </Grid>
-        <Grid item xs={12} height={'90%'}>
-          <main>{children}</main>
+        <Grid item xs={12} height={'90%'} style={{ padding: '0 20px' }}>
+          <Box>{children}</Box>
         </Grid>
       </Grid>
     </Grid>
