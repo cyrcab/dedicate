@@ -16,7 +16,7 @@ export default function CodeQR() {
     const scannedData = JSON.parse(data);
     try {
       //console.log(token)
-      console.log(scannedData);
+      //console.log(scannedData);
       axiosApiInstance.post(backendUrl + 'events/add/' + scannedData.idEvent);
     } catch (err) {
       console.error(err);
