@@ -4,6 +4,7 @@ import styles from "./styles";
 import { Avatar, Button, IconButton } from "react-native-paper";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
+
 export default function ReadMore({ route }) {
   const { event } = route.params;
   const [scanning, setScanning] = useState(false);
