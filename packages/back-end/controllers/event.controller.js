@@ -618,3 +618,45 @@ module.exports.getMyEvent = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+module.exports.getEventActif = async (req, res) => {
+  const token = req.headers.authorization.split(' ')[1];
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+  }
+  catch (err) {
+    return res.status(401).json({ message: "Votre token n'est pas valide" });
+  }
+  const idUser = decodedToken.id;
+  const user = await prisma.user.findUnique({
+    where: {
+      id: parseInt(idUser, 10),
+    },
+  });
+  if (!user) {
+    return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
+  }
+  if (!user.eventActif) {
+    return res.status(400).json({ message: "Cet utilisateur n'a pas d'événement actif" });
+  }
+  try {
+    const event = await prisma.event.findFirst({
+      where:{
+        id : parseInt(user.eventActif, 10),
+      },
+      include: {
+        Etablissement: true,
+        enchere: true,
+      },
+    })
+    if (!event) {
+      return res.status(400).json({ message: "Cet événement n'existe pas" });
+    }
+    return res.status(200).json({ message: 'Événement récupéré', data: event });
+  }
+  catch (err) {
+    return res.status(500).json({ message: "Internal error BG", data: err.message });
+  }
+
+} 
