@@ -92,12 +92,12 @@ export default StyleSheet.create({
   },
   containerEventInformation:{
     flex: 1,
-    padding: 20
+    padding: 20,
   },
   etablissementInformationHistoric:{
     flexDirection: 'row',
     justifyContent: 'space-around',
     height: '20%',
     alignItems: 'center',
-  }
+  },
 });
