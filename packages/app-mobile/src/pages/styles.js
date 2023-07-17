@@ -101,7 +101,7 @@ export default StyleSheet.create({
     alignItems: 'center',
   },
 
-  //components\CodeQR.jsx
+  // components\CodeQR.jsx
   buttonCodeQR: {
     borderRadius: 50,
     width: 60,
@@ -124,7 +124,7 @@ export default StyleSheet.create({
     right: 20,
   },
 
-  //pages\Home.jsx
+  // pages\Home.jsx
   containerHome: {
     flex: 1,
     backgroundColor: "#fff",
@@ -153,7 +153,7 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
 
-  //pages\Event.jsx
+  // pages\Event.jsx
   containerEvent: {
     flexGrow: 1,
     alignItems: "center",
