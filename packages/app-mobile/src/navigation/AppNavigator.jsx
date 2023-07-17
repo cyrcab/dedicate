@@ -21,7 +21,6 @@ const ProfileStack = () => (
     <Stack.Screen name="Informations de la soirée" component={EventInformation}/>
   </Stack.Navigator>
 );
-
 const HomeStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
