@@ -1,0 +1,45 @@
+const request = require('supertest');
+const app = require('../app');
+const authController = require('../controllers/auth.controller');
+
+describe('Routes API d\'authentification', () => {
+  it('devrait enregistrer un Eta', async () => {
+    const response = await request(app)
+      .post('/registerEta')
+      .send({ /* données du corps pour l'enregistrement */ });
+    
+    // Assertions pour la réponse
+    expect(response.statusCode).toBe(200);
+    // Ajoute d'autres assertions au besoin
+  });
+
+  it('devrait enregistrer un utilisateur', async () => {
+    const response = await request(app)
+      .post('/register')
+      .send({ /* données du corps pour l'enregistrement */ });
+    
+    // Assertions pour la réponse
+    expect(response.statusCode).toBe(200);
+    // Ajoute d'autres assertions au besoin
+  });
+
+  it('devrait connecter un utilisateur', async () => {
+    const response = await request(app)
+      .post('/login')
+      .send({ /* données du corps pour la connexion */ });
+    
+    // Assertions pour la réponse
+    expect(response.statusCode).toBe(200);
+    // Ajoute d'autres assertions au besoin
+  });
+
+  it('devrait connecter un Eta', async () => {
+    const response = await request(app)
+      .post('/loginEta')
+      .send({ /* données du corps pour la connexion */ });
+    
+    // Assertions pour la réponse
+    expect(response.statusCode).toBe(200);
+    // Ajoute d'autres assertions au besoin
+  });
+});
