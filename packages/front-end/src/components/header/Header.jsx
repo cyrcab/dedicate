@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import './Header.css';
+import './header.css';
 import Avatar from '@mui/material/Avatar';
 import { useLocation } from 'react-router-dom';
 
