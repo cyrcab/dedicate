@@ -12,6 +12,8 @@ import { useFocusEffect } from '@react-navigation/native';
 
 import styles from "./styles";
 
+import styles from "./styles";
+
 export default function Event({ navigation }) {
   const [idEvent, setIdEvent] = useState(0);
   const [music, setMusic] = useState([]);
