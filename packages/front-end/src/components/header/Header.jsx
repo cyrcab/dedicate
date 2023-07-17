@@ -49,7 +49,7 @@ export default function Header() {
       <Box>
         <Typography variant="h5">{getTitle()}</Typography>
         <Typography variant="subtitle2" color={'GrayText'}>
-          04 Juillet 2023
+          {new Date().toLocaleDateString()}
         </Typography>
       </Box>
       <ProfileComponent user={user} />
