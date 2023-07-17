@@ -10,25 +10,25 @@ import Users from './components/pages/users/index';
 import Settings from './components/pages/settings/index';
 import MyEventsDetails from './components/pages/myEvents/component/MyEventsDetails';
 import theme from './utils/appTheme';
+import Login from './components/pages/login/index';
+import Register from './components/pages/register/index';
 
 export default function App() {
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <BrowserRouter>
-          <Layout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/playlist" element={<Playlist />} />
-              <Route path="/myEvents" element={<MyEvents />} />
-              <Route path="/myEvents/:id" element={<MyEventsDetails />} />
-              <Route path="/users" element={<Users />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/profile" element={<Profile />} />
-            </Routes>
-          </Layout>
-        </BrowserRouter>
-      </ThemeProvider>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/playlist' element={<Playlist />} />
+            <Route path='/myEvents' element={<MyEvents />} />
+            <Route path='/myEvents/:id' element={<MyEventsDetails />} />
+            <Route path='/users' element={<Users />} />
+            <Route path='/settings' element={<Settings />} />
+            <Route path='/profile' element={<Profile />} />
+          </Routes>
+        </Layout>
+      </BrowserRouter>
     </>
   );
 }
