@@ -2,7 +2,7 @@
 import React from 'react';
 import Header from '../../header/Header';
 import Sidebar from '../../sidebar/Sidebar';
-import './style/Layout.css';
+import './style/layout.css';
 
 export default function Layout({ children }) {
   const activeTab = 'New events';
