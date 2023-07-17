@@ -4,8 +4,8 @@ import './style/home.css';
 // import { styled } from '@mui/material/styles';
 // import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Unstable_Grid2';
-import Button from '@mui/material/Button';
-import Table from '../../Table/Table';
+// import Button from '@mui/material/Button';
+// import Table from '../../Table/Table';
 
 // const Item = styled(Paper)(({ theme }) => ({
 //     ...theme.typography.body2,
@@ -15,9 +15,10 @@ import Table from '../../Table/Table';
 
 export default function Home() {
   return (
-    <div className='home'>
+    <div className="home">
       <Grid container spacing={2} sx={{ m: 2 }}>
-        <Grid xs={2}>
+        <h2>Hello</h2>
+        {/* <Grid xs={2}>
           <Button
             className='dashboardCreateEvent'
             sx={{
@@ -54,7 +55,7 @@ export default function Home() {
           <div className='tableContainer'>
             <Table />
           </div>
-        </Grid>
+        </Grid> */}
       </Grid>
       {/* <div className='ligne1'>home
             <div className='col1'>test
