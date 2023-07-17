@@ -1,5 +1,5 @@
 import React from 'react';
-import './Sidebar.css';
+import './sidebar.css';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import EventIcon from '@mui/icons-material/Event';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
