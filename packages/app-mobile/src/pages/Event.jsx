@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, Image, RefreshControl } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  Image,
+  RefreshControl,
+} from 'react-native';
 import { axiosApiInstance } from '../../axios.config';
 import { backendUrl } from '../backendUrl';
 import { Button, Card } from 'react-native-paper';
@@ -59,7 +65,7 @@ export default function Event({ navigation }) {
           <Card
             key={index}
             style={[styles.card, isTopTen && styles.topTenCard]} // Applique le style "topTenCard" si c'est l'une des 10 premières musiques
-            onPress={() => navigation.navigate('Enchérir')}
+            onPress={() => navigation.navigate('Enchérir', { event: event, item : item, index : index })}
           >
             <Card.Title
               title={item.Musique.artiste}
@@ -70,7 +76,9 @@ export default function Event({ navigation }) {
                   style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
                 />
               )}
-              right={() => <Text style={{ marginRight: 10 }}>{item.prix}€</Text>}
+              right={() => (
+                <Text style={{ marginRight: 10 }}>{item.prix}€</Text>
+              )}
             />
           </Card>
         );

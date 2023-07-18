@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { axiosApiInstance } from '../../axios.config';
 import axios from 'axios';
 import {
   View,
@@ -96,7 +97,7 @@ export default function SlotInformation({ route }) {
           artisteMusique: selectedTrack.name,
           album: selectedTrack.album.images[0].url,
         };
-        axios
+        axiosApiInstance
           .post(backendUrl + 'encheres', musicVoted)
           .then((response) => {
             console.log(response);
