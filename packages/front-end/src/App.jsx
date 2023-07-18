@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import jwtDecode from 'jwt-decode';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { setSignedIn } from './store/reducer/reducer';
 import Home from './components/pages/home';
 import Playlist from './components/pages/playlist/index';
@@ -16,28 +15,25 @@ import theme from './utils/appTheme';
 // import MyEventsDetails from './components/pages/myEvents/component/MyEventsDetails';
 import Login from './components/pages/login/index';
 import Register from './components/pages/register/index';
+import RequireAuth from './components/router/RequireAuth';
 
 export default function App() {
   const dispatch = useDispatch();
-  const isSignedIn = useSelector((state) => state.isSignedIn);
+  const isSignedIn = useSelector((state) => state.auth.isSignedIn);
 
-  const checkToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem('token');
-      if (!token) {
-        dispatch(setSignedIn(false));
-        return;
-      }
-      const decodedToken = jwtDecode(token);
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp < currentTime) {
-        dispatch(setSignedIn(false));
-        return;
-      }
-      dispatch(setSignedIn(true));
-    } catch (error) {
+  const checkToken = () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
       dispatch(setSignedIn(false));
+      return;
     }
+    const decodedToken = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    if (decodedToken.exp < currentTime) {
+      dispatch(setSignedIn(false));
+      return;
+    }
+    dispatch(setSignedIn(true));
   };
 
   useEffect(() => {
@@ -49,71 +45,78 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <BrowserRouter>
           <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route
               path="/"
-              element={ isSignedIn
-                ? <Layout>
+              element={
+                <RequireAuth>
+                 <Layout>
                   <Home />
                 </Layout>
-                : <Navigate to='/login' replace />
+                </RequireAuth>
               }
             />
             <Route
               path="/playlist"
-              element={ isSignedIn
-                ? <Layout>
-                  <Playlist />
-                </Layout>
-                : <Navigate to='/login' replace />
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <Playlist />
+                  </Layout>
+                </RequireAuth>
               }
             />
             <Route
               path="/myEvents"
-              element={ isSignedIn
-                ? <Layout>
-                  <MyEvents />
-                </Layout>
-                : <Navigate to='/login' replace />
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <MyEvents />
+                  </Layout>
+                </RequireAuth>
               }
             />
             <Route
               path="/myEvents/:id"
-              element={ isSignedIn
-                ? <Layout>
-                  <Home />
-                </Layout>
-                : <Navigate to='/login' replace />
+              element={
+                <RequireAuth>
+                  <Layout>
+                    {/* <MyEventsDetails /> */}
+                  </Layout>
+                </RequireAuth>
               }
             />
             <Route
               path="/users"
-              element={ isSignedIn
-                ? <Layout>
-                  <Users />
-                </Layout>
-                : <Navigate to='/login' replace />
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <Users />
+                  </Layout>
+                </RequireAuth>
               }
             />
             <Route
               path="/settings"
-              element={ isSignedIn
-                ? <Layout>
-                  <Settings />
-                </Layout>
-                : <Navigate to='/login' replace />
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <Settings />
+                  </Layout>
+                </RequireAuth>
               }
             />
             <Route
               path="/profile"
-              element={ isSignedIn
-                ? <Layout>
-                  <Profile />
-                </Layout>
-                : <Navigate to='/login' replace />
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <Profile />
+                  </Layout>
+                </RequireAuth>
               }
             />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
