@@ -1,28 +1,35 @@
-import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, Image } from "react-native";
-import { axiosApiInstance } from "../../axios.config";
-import { backendUrl } from "../backendUrl";
-import { Button, Card } from "react-native-paper";
+import { useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, Text, Image, RefreshControl } from 'react-native';
+import { axiosApiInstance } from '../../axios.config';
+import { backendUrl } from '../backendUrl';
+import { Button, Card } from 'react-native-paper';
 
 export default function Event({ navigation }) {
-  const idEvent = "1";
+  const idEvent = '1';
   const [music, setMusic] = useState([]);
   const [event, setEvent] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   function musicInfos() {
     axiosApiInstance
-      .get(backendUrl + "encheres/" + idEvent)
+      .get(backendUrl + 'encheres/' + idEvent)
       .then((response) => {
         setMusic(response.data.votes);
+        setRefreshing(false);
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
+  const onRefresh = () => {
+    setRefreshing(true);
+    musicInfos();
+  };
+
   function EventInfos() {
     axiosApiInstance
-      .get(backendUrl + "events/one/" + idEvent)
+      .get(backendUrl + 'events/one/' + idEvent)
       .then((response) => {
         setEvent(response.data.data);
       })
@@ -37,33 +44,44 @@ export default function Event({ navigation }) {
   }, []);
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <Text style={styles.eventName}>{event.nom}</Text>
 
-      {music.map((item, index) => (
-        <Card
-          key={index}
-          style={styles.card}
-          onPress={() => navigation.navigate("SlotsInformation")}
-        >
-          <Card.Title
-            title={item.Musique.artiste}
-            subtitle={item.Musique.titre}
-            left={() => (
-              <Image
-                source={{uri : item.Musique.album}} // Remplacez le chemin par le chemin réel de votre image
-                style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
-              />
-            )}
-            right={() => <Text style={{ marginRight: 10 }}>{item.prix}€</Text>}
-          />
-        </Card>
-      ))}
+      {music.map((item, index) => {
+        const isTopTen = index < event.nbSlots; // Vérifie si l'index est inférieur à 10
+
+        return (
+          <Card
+            key={index}
+            style={[styles.card, isTopTen && styles.topTenCard]} // Applique le style "topTenCard" si c'est l'une des 10 premières musiques
+            onPress={() => navigation.navigate('Enchérir')}
+          >
+            <Card.Title
+              title={item.Musique.artiste}
+              subtitle={item.Musique.titre}
+              left={() => (
+                <Image
+                  source={{ uri: item.Musique.album }} // Remplacez le chemin par le chemin réel de votre image
+                  style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
+                />
+              )}
+              right={() => <Text style={{ marginRight: 10 }}>{item.prix}€</Text>}
+            />
+          </Card>
+        );
+      })}
 
       <Button
         mode="contained"
         style={styles.button}
-        onPress={() => navigation.navigate("SlotsInformation")}
+        onPress={() =>
+          navigation.navigate('SlotsInformation', { event: event })
+        }
       >
         Ajoutez un titre
       </Button>
@@ -74,22 +92,26 @@ export default function Event({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 20,
   },
   eventName: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   card: {
-    width: "90%", // ou la largeur souhaitée
+    width: '90%',
     marginBottom: 10,
   },
+  topTenCard: {
+    borderWidth: 2,
+    borderColor: 'red',
+  },
   button: {
-    width: "auto",
-    alignSelf: "center",
+    width: 'auto',
+    alignSelf: 'center',
   },
 });
