@@ -1,9 +1,9 @@
 /* eslint-disable prefer-template */
 import * as React from 'react';
 import { useState } from 'react';
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,9 +22,8 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import club2 from '../../../assets/club2.jpg';
 import logo from '../../../assets/logo.png';
-import { backendUrl } from "../../../backendUrl";
-import { setSignedIn } from "../../../store/reducer/reducer";
-
+import { backendUrl } from '../../../backendUrl';
+import { setSignedIn } from '../../../store/reducer/reducer';
 
 function Copyright(props) {
   return (
@@ -47,15 +46,15 @@ export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
 
-  const [email, setEmail] = useState("");
-  const [mdp, setMdp] = useState("");
-  const [prenom, setPrenom] = useState("");
-  const [nom, setNom] = useState("");
-  const [tel, setTel] = useState("");
-  const [nomEta, setNomEta] = useState("");
-  const [ville, setVille] = useState("");
-  const [codePostal, setCodePostal] = useState("");
-  const [adresse, setAdresse] = useState("");
+  const [email, setEmail] = useState('');
+  const [mdp, setMdp] = useState('');
+  const [prenom, setPrenom] = useState('');
+  const [nom, setNom] = useState('');
+  const [tel, setTel] = useState('');
+  const [nomEta, setNomEta] = useState('');
+  const [ville, setVille] = useState('');
+  const [codePostal, setCodePostal] = useState('');
+  const [adresse, setAdresse] = useState('');
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -65,7 +64,6 @@ export default function Register() {
     event.preventDefault();
   };
 
-  
   const handleClickShowPassword2 = () => {
     setShowPassword2(!showPassword2);
   };
@@ -75,7 +73,7 @@ export default function Register() {
   };
 
   const [visible, setVisible] = useState(false);
-  const [messageError, setMessageError] = useState("");
+  const [messageError, setMessageError] = useState('');
 
   const onDismissAlert = () => setVisible(false);
 
@@ -95,11 +93,11 @@ export default function Register() {
     };
 
     axios
-      .post(backendUrl + "auth/registerEta", data)
+      .post(backendUrl + 'auth/registerEta', data)
       .then((response) => {
-        dispatch({ type: "SET_USER_DATA", payload: response.data });
-        AsyncStorage.setItem("token", response.data.token);
-        AsyncStorage.setItem("userId", JSON.stringify(response.data.data.id));
+        dispatch({ type: 'SET_USER_DATA', payload: response.data });
+        AsyncStorage.setItem('token', response.data.token);
+        AsyncStorage.setItem('userId', JSON.stringify(response.data.data.id));
         dispatch(setSignedIn(true));
       })
       .catch((error) => {
@@ -121,8 +119,7 @@ export default function Register() {
           sx={{
             backgroundImage: `url(${club2})`,
             backgroundRepeat: 'no-repeat',
-            backgroundColor: (t) =>
-              t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+            backgroundColor: (t) => (t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900]),
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -232,7 +229,7 @@ export default function Register() {
                 name="password"
                 onChange={setMdp}
                 label="Mot de passe"
-                type={ showPassword ? "password" : "text"}
+                type={ showPassword ? 'password' : 'text'}
                 id="password"
                 autoComplete="current-password"
                 InputProps={{
@@ -246,7 +243,7 @@ export default function Register() {
                       </IconButton>
                     </InputAdornment>
                   ),
-                 }}
+                }}
               />
               <TextField
                 margin="normal"
@@ -254,7 +251,7 @@ export default function Register() {
                 fullWidth
                 name="passwordConfirm"
                 label="Confirmation mot de passe"
-                type={ showPassword2 ? "password" : "text"}
+                type={ showPassword2 ? 'password' : 'text'}
                 id="password"
                 autoComplete="current-password"
                 InputProps={{
@@ -268,7 +265,7 @@ export default function Register() {
                       </IconButton>
                     </InputAdornment>
                   ),
-                 }}
+                }}
               />
               <Button
                 type="submit"
@@ -281,7 +278,7 @@ export default function Register() {
               <Grid container>
                 <Grid item>
                   <Link href="/login" variant="body2">
-                    {"Already have an account? Login"}
+                    {'Already have an account? Login'}
                   </Link>
                 </Grid>
               </Grid>
@@ -289,8 +286,8 @@ export default function Register() {
             </Box>
           </Box>
         </Grid>
-        <Snackbar 
-          sx={{ width: '100%', top: 0 }} 
+        <Snackbar
+          sx={{ width: '100%', top: 0 }}
           spacing={2}
           visible={visible}
           onDismiss={onDismissAlert}
