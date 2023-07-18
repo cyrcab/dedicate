@@ -26,12 +26,16 @@ model User {
   dateN           DateTime?
   photo           String?
   typePaiement    String?
+  eventActif      String?
   Role            Role           @relation(fields: [roleId], references: [id])
   roleId          Int
   idEtablissement Int?
+  eventActif      String?
   Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
   enchere         Enchere[]
   events          Event[]        @relation("EventUser")
+  lastScannedEventId  Int?           
+  LastScannedEvent    Event?     @relation(name: "LastScannedEvent", fields: [lastScannedEventId], references: [id])
 }
 
 model Etablissement {
@@ -58,6 +62,7 @@ model Musique {
   id           Int        @id @default(autoincrement())
   titre        String
   artiste      String
+  album        String?
   countVote    Int
   countDiffuse Int
   diffuser     Diffuser[]
@@ -75,11 +80,12 @@ model Event {
   photo           String?
   description     String?
   idEtablissement Int?
-  qrCode          String?  @db.VarChar(1800)
+  qrCode          String?        @db.VarChar(1800)
   Etablissement   Etablissement? @relation(fields: [idEtablissement], references: [id])
   diffuser        Diffuser[]
   enchere         Enchere[]
   User            User[]         @relation("EventUser")
+  LastScannedUsers  User[]       @relation("LastScannedEvent")
 }
 
 model Enchere {

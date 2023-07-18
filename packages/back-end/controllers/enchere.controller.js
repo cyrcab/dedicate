@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 module.exports.vote = async (req, res) => {
   const {
-    eventId, userId, enchereId, nomMusique, artisteMusique, prix,
+    eventId, userId, enchereId, nomMusique, artisteMusique, album, prix,
   } = req.body;
 
   if (!eventId || !userId || !prix) {
@@ -77,7 +77,7 @@ module.exports.vote = async (req, res) => {
 
       return res.status(200).json({ message: "L'enchère a bien été mise à jour", enchere: updatedEnchere, musique: updatedMusique });
     }
-    if (!nomMusique || !artisteMusique) {
+    if (!nomMusique || !artisteMusique || !album) {
       return res.status(400).json({ message: 'Il manque des informations' });
     }
 
@@ -94,6 +94,7 @@ module.exports.vote = async (req, res) => {
         data: {
           titre: nomMusique,
           artiste: artisteMusique,
+          album,
           countVote: 1,
           countDiffuse: 0,
         },
@@ -153,6 +154,7 @@ module.exports.getVotes = async (req, res) => {
           select: {
             titre: true,
             artiste: true,
+            album: true,
           },
         },
       },

@@ -109,9 +109,6 @@ module.exports.create = async (req, res) => {
     const qrCodeString = JSON.stringify(qrCodeData);
     const qrCodeImage = await QRCode.toDataURL(qrCodeString);
 
-    console.log(`qrCodeString = ${qrCodeString}`);
-    console.log(`qrCodeImage = ${qrCodeImage}`);
-
     // Met à jour l'événement avec le code QR
     const updatedEvent = await prisma.event.update({
       where: { id: event.id },
@@ -322,7 +319,6 @@ module.exports.addUserToEvent = async (req, res) => {
     const token = authHeader && authHeader.split(' ')[1];
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
     const idUser = decoded.id;
-
     if (!event) {
       return res.status(400).json({ message: "Cet evenement n'existe pas" });
     }
@@ -353,6 +349,15 @@ module.exports.addUserToEvent = async (req, res) => {
         .status(400)
         .json({ message: "Cet utilisateur est déjà dans l'événement" });
     }
+    await prisma.user.update({
+      where: {
+        id: parseInt(idUser, 10),
+      },
+      data: {
+        eventActif: idEvent,
+      },
+    });
+
     const userEvent = await prisma.event.update({
       where: {
         id: parseInt(idEvent, 10),
@@ -365,14 +370,25 @@ module.exports.addUserToEvent = async (req, res) => {
         },
       },
     });
+    // Update the user's lastScannedEventId
+    await prisma.user.update({
+      where: {
+        id: parseInt(idUser, 10),
+      },
+      data: {
+        lastScannedEventId: parseInt(idEvent, 10),
+      },
+    });
     return res.status(200).json({
       message: "Utilisateur ajouté à l'événement",
       data: userEvent,
     });
   } catch (err) {
+    console.log(err);
     return res.status(500).json({ message: err.message });
   }
 };
+
 
 module.exports.update = async (req, res) => {
   const { idEvent } = req.params;
@@ -602,3 +618,45 @@ module.exports.getMyEvent = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+
+module.exports.getEventActif = async (req, res) => {
+  const token = req.headers.authorization.split(' ')[1];
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+  }
+  catch (err) {
+    return res.status(401).json({ message: "Votre token n'est pas valide" });
+  }
+  const idUser = decodedToken.id;
+  const user = await prisma.user.findUnique({
+    where: {
+      id: parseInt(idUser, 10),
+    },
+  });
+  if (!user) {
+    return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
+  }
+  if (!user.eventActif) {
+    return res.status(400).json({ message: "Cet utilisateur n'a pas d'événement actif" });
+  }
+  try {
+    const event = await prisma.event.findFirst({
+      where:{
+        id : parseInt(user.eventActif, 10),
+      },
+      include: {
+        Etablissement: true,
+        enchere: true,
+      },
+    })
+    if (!event) {
+      return res.status(400).json({ message: "Cet événement n'existe pas" });
+    }
+    return res.status(200).json({ message: 'Événement récupéré', data: event });
+  }
+  catch (err) {
+    return res.status(500).json({ message: "Internal error BG", data: err.message });
+  }
+
+} 

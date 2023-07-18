@@ -282,7 +282,13 @@ router.put(
   checkTokenForParticipeEvent,
   eventController.addUserToEvent,
 );
+router.post(
+  '/add/:idEvent',
+  checkTokenForParticipeEvent,
+  eventController.addUserToEvent,
+);
 router.put('/:idEvent', checkTokenForUpdateEvents, eventController.update);
 router.delete('/:idEvent', checkTokenForUpdateEvents, eventController.delete);
+router.get('/eventActif/me', checkToken, eventController.getEventActif)
 
 module.exports = router;
