@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './components/pages/home';
 import Playlist from './components/pages/playlist/index';
