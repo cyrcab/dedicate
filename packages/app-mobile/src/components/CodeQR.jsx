@@ -6,8 +6,6 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import styles from "../pages/styles";
 import ScannerCodeQR from "./ScannerCodeQR";
 
-import styles from "../pages/styles";
-
 export default function CodeQR() {
   const [startScanning, setStartScanning] = useState(false);
 
