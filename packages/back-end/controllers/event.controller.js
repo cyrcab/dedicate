@@ -334,14 +334,6 @@ module.exports.addUserToEvent = async (req, res) => {
         .status(400)
         .json({ message: "Cet utilisateur est déjà dans l'événement" });
     }
-    await prisma.user.update({
-      where: {
-        id: parseInt(idUser, 10),
-      },
-      data: {
-        eventActif: idEvent,
-      },
-    });
 
     const userEvent = await prisma.event.update({
       where: {
