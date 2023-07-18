@@ -629,13 +629,13 @@ module.exports.getEventActif = async (req, res) => {
   if (!user) {
     return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
   }
-  if (!user.eventActif) {
-    return res.status(400).json({ message: "Cet utilisateur n'a pas d'événement actif" });
+  if (!user.lastScannedEventId) {
+    return res.status(400).json({ message: "Cet utilisateur n'a pas de dernier événement scanné" });
   }
   try {
     const event = await prisma.event.findFirst({
-      where:{
-        id : parseInt(user.eventActif, 10),
+      where: {
+        id: parseInt(user.lastScannedEventId, 10),
       },
       include: {
         Etablissement: true,
@@ -651,4 +651,4 @@ module.exports.getEventActif = async (req, res) => {
     return res.status(500).json({ message: "Internal error BG", data: err.message });
   }
 
-} 
+}

@@ -106,9 +106,9 @@ export default StyleSheet.create({
     borderRadius: 50,
     width: 60,
     height: 62,
-    position: "absolute",
+    position: 'absolute',
     bottom: 20,
-    left: "41%",
+    left: '41%',
   },
   containerCodeQR: {
     flex: 1,
@@ -119,7 +119,7 @@ export default StyleSheet.create({
     right: 0,
   },
   closeIconCodeQR: {
-    position: "absolute",
+    position: 'absolute',
     top: 50,
     right: 20,
   },
@@ -127,18 +127,18 @@ export default StyleSheet.create({
   // pages\Home.jsx
   containerHome: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   headerHome: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     padding: 16,
     marginTop: 30,
   },
   logoHome: {
     fontSize: 18,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   searchIconHome: {
     marginLeft: 16,
@@ -156,22 +156,22 @@ export default StyleSheet.create({
   // pages\Event.jsx
   containerEvent: {
     flexGrow: 1,
-    alignItems: "center",
+    alignItems: 'center',
     padding: 20,
   },
   eventNameEvent: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginTop: 20,
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: 'center',
   },
   cardEvent: {
-    width: "90%", // ou la largeur souhaitée
+    width: '90%', // ou la largeur souhaitée
     marginBottom: 10,
   },
   buttonEvent: {
-    width: "auto",
-    alignSelf: "center",
+    width: 'auto',
+    alignSelf: 'center',
   },
 });
