@@ -276,18 +276,161 @@ router.get('/next/next/:ville?', checkToken, eventController.getNextEvent);
  *         description: Erreur du serveur
  */
 router.get('/me/:id', checkMe, eventController.getMyEvent);
+
+/**
+ * @swagger
+ * /api/events/eventActif/me:
+ *   get:
+ *    summary: Récupère l'événement actif d'un utilisateur
+ *    description: Récupère l'événement actif d'un utilisateur connecté
+ *    security:
+ *      - bearerAuth: []
+ *    tags: [Events]
+ *    responses:
+ *      200:
+ *        description: Événement récupéré
+ *      400:
+ *        description: Il manque des informations / Cet utilisateur n'existe pas / Cet utilisateur n'a pas d'événement actif
+ *      401:
+ *        description: Vous n'êtes pas connecté
+ *      403:
+ *        description: Vous n'êtes pas authorisé à faire ça
+ *      404:
+ *        description: Cet evenement n'existe pas
+ *      500:
+ *        description: Erreur du serveur
+ */
+router.get('/eventActif/me', checkToken, eventController.getEventActif)
+
+/**
+ * @swagger
+ * /api/events/add/{idEvent}:
+ *   put:
+ *     summary: Ajoute un utilisateur à un événement
+ *     description: Ajoute un utilisateur à un événement (si il n'y est pas déjà)
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Events]
+ *     parameters:
+ *       - in: path
+ *         name: idEvent
+ *         required: true
+ *         description: L'id de l'événement
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Utilisateur ajouté à l'événement
+ *       400:
+ *         description: Il manque des informations / Cet événement n'existe pas / Cet utilisateur n'existe pas / Vous participez déjà à cet événement
+ *       401:
+ *         description: Vous n'êtes pas connecté
+ *       403:
+ *         description: Vous n'êtes pas authorisé à faire ça
+ *       404:
+ *         description: Cet événement n'existe pas / Cet utilisateur n'existe pas
+ *       500:
+ *         description: Erreur du serveur
+ *         
+ */
 router.put(
   '/add/:idEvent',
   checkTokenForParticipeEvent,
   eventController.addUserToEvent,
 );
-router.post(
-  '/add/:idEvent',
-  checkTokenForParticipeEvent,
-  eventController.addUserToEvent,
-);
+
+/**
+ * @swagger
+ * /api/events/{idEvent}:
+ *   put:
+ *     summary: Modifie un événement
+ *     description: Modifie un événement (Si il n'est pas passé)
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [Events]
+ *     parameters:
+ *       - in: path
+ *         name: idEvent
+ *         required: true
+ *         description: L'id de l'événement
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       description: Les informations de l'événement à modifier
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               nom:
+ *                 type: string
+ *               date:
+ *                 type: string
+ *               lieu:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               prix:
+ *                 type: float
+ *               nbSlots:
+ *                 type: integer
+ *               description:
+ *                 type: string
+ *           example:
+ *             nom: Soirée de l'été
+ *             date: 2021-07-01 20:00:00
+ *             lieu: 3 rue de la paix
+ *             type: Rap
+ *             prix: 10
+ *             nbSlots: 5
+ *             description: Venez nombreux
+ *     responses:
+ *       200:
+ *         description: Événement mis à jour
+ *       400:
+ *         description: Il manque des informations / Cet événement n'existe pas / Cet événement est passé / La date de l'événement est déjà passée / Le format de la date est incorrect / Le prix doit être un nombre positif / Le nombre de slots doit être un nombre positif 
+ *       401:
+ *         description: Vous n'êtes pas connecté
+ *       403:
+ *         description: Vous n'êtes pas authorisé à faire ça
+ *       404:
+ *         description: Cet événement n'existe pas
+ *       500:
+ *         description: Erreur du serveur
+ */
 router.put('/:idEvent', checkTokenForUpdateEvents, eventController.update);
+
+/**
+ * @swagger
+ * /api/events/{idEvent}:
+ *  delete:
+ *   summary: Supprime un événement
+ *   description: Supprime un événement (Si il n'est pas passé)
+ *   security:
+ *    - bearerAuth: []
+ *   tags: [Events]
+ *   parameters:
+ *    - in: path
+ *      name: idEvent
+ *      required: true
+ *      description: L'id de l'événement
+ *      schema:
+ *       type: integer
+ *   responses:
+ *    200:
+ *     description: Événement supprimé
+ *    400:
+ *     description: Il manque des informations / Cet événement n'existe pas / Cet événement est dans moins de 2h / Cet événement est passé
+ *    401:
+ *     description: Vous n'êtes pas connecté
+ *    403:
+ *     description: Vous n'êtes pas authorisé à faire ça
+ *    404:
+ *     description: Cet événement n'existe pas
+ *    500:
+ *     description: Erreur du serveur 
+ */
 router.delete('/:idEvent', checkTokenForUpdateEvents, eventController.delete);
-router.get('/eventActif/me', checkToken, eventController.getEventActif)
 
 module.exports = router;
