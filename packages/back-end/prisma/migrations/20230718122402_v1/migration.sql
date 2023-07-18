@@ -20,6 +20,7 @@ CREATE TABLE `User` (
     `typePaiement` VARCHAR(191) NULL,
     `roleId` INTEGER NOT NULL,
     `idEtablissement` INTEGER NULL,
+    `lastScannedEventId` INTEGER NULL,
 
     UNIQUE INDEX `User_mail_key`(`mail`),
     UNIQUE INDEX `User_tel_key`(`tel`),
@@ -51,6 +52,7 @@ CREATE TABLE `Musique` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `titre` VARCHAR(191) NOT NULL,
     `artiste` VARCHAR(191) NOT NULL,
+    `album` VARCHAR(191) NULL,
     `countVote` INTEGER NOT NULL,
     `countDiffuse` INTEGER NOT NULL,
 
@@ -99,6 +101,9 @@ ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFE
 
 -- AddForeignKey
 ALTER TABLE `User` ADD CONSTRAINT `User_idEtablissement_fkey` FOREIGN KEY (`idEtablissement`) REFERENCES `Etablissement`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `User` ADD CONSTRAINT `User_lastScannedEventId_fkey` FOREIGN KEY (`lastScannedEventId`) REFERENCES `Event`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Diffuser` ADD CONSTRAINT `Diffuser_idMusique_fkey` FOREIGN KEY (`idMusique`) REFERENCES `Musique`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
