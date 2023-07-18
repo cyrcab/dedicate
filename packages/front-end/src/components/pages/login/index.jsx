@@ -4,7 +4,6 @@ import * as React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -27,6 +26,10 @@ import club from '../../../assets/club.jpg';
 import logo from '../../../assets/logo.png';
 import { backendUrl } from '../../../backendUrl';
 import { setSignedIn } from '../../../store/reducer/reducer';
+
+function saveToLocalStorage(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
 
 function Copyright(props) {
   return (
@@ -81,8 +84,8 @@ export default function Login() {
       .post(backendUrl + 'auth/loginEta', data)
       .then((response) => {
         dispatch({ type: 'SET_USER_DATA', payload: response.data });
-        AsyncStorage.setItem('token', response.data.token);
-        AsyncStorage.setItem('userId', response.data.data.id.toString());
+        saveToLocalStorage.setItem('token', response.data.token);
+        saveToLocalStorage.setItem('userId', response.data.data.id.toString());
         dispatch(setSignedIn(true));
       })
       .catch((error) => {
