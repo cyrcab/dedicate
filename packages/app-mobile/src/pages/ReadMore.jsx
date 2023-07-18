@@ -3,37 +3,21 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import styles from "./styles";
 import { Avatar, Button, IconButton } from "react-native-paper";
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import ScannerCodeQR from "../components/ScannerCodeQR";
 
 
 export default function ReadMore({ route }) {
   const { event } = route.params;
-  const [scanning, setScanning] = useState(false);
-
-  const handleBarCodeScanned = ({ type, data }) => {
-    setScanning(false);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
-  };
+  const [startScanning, setStartScanning] = useState(false);
 
   return (
     <View style={StyleSheet.absoluteFillObject}>
-      {scanning && (
-        <View style={StyleSheet.absoluteFillObject}>
-          <BarCodeScanner onBarCodeScanned={handleBarCodeScanned} style={StyleSheet.absoluteFillObject} />
-          <IconButton
-            icon="close"
-            color="white"
-            size={24}
-            onPress={() => setScanning(false)}
-            style={{
-              position: "absolute",
-              top: 50,
-              right: 20,
-            }}
-          />
-        </View>
-      )}
+      <ScannerCodeQR
+        startScanning={startScanning}
+        resetScanning={() => setStartScanning(false)}
+      />
 
-      {!scanning && (
+      {!startScanning && (
         <ScrollView style={styles.containerReadMore}>
           <View style={styles.etablissementInformation}>
             <Avatar.Image size={100} source={require("../../assets/oclub.png")} />
@@ -61,7 +45,7 @@ export default function ReadMore({ route }) {
           <Button
             mode="contained"
             style={styles.qrCodeButton}
-            onPress={() => setScanning(true)}
+            onPress={() => setStartScanning(true)}
           >
             SCANNEZ LE QR CODE
           </Button>
