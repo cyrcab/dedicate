@@ -1,7 +1,6 @@
 .dashboard {
     display: flex;
     flex-direction: column;
-    width: 15vw;
     height: 100vh;
     background-color: #ffffff;
     border-right: solid 1px rgb(232, 232, 232);

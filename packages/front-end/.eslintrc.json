@@ -4,14 +4,14 @@
     "commonjs": true,
     "es2021": true
   },
-  "extends": ["airbnb-base", "plugin:react/recommended", "prettier"],
+  "extends": ["airbnb-base", "plugin:react/recommended"],
   "overrides": [],
   "parserOptions": {
     "ecmaVersion": "latest"
   },
   "ignorePatterns": ["node_modules/"],
   "rules": {
-    "linebreak-style": ["error", "windows"],
+    "linebreak-style": 0,
     "comma-dangle": 1,
     "object-curly-newline": 0,
     "import/newline-after-import": 1,
@@ -20,6 +20,7 @@
     "consistent-return": 1,
     "react/react-in-jsx-scope": 0,
     "import/no-unresolved": 0,
-    "import/extensions": 0
+    "import/extensions": 0,
+    "react/prop-types": 0
   }
 }

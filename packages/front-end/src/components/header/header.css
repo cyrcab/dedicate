@@ -1,10 +1,8 @@
-.navigation {
-    height: 10vh;
+/* .navigation {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    width: 85vw;
     background-color: white;
 }
 
@@ -21,4 +19,4 @@
 
 .profile{
     padding-right: 30px;
-}
+} */
