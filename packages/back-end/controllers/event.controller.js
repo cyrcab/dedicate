@@ -389,11 +389,10 @@ module.exports.addUserToEvent = async (req, res) => {
   }
 };
 
-
 module.exports.update = async (req, res) => {
   const { idEvent } = req.params;
   const {
-    nom, date, lieu, type, prix, nbSlots,
+    nom, date, lieu, type, prix, nbSlots, description,
   } = req.body;
   const data = {};
   if (!idEvent) {
@@ -457,6 +456,9 @@ module.exports.update = async (req, res) => {
         });
       }
       data.nbSlots = nbSlots;
+    }
+    if (description) {
+      data.description = description;
     }
     const updatedEvent = await prisma.event.update({
       where: {
@@ -624,8 +626,7 @@ module.exports.getEventActif = async (req, res) => {
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-  }
-  catch (err) {
+  } catch (err) {
     return res.status(401).json({ message: "Votre token n'est pas valide" });
   }
   const idUser = decodedToken.id;
@@ -642,21 +643,19 @@ module.exports.getEventActif = async (req, res) => {
   }
   try {
     const event = await prisma.event.findFirst({
-      where:{
-        id : parseInt(user.eventActif, 10),
+      where: {
+        id: parseInt(user.eventActif, 10),
       },
       include: {
         Etablissement: true,
         enchere: true,
       },
-    })
+    });
     if (!event) {
-      return res.status(400).json({ message: "Cet événement n'existe pas" });
+      return res.status(404).json({ message: "Cet événement n'existe pas" });
     }
     return res.status(200).json({ message: 'Événement récupéré', data: event });
+  } catch (err) {
+    return res.status(500).json({ message: 'Internal error BG', data: err.message });
   }
-  catch (err) {
-    return res.status(500).json({ message: "Internal error BG", data: err.message });
-  }
-
-} 
+};
