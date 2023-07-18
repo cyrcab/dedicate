@@ -1,7 +1,9 @@
 const router = require('express').Router();
 const roleController = require('../controllers/roles.controller');
 const { authTokenAdmin } = require('../middleware/auth.middleware');
+
 /* eslint-disable */
+
 /**
  * @swagger
  * tags:

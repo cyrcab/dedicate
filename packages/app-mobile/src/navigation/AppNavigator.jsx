@@ -10,6 +10,7 @@ import Settings from "../pages/Settings";
 import ReadMore from "../pages/ReadMore";
 import EventInformation from "../pages/EventInformation";
 import SlotInformation from "../pages/SlotInformation";
+import Auctions from "../pages/Auctions";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ const EventStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="Event" component={Event} options={{ headerShown: false }}/>
     <Stack.Screen name="SlotsInformation" component={SlotInformation} />
+    <Stack.Screen name="Enchérir" component={Auctions} />
   </Stack.Navigator>
 );
 

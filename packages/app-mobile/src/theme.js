@@ -1,5 +1,4 @@
 export const colors = {
-
   primary: 'rgb(154, 55, 132)',
   onPrimary: 'rgb(255, 255, 255)',
   primaryContainer: 'rgb(255, 215, 239)',

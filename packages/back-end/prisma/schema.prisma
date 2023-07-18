@@ -17,6 +17,7 @@ model Role {
 }
 
 model User {
+
   id                 Int            @id @default(autoincrement())
   nom                String
   prenom             String
@@ -35,6 +36,7 @@ model User {
   events             Event[]        @relation("EventUser")
   lastScannedEventId Int?
   LastScannedEvent   Event?         @relation(name: "LastScannedEvent", fields: [lastScannedEventId], references: [id])
+
 }
 
 model Etablissement {

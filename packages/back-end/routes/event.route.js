@@ -10,6 +10,7 @@ const {
   checkMe,
 } = require('../middleware/auth.middleware');
 /* eslint-disable */
+
 /**
  * @swagger
  * tags:
@@ -433,5 +434,6 @@ router.put('/:idEvent', checkTokenForUpdateEvents, eventController.update);
  *     description: Erreur du serveur 
  */
 router.delete('/:idEvent', checkTokenForUpdateEvents, eventController.delete);
+router.get('/eventActif/me', checkToken, eventController.getEventActif)
 
 module.exports = router;
