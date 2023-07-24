@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, Image } from "react-native";
-import { Card, IconButton, Avatar } from "react-native-paper";
+import { IconButton, Avatar } from "react-native-paper";
 import { axiosApiInstance } from "../../axios.config";
 import { backendUrl } from "../backendUrl";
 import EventsHistoric from "../components/EventHistoric";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native"; 
+
 
 const ProfilePage = ({ navigation }) => {
   const [user, setUser] = useState({});
@@ -46,10 +48,12 @@ const ProfilePage = ({ navigation }) => {
       });
   }, []);
 
-  useEffect(() => {
-    profileInfo();
-    historicalEventInfo();
-  }, [userId]);
+  useFocusEffect(
+    React.useCallback(() => {
+      profileInfo();
+      historicalEventInfo();
+    }, [userId])
+  );
 
   return (
     <View style={{ flex: 1, padding: 16, marginTop: 30 }}>

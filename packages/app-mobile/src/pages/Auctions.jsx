@@ -8,8 +8,8 @@ import {
   KeyboardAvoidingView,
 } from 'react-native';
 import { useState } from 'react';
-import { TextInput, Button } from 'react-native-paper';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TextInput, Button, Snackbar } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { axiosApiInstance } from '../../axios.config';
 import { backendUrl } from '../backendUrl';
 import { useNavigation } from '@react-navigation/native';
@@ -18,6 +18,8 @@ export default function Auctions({ route }) {
   const { event, item, index } = route.params;
   const [enchere, setEnchere] = useState(0);
   const navigation = useNavigation();
+  const [visible, setVisible] = useState(false);
+  const [messageError, setMessageError] = useState('');
 
   function handleEncherir() {
     AsyncStorage.getItem('userId')
@@ -38,12 +40,17 @@ export default function Auctions({ route }) {
           })
           .catch((error) => {
             console.log(error);
+            setMessageError(error.response.data.message);
+            setVisible(true);
           });
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
+  const onDismissSnackBar = () => setVisible(false);
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -69,12 +76,19 @@ export default function Auctions({ route }) {
               <Button
                 mode="contained"
                 onPress={handleEncherir}
-                disabled={enchere < item.prix || isNaN(enchere) }
+                disabled={enchere < item.prix || isNaN(enchere)}
               >
                 Enchérir
               </Button>
             </View>
           </View>
+          <Snackbar
+            wrapperStyle={{ top: 0 }}
+            visible={visible}
+            onDismiss={onDismissSnackBar}
+          >
+            {messageError}
+          </Snackbar>
         </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
