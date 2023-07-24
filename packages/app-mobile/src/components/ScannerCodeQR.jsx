@@ -9,8 +9,11 @@ import { backendUrl } from "../backendUrl";
 import styles from "../pages/styles";
 import { Alert } from 'react-native';
 
+import { useNavigation } from "@react-navigation/native";
+
 export default function ScannerCodeQR({ startScanning, resetScanning }) {
     const [scanning, setScanning] = useState(false);
+    const navigation = useNavigation();
 
     const onScan = ({ type, data }) => {
         //Alert.alert("Scan effectué", `Type: ${type}\nData: ${data}`);
@@ -40,6 +43,7 @@ export default function ScannerCodeQR({ startScanning, resetScanning }) {
         try {
             await axiosApiInstance.post(backendUrl + 'events/add/' + scannedData.idEvent);
             onSuccess();
+            navigation.navigate("Event");
         } catch (err) {
             if (err.response && err.response.data) {
                 onError(err.response.data.message);
