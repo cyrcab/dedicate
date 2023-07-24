@@ -10,8 +10,6 @@ import { backendUrl } from '../backendUrl';
 import { Button, Card } from 'react-native-paper';
 import { useFocusEffect } from '@react-navigation/native';
 
-import styles from "./styles";
-
 export default function Event({ navigation }) {
   const [idEvent, setIdEvent] = useState(0);
   const [music, setMusic] = useState([]);
@@ -124,3 +122,37 @@ export default function Event({ navigation }) {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    alignItems: 'center',
+    padding: 20,
+  },
+  eventName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginTop: 20,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  card: {
+    width: '90%',
+    marginBottom: 10,
+  },
+  topTenCard: {
+    borderWidth: 2,
+    borderColor: 'red',
+  },
+  button: {
+    width: 'auto',
+    alignSelf: 'center',
+  },
+  noEventMessage: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'gray',
+    marginTop: 100,
+  },
+});
