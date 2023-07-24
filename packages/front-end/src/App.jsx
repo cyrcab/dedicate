@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import jwtDecode from 'jwt-decode';
@@ -16,6 +16,7 @@ import theme from './utils/appTheme';
 import Login from './components/pages/login/index';
 import Register from './components/pages/register/index';
 import RequireAuth from './components/router/RequireAuth';
+import CreateEvent from './components/pages/myEvents/CreateEvent';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -81,6 +82,16 @@ export default function App() {
                 <RequireAuth>
                   <Layout>
                     {/* <MyEventsDetails /> */}
+                  </Layout>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/createEvent"
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <CreateEvent />
                   </Layout>
                 </RequireAuth>
               }
