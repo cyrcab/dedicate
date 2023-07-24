@@ -9,12 +9,12 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
 } from 'react-native';
-import { TextInput, Text, Button } from 'react-native-paper';
+import { TextInput, Text, Button, Snackbar } from 'react-native-paper';
 import { backendUrl } from '../backendUrl';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function SlotInformation({ route }) {
@@ -25,7 +25,9 @@ export default function SlotInformation({ route }) {
   const [selectedTrack, setSelectedTrack] = useState(null); // New state for selected track
   const [enchere, setEnchere] = useState(0);
   const navigation = useNavigation();
-
+  const [visible, setVisible] = useState(false);
+  const [messageError, setMessageError] = useState('');
+  
 
   const clientid = '15bc2c43418a43699f3aa638e67ec78f';
   const secret = '487bf1340feb43b18118e9495836c7fd';
@@ -100,11 +102,12 @@ export default function SlotInformation({ route }) {
         axiosApiInstance
           .post(backendUrl + 'encheres', musicVoted)
           .then((response) => {
-            console.log(response);
-            navigation.navigate('Event'); 
+            navigation.navigate('Event');
           })
           .catch((error) => {
             console.log(error);
+            setMessageError(error.response.data.message);
+            setVisible(true);
           });
       })
       .catch((error) => {
@@ -112,7 +115,8 @@ export default function SlotInformation({ route }) {
       });
   }
 
-  console.log(tracks);
+  const onDismissSnackBar = () => setVisible(false);
+
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -188,6 +192,13 @@ export default function SlotInformation({ route }) {
                     </Button>
                   </View>
                 </View>
+                <Snackbar
+                  wrapperStyle={{ top: 0 }}
+                  visible={visible}
+                  onDismiss={onDismissSnackBar}
+                >
+                  {messageError}
+                </Snackbar>
               </View>
             </>
           )}
