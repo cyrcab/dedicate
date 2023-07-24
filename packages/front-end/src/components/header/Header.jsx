@@ -47,7 +47,7 @@ export default function Header() {
       }}
     >
       <Box>
-        <Typography variant="h5">{getTitle()}</Typography>
+        <Typography variant="h2">{getTitle()}</Typography>
         <Typography variant="subtitle2" color={'GrayText'}>
           {new Date().toLocaleDateString()}
         </Typography>

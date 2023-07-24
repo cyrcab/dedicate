@@ -15,6 +15,8 @@ import { backendUrl } from '../backendUrl';
 import CodeQR from '../components/CodeQR';
 import { Button, Chip } from 'react-native-paper';
 
+import styles from "./styles";
+
 export default function Home() {
   const [event, setEvent] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
@@ -106,7 +108,7 @@ export default function Home() {
         </View>
       )}
       <ScrollView
-        style={styles.eventList}
+        style={styles.eventListHome}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

@@ -115,6 +115,9 @@ module.exports.create = async (req, res) => {
       data: { qrCode: qrCodeImage },
     });
 
+    if (!fs.existsSync('./qrcodes')) {
+      fs.mkdirSync('./qrcodes');
+    }
     const qrCodeStream = fs.createWriteStream('./qrcodes/path-to-your-file.png');
     // if (!fs.existsSync('../qrcodes')) {
     //   fs.mkdirSync('../qrcodes');
@@ -349,14 +352,6 @@ module.exports.addUserToEvent = async (req, res) => {
         .status(400)
         .json({ message: "Cet utilisateur est déjà dans l'événement" });
     }
-    await prisma.user.update({
-      where: {
-        id: parseInt(idUser, 10),
-      },
-      data: {
-        eventActif: idEvent,
-      },
-    });
 
     const userEvent = await prisma.event.update({
       where: {
@@ -637,13 +632,13 @@ module.exports.getEventActif = async (req, res) => {
   if (!user) {
     return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
   }
-  if (!user.eventActif) {
-    return res.status(400).json({ message: "Cet utilisateur n'a pas d'événement actif" });
+  if (!user.lastScannedEventId) {
+    return res.status(400).json({ message: "Cet utilisateur n'a pas de dernier événement scanné" });
   }
   try {
     const event = await prisma.event.findFirst({
-      where:{
-        id : parseInt(user.eventActif, 10),
+      where: {
+        id: parseInt(user.lastScannedEventId, 10),
       },
       include: {
         Etablissement: true,
@@ -659,4 +654,4 @@ module.exports.getEventActif = async (req, res) => {
     return res.status(500).json({ message: "Internal error BG", data: err.message });
   }
 
-} 
+}
