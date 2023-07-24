@@ -115,6 +115,9 @@ module.exports.create = async (req, res) => {
       data: { qrCode: qrCodeImage },
     });
 
+    if (!fs.existsSync('./qrcodes')) {
+      fs.mkdirSync('./qrcodes');
+    }
     const qrCodeStream = fs.createWriteStream('./qrcodes/path-to-your-file.png');
     // if (!fs.existsSync('../qrcodes')) {
     //   fs.mkdirSync('../qrcodes');
