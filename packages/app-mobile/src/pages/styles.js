@@ -36,10 +36,12 @@ export default StyleSheet.create({
   },
   CardEvent: {
     margin: 10,
+    width: '82%',
+    alignSelf: 'center',
   },
+  // ReadMore page
   containerReadMore: {
     flex: 1,
-    backgroundColor: '#fff',
     padding: 20,
   },
   readMorePresentation: {
@@ -52,7 +54,6 @@ export default StyleSheet.create({
   },
   price: {
     fontSize: 16,
-    color: 'gray',
   },
   description: {
     fontSize: 16,
@@ -100,7 +101,16 @@ export default StyleSheet.create({
     height: '20%',
     alignItems: 'center',
   },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+  },
+  EtablissementNom: {
+    fontSize: 20,
+    fontWeight: 'bold',
 
+  },
   // components\CodeQR.jsx
   buttonCodeQR: {
     borderRadius: 50,
