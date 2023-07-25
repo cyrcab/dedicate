@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { axiosApiInstance } from '../../axios.config';
-import axios from 'axios';
 import {
   View,
   StyleSheet,
@@ -15,22 +13,29 @@ import { TextInput, Text, Button, Snackbar } from 'react-native-paper';
 import { backendUrl } from '../backendUrl';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { Audio } from 'expo-av';
+import axios from 'axios';
+import { axiosApiInstance } from '../../axios.config';
 
 export default function SlotInformation({ route }) {
   const { event } = route.params;
   const [accessToken, setAccessToken] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [tracks, setTracks] = useState([]);
-  const [selectedTrack, setSelectedTrack] = useState(null); // New state for selected track
+  const [selectedTrack, setSelectedTrack] = useState(null);
   const [enchere, setEnchere] = useState(0);
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
   const [messageError, setMessageError] = useState('');
-  
+  const [sound, setSound] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const clientid = '15bc2c43418a43699f3aa638e67ec78f';
   const secret = '487bf1340feb43b18118e9495836c7fd';
+
+  useEffect(() => {
+    Audio.requestPermissionsAsync();
+  }, []);
 
   useEffect(() => {
     axios
@@ -65,7 +70,7 @@ export default function SlotInformation({ route }) {
   async function search() {
     try {
       const response = await axios.get(
-        `https://api.spotify.com/v1/search?q=${searchQuery}&type=track`,
+        `https://api.spotify.com/v1/search?q=genre:${event.type}%20${searchQuery}&type=track&market=FR`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -78,22 +83,60 @@ export default function SlotInformation({ route }) {
     }
   }
 
+  async function handlePlayPause() {
+    if (sound) {
+      if (isPlaying) {
+        await sound.pauseAsync();
+      } else {
+        await sound.playAsync();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  }
+
+  async function loadAudio(track) {
+    try {
+      if (track.preview_url) {
+        const { sound: newSound } = await Audio.Sound.createAsync(
+          { uri: track.preview_url },
+          { shouldPlay: false },
+          onPlaybackStatusUpdate,
+        );
+        setSound(newSound);
+      } else {
+        console.log("This track doesn't have a preview URL.");
+        setIsPlaying(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const onPlaybackStatusUpdate = (status) => {
+    setIsPlaying(status.isPlaying);
+  };
+
   function selectTrack(track) {
     setSelectedTrack(track);
+    loadAudio(track);
   }
 
   function clearSelectedTrack() {
+    if (sound) {
+      sound.unloadAsync();
+    }
     setSelectedTrack(null);
     setEnchere(0);
+    setIsPlaying(false);
     Keyboard.dismiss();
   }
 
   function handleEncherir() {
-    AsyncStorage.getItem('userId') // Récupère la valeur de 'userId' depuis l'AsyncStorage
+    AsyncStorage.getItem('userId')
       .then((userId) => {
         const musicVoted = {
           eventId: event.id.toString(),
-          userId: userId, // Utilise la valeur récupérée de l'AsyncStorage
+          userId: userId,
           prix: enchere,
           nomMusique: selectedTrack.artists[0].name,
           artisteMusique: selectedTrack.name,
@@ -174,6 +217,15 @@ export default function SlotInformation({ route }) {
                   <Text style={styles.selectedTrackName}>
                     {selectedTrack.name}
                   </Text>
+                  {selectedTrack.preview_url && (
+                    <Button
+                      mode="contained"
+                      onPress={handlePlayPause}
+                      style={styles.playPauseButton}
+                    >
+                      {isPlaying ? 'Pause' : 'Play'}
+                    </Button>
+                  )}
                   <View style={styles.bidContainer}>
                     <TextInput
                       style={styles.bidInput}
@@ -278,6 +330,9 @@ const styles = StyleSheet.create({
   },
   selectedTrackName: {
     fontSize: 18,
+  },
+  playPauseButton: {
+    marginTop: 8,
   },
   bidContainer: {
     marginTop: 16,
