@@ -16,7 +16,9 @@ import theme from './utils/appTheme';
 import Login from './components/pages/login/index';
 import Register from './components/pages/register/index';
 import RequireAuth from './components/router/RequireAuth';
-import CreateEvent from './components/pages/myEvents/CreateEvent';
+import CreateEvent from './components/pages/myEvents/component/CreateEvent';
+import EventDetails from './components/pages/myEvents/EventDetails';
+import UpdateEvent from './components/pages/myEvents/component/UpdateEvent';
 
 export default function App() {
   const dispatch = useDispatch();
@@ -50,9 +52,9 @@ export default function App() {
               path="/"
               element={
                 <RequireAuth>
-                 <Layout>
-                  <Home />
-                </Layout>
+                  <Layout>
+                    <Home />
+                  </Layout>
                 </RequireAuth>
               }
             />
@@ -77,21 +79,31 @@ export default function App() {
               }
             />
             <Route
-              path="/myEvents/:id"
-              element={
-                <RequireAuth>
-                  <Layout>
-                    {/* <MyEventsDetails /> */}
-                  </Layout>
-                </RequireAuth>
-              }
-            />
-            <Route
               path="/createEvent"
               element={
                 <RequireAuth>
                   <Layout>
                     <CreateEvent />
+                  </Layout>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/eventDetails/:id"
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <EventDetails />
+                  </Layout>
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/updateEvent/:id"
+              element={
+                <RequireAuth>
+                  <Layout>
+                    <UpdateEvent />
                   </Layout>
                 </RequireAuth>
               }
