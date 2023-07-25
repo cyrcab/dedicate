@@ -2,17 +2,13 @@
 import React from 'react';
 import './header.css';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { Box, Typography } from '@mui/material';
 import ProfileComponent from './components/ProfileComponent';
 
-const user = {
-  lastName: 'Sébastien',
-  firstName: 'Bouillon',
-  role: 'Admin',
-};
-
 export default function Header() {
   const location = useLocation();
+  const user = useSelector((state) => state.auth.user);
   const getTitle = () => {
     const { pathname } = location;
 

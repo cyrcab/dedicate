@@ -11,9 +11,9 @@ const ProfileComponent = ({ user }) => (
       <Typography
         variant="body1"
         style={{ fontWeight: 'bold' }}
-      >{`${user.firstName} ${user.lastName}`}</Typography>
+      >{`${user?.prenom} ${user?.nom}`}</Typography>
       <Typography variant="subtitle2" color={'GrayText'}>
-        {user.role}
+        {user?.Role?.refRole}
       </Typography>
     </Box>
   </Box>

@@ -27,7 +27,7 @@ import { backendUrl } from '../../backendUrl';
 import { setSignedIn } from '../../store/reducer/reducer';
 
 function saveToLocalStorage(key, value) {
-  localStorage.setItem(key, JSON.stringify(value));
+  localStorage.setItem(key, value);
 }
 
 function Copyright(props) {
