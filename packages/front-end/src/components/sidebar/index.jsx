@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Typography, CardMedia } from '@mui/material';
-import './sidebar.css';
 import { useLocation } from 'react-router-dom';
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import EventIcon from '@mui/icons-material/Event';
@@ -65,8 +64,8 @@ export default function Sidebar() {
           pathName={'Accueil'}
         />
         <MySidebarLink
-          isActive={isActive('/myEvents')}
-          path={'/myEvents'}
+          isActive={isActive('/events')}
+          path={'/events'}
           icon={<EventIcon />}
           pathName={'Événements'}
         />

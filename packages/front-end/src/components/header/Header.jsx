@@ -18,17 +18,17 @@ export default function Header() {
 
     switch (pathname) {
       case '/':
-        return 'Dashboard';
+        return 'Tableau de bord';
       case '/playlist':
         return 'Playlist';
-      case '/myEvents':
-        return 'My Events';
+      case '/events':
+        return 'Événements';
       case '/users':
-        return 'Users';
+        return 'Utilisateurs';
       case '/settings':
-        return 'Settings';
+        return 'Paramètres';
       case '/profile':
-        return 'Profile';
+        return 'Profil';
       default:
         return '';
     }

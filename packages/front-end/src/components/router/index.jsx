@@ -1,64 +1,72 @@
-import { createBrowserRouter } from 'react-router-dom';
 import RequireAuth from './RequireAuth';
 import Layout from '../layout';
 import Home from '../../pages/home';
 import Login from '../../pages/login';
 import Register from '../../pages/register';
 import Playlist from '../../pages/playlist';
-import AuthLayout from '../layout/AuthLayout';
 import MyEvents from '../../pages/myEvents';
+import Users from '../../pages/users';
+import Settings from '../../pages/settings';
 
-const router = createBrowserRouter([
+const routes = [
   {
-    element: <RequireAuth />,
+    element: <Layout />,
+
     children: [
       {
         path: '/',
         element: (
-          <Layout>
+          <RequireAuth>
             <Home />
-          </Layout>
-        ),
-      },
-      {
-        path: 'playlist',
-        element: (
-          <Layout>
-            <Playlist />
-          </Layout>
+          </RequireAuth>
         ),
       },
       {
         path: 'events',
         element: (
-          <Layout>
+          <RequireAuth>
             <MyEvents />
-          </Layout>
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'playlist',
+        element: (
+          <RequireAuth>
+            <Playlist />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'users',
+        element: (
+          <RequireAuth>
+            <Users />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'settings',
+        element: (
+          <RequireAuth>
+            <Settings />
+          </RequireAuth>
         ),
       },
     ],
   },
   {
-    element: <AuthLayout />,
-    children: [
-      {
-        path: '/login',
-        element: <Login />,
-      },
-      {
-        path: '/register',
-        element: <Register />,
-      },
-    ],
+    path: '/login',
+    element: <Login />,
   },
-  // {
-  //   path: '/login',
-  //   element: <Login />,
-  // },
-  // {
-  //   path: '/register',
-  //   element: <Register />,
-  // },
-]);
+  {
+    path: '/register',
+    element: <Register />,
+  },
+  {
+    path: '*',
+    element: <h1>404</h1>,
+  },
+];
 
-export default router;
+export default routes;
