@@ -1,11 +1,24 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, TextField, Grid, Card, Box } from '@mui/material';
-import { axiosApiInstance } from '../../../axios.config';
-import { backendUrl } from '../../../backendUrl';
+import { useParams } from 'react-router-dom';
+import { axiosApiInstance } from '../../../../axios.config';
+import { backendUrl } from '../../../../backendUrl';
 
-function CreateEvent() {
+function UpdateEvent() {
   const [dateTime, setDateTime] = useState();
+  const [eventData, setEventData] = useState({});
+  const { id } = useParams();
+
+  useEffect(() => {
+    axiosApiInstance.get(`${backendUrl}events/one/${id}`)
+      .then((response) => {
+        setEventData(response.data);
+      })
+      .catch((error) => {
+        console.error('There was an error!', error);
+      });
+  }, [id]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -18,6 +31,7 @@ function CreateEvent() {
       const formattedDate = `${day}/${month}/${year}`;
       return `${formattedDate} ${timePart}:00`;
     };
+    // eslint-disable-next-line no-shadow
     const eventData = {
       nom: data.get('nom'),
       lieu: data.get('lieu'),
@@ -27,9 +41,8 @@ function CreateEvent() {
       description: data.get('description'),
       nbSlots: parseInt(data.get('nbSlots'), 10),
     };
-    console.log(eventData);
 
-    axiosApiInstance.post(`${backendUrl}events`, eventData)
+    axiosApiInstance.put(`${backendUrl}events/`, id)
       .then((response) => {
         console.log(response.data);
       })
@@ -50,6 +63,7 @@ function CreateEvent() {
                 label="Nom de l'événement"
                 name="nom"
                 autoComplete="nom"
+                defaultValue={eventData.nom}
                 />
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -60,6 +74,7 @@ function CreateEvent() {
                 label="Lieu"
                 name="lieu"
                 autoComplete="lieu"
+                defaultValue={eventData.lieu}
                 />
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -74,6 +89,7 @@ function CreateEvent() {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                defaultValue={eventData.date}
                 />
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -84,6 +100,7 @@ function CreateEvent() {
                 label="Type de musique"
                 name="type"
                 autoComplete="type"
+                defaultValue={eventData.type}
                 />
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -94,6 +111,7 @@ function CreateEvent() {
                 label="Description"
                 name="description"
                 autoComplete="description"
+                defaultValue={eventData.description}
                 />
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -105,6 +123,7 @@ function CreateEvent() {
                 name="prix"
                 autoComplete="prix"
                 type="number"
+                defaultValue={eventData.prix}
                 />
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -116,6 +135,7 @@ function CreateEvent() {
                 name="nbSlots"
                 autoComplete="nbSlots"
                 type="number"
+                defaultValue={eventData.nbSlots}
                 />
             </Grid>
             <Button
@@ -133,4 +153,4 @@ function CreateEvent() {
   );
 }
 
-export default CreateEvent;
+export default UpdateEvent;

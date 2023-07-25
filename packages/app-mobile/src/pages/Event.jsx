@@ -15,6 +15,7 @@ export default function Event({ navigation }) {
   const [music, setMusic] = useState([]);
   const [event, setEvent] = useState([]);
   const idEventRef = useRef(0);
+  const [intervalId, setIntervalId] = useState(null);
 
   function updateIdEvent(newIdEvent) {
     setIdEvent(newIdEvent);
@@ -23,7 +24,7 @@ export default function Event({ navigation }) {
 
   function musicInfos() {
     axiosApiInstance
-      .get(backendUrl + 'encheres/' + idEventRef.current) // Use the ref value instead of the state value
+      .get(backendUrl + 'encheres/' + idEventRef.current)
       .then((response) => {
         setMusic(response.data.votes);
       })
@@ -34,7 +35,7 @@ export default function Event({ navigation }) {
 
   function EventInfos() {
     axiosApiInstance
-      .get(backendUrl + 'events/one/' + idEventRef.current) // Use the ref value instead of the state value
+      .get(backendUrl + 'events/one/' + idEventRef.current)
       .then((response) => {
         setEvent(response.data.data);
       })
@@ -56,14 +57,33 @@ export default function Event({ navigation }) {
       });
   }
 
+  function startInterval() {
+    const intervalDelay = 10000; // 5 minutes in milliseconds
+    const id = setInterval(() => {
+      musicInfos();
+    }, intervalDelay);
+  
+    setIntervalId(id);
+  }
+
+  function stopInterval() {
+    if (intervalId !== null) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    }
+  }
+
   useFocusEffect(
     React.useCallback(() => {
       EventActif();
+      // Start the interval when the component is focused
+      startInterval();
+      // Clean up the interval and stop it when the component is unfocused or unmounts
+      return () => {
+        stopInterval();
+      };
     }, []),
   );
-
-
-
   return (
     <ScrollView
       contentContainerStyle={styles.container}
@@ -73,12 +93,12 @@ export default function Event({ navigation }) {
           <Text style={styles.eventName}>{event.nom}</Text>
 
           {music.map((item, index) => {
-            const isTopTen = index < event.nbSlots; // Vérifie si l'index est inférieur à 10
+            const isTopTen = index < event.nbSlots;
 
             return (
               <Card
                 key={index}
-                style={[styles.card, isTopTen && styles.topTenCard]} // Applique le style "topTenCard" si c'est l'une des 10 premières musiques
+                style={[styles.card, isTopTen && styles.topTenCard]}
                 onPress={() =>
                   navigation.navigate('Enchérir', {
                     event: event,
@@ -92,8 +112,8 @@ export default function Event({ navigation }) {
                   subtitle={item.Musique.titre}
                   left={() => (
                     <Image
-                      source={{ uri: item.Musique.album }} // Remplacez le chemin par le chemin réel de votre image
-                      style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
+                      source={{ uri: item.Musique.album }}
+                      style={{ width: 50, height: 50 }}
                     />
                   )}
                   right={() => (
