@@ -1,4 +1,3 @@
-/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable prefer-template */
 import * as React from 'react';
 import { useState } from 'react';
@@ -8,8 +7,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -22,10 +19,10 @@ import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import club from '../../../assets/club.jpg';
-import logo from '../../../assets/logo.png';
-import { backendUrl } from '../../../backendUrl';
-import { setSignedIn } from '../../../store/reducer/reducer';
+import club2 from '../../assets/club2.jpg';
+import logo from '../../assets/logo.png';
+import { backendUrl } from '../../backendUrl';
+import { setSignedIn } from '../../store/reducer/reducer';
 
 function saveToLocalStorage(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
@@ -53,13 +50,19 @@ function Copyright(props) {
 
 const defaultTheme = createTheme();
 
-export default function Login() {
+export default function Register() {
   const [showPassword, setShowPassword] = useState(false);
+  const [showPassword2, setShowPassword2] = useState(false);
 
   const [email, setEmail] = useState('');
   const [mdp, setMdp] = useState('');
-
-  const dispatch = useDispatch();
+  const [prenom, setPrenom] = useState('');
+  const [nom, setNom] = useState('');
+  const [tel, setTel] = useState('');
+  const [nomEta, setNomEta] = useState('');
+  const [ville, setVille] = useState('');
+  const [codePostal, setCodePostal] = useState('');
+  const [adresse, setAdresse] = useState('');
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -69,29 +72,48 @@ export default function Login() {
     event.preventDefault();
   };
 
+  const handleClickShowPassword2 = () => {
+    setShowPassword2(!showPassword2);
+  };
+
+  const handleMouseDownPassword2 = (event) => {
+    event.preventDefault();
+  };
+
   const [visible, setVisible] = useState(false);
   const [messageError, setMessageError] = useState('');
 
   const onDismissAlert = () => setVisible(false);
 
+  const dispatch = useDispatch();
+
   const handleLogin = () => {
     const data = {
       email,
       password: mdp,
+      nom,
+      prenom,
+      tel,
+      ville,
+      codePostal,
+      nomEta,
+      adresse,
     };
 
     axios
-      .post(backendUrl + 'auth/loginEta', data)
+      .post(backendUrl + 'auth/registerEta', data)
       .then((response) => {
         dispatch({ type: 'SET_USER_DATA', payload: response.data });
         saveToLocalStorage.setItem('token', response.data.token);
-        saveToLocalStorage.setItem('userId', response.data.data.id.toString());
+        saveToLocalStorage.setItem(
+          'userId',
+          JSON.stringify(response.data.data.id),
+        );
         dispatch(setSignedIn(true));
       })
       .catch((error) => {
         setMessageError(error.response.data.message);
         setVisible(true);
-        // eslint-disable-next-line no-console
         console.log(error);
       });
   };
@@ -106,12 +128,12 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: `url(${club})`,
+            backgroundImage: `url(${club2})`,
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
-              (t.palette.mode === 'light'
+              t.palette.mode === 'light'
                 ? t.palette.grey[50]
-                : t.palette.grey[900]),
+                : t.palette.grey[900],
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
@@ -130,17 +152,92 @@ export default function Login() {
               <img src={logo} alt="logo" style={{ height: '50px' }} />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Login
+              Register
             </Typography>
-            <Box component="form" noValidate sx={{ mt: 1 }}>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleLogin}
+              sx={{ mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="nom"
+                label="Nom"
+                onChangeText={setNom}
+                name="nom"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="prenom"
+                label="Prénom"
+                onChangeText={setPrenom}
+                name="prenom"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="tel"
+                label="Téléphone"
+                onChangeText={setTel}
+                name="tel"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="nomEta"
+                label="Nom de l'établissement"
+                onChangeText={setNomEta}
+                name="nomEta"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="adresse"
+                label="Adresse"
+                onChangeText={setAdresse}
+                name="adresse"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="ville"
+                label="Ville"
+                onChangeText={setVille}
+                name="ville"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="codePostal"
+                label="Code Postal"
+                onChangeText={setCodePostal}
+                name="codePostal"
+                autoFocus
+              />
               <TextField
                 margin="normal"
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
-                onChange={setEmail}
+                label="Adresse Email"
                 name="email"
+                onChangeText={setEmail}
                 autoComplete="email"
                 autoFocus
               />
@@ -149,8 +246,8 @@ export default function Login() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
                 onChange={setMdp}
+                label="Mot de passe"
                 type={showPassword ? 'password' : 'text'}
                 id="password"
                 autoComplete="current-password"
@@ -167,28 +264,40 @@ export default function Login() {
                   ),
                 }}
               />
-              <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
-                label="Remember me"
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="passwordConfirm"
+                label="Confirmation mot de passe"
+                type={showPassword2 ? 'password' : 'text'}
+                id="password"
+                autoComplete="current-password"
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleClickShowPassword2}
+                        onMouseDown={handleMouseDownPassword2}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
               <Button
                 type="submit"
                 fullWidth
-                onSubmit={handleLogin}
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
-                Login
+                Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
-                  <Link href="/register" variant="body2">
-                    {'Do not have an account? Register'}
+                  <Link href="/login" variant="body2">
+                    {'Already have an account? Login'}
                   </Link>
                 </Grid>
               </Grid>
@@ -197,14 +306,12 @@ export default function Login() {
           </Box>
         </Grid>
         <Snackbar
-          open={visible}
-          autoHideDuration={6000}
-          onClose={onDismissAlert}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          sx={{ width: '100%', top: 0 }}
+          spacing={2}
+          visible={visible}
+          onDismiss={onDismissAlert}
         >
-          <Alert onClose={onDismissAlert} severity="error">
-            {messageError}
-          </Alert>
+          <Alert severity="error">{messageError}</Alert>
         </Snackbar>
       </Grid>
     </ThemeProvider>
