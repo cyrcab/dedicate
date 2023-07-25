@@ -78,7 +78,6 @@ export default function Home() {
     }
   };
 
-  console.log(event);
   return (
     <View style={styles.container}>
       <ImageBackground
