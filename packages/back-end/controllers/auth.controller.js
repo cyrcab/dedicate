@@ -238,6 +238,7 @@ module.exports.loginUser = async (req, res) => {
 
 module.exports.loginEta = async (req, res) => {
   const { email, password } = req.body;
+
   if (!email || !password) {
     return res
       .status(400)

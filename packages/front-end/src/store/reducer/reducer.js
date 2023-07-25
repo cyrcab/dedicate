@@ -2,7 +2,13 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isSignedIn: false,
-  idCompany: 1,
+  id: null,
+  idEtablissement: null,
+  mail: null,
+  nom: null,
+  prenom: null,
+  roleId: null,
+  tel: null,
 };
 
 const authSlice = createSlice({
@@ -10,7 +16,10 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setSignedIn: (state, action) => {
-      state.isSignedIn = action.payload;
+      if (action.type === 'auth/setSignedIn') {
+        state.isSignedIn = action.payload;
+      }
+      state = { ...state, ...action.payload };
     },
   },
 });
