@@ -255,7 +255,7 @@ module.exports.loginEta = async (req, res) => {
   if ((await user.roleId) === 1) {
     return res
       .status(400)
-      .json({ message: 'Identifiant incorect', data: user });
+      .json({ message: 'Identifiant incorect' });
   }
   const refRole = await prismaRole.findFirst({
     where: {
