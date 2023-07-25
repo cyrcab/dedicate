@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import Table from '../../Table/Table';
-import { backendUrl } from '../../../backendUrl';
-import { axiosApiInstance } from '../../../axios.config';
+import { IconButton } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import EditIcon from '@mui/icons-material/Edit';
+import { Link } from 'react-router-dom';
+import Table from '../../../Table/Table';
+import { backendUrl } from '../../../../backendUrl';
+import { axiosApiInstance } from '../../../../axios.config';
 
 export const columns = [
   {
@@ -29,7 +33,7 @@ export const columns = [
     field: 'description',
     headerName: 'Description',
     sortable: false,
-    width: 400,
+    width: 250,
   },
   {
     field: 'date',
@@ -46,6 +50,34 @@ export const columns = [
     headerName: 'Slots',
     width: 90,
   },
+  {
+    field: 'seeMore',
+    headerName: 'See More',
+    width: 90,
+    renderCell: (params) => (
+      <Link to={`/eventDetails/${params.row.id}`}>
+        <IconButton>
+          <InfoIcon />
+        </IconButton>
+      </Link>
+    ),
+  },
+  {
+    field: 'edit',
+    headerName: 'Edit',
+    sortable: false,
+    width: 100,
+    renderCell: (params) => {
+      const eventDate = new Date(params.row.date);
+      const currentDate = new Date();
+      const isEventPassed = eventDate < currentDate;
+      return (
+          <Link to={isEventPassed ? '#' : `/updateEvent/${params.row.id}`}>
+              {isEventPassed ? 'Fini' : <EditIcon />}
+          </Link>
+      );
+    },
+  },
 ];
 
 export default function Events() {
@@ -53,8 +85,6 @@ export default function Events() {
   const [rows, setRows] = useState([]);
 
   const idCompany = useSelector((state) => state.auth.idCompany);
-
-  console.log(idCompany);
 
   useEffect(() => {
     axiosApiInstance

@@ -14,6 +14,11 @@ import Grid from '@mui/material/Unstable_Grid2';
 //   }));
 
 export default function Home() {
+  const userDataStr = localStorage.getItem('user');
+  console.log(userDataStr);
+  const userData = JSON.parse(userDataStr);
+  console.log(userData);
+
   return (
     <div className="home">
       <Grid container spacing={2} sx={{ m: 2 }}>
