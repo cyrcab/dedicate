@@ -5,129 +5,159 @@ const { DateTime } = require('luxon');
 const jwt = require('jsonwebtoken');
 const QRCode = require('qrcode');
 const fs = require('fs');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, './images/');
+  },
+  filename(req, file, cb) {
+    const uniqueFileName = `${Date.now()}-${Math.round(
+      Math.random() * 1e9,
+    )}${file.originalname.substring(file.originalname.lastIndexOf('.'))
+    }`;
+    cb(null, uniqueFileName);
+  },
+});
+
+const upload = multer({ storage });
 
 module.exports.create = async (req, res) => {
-  const {
-    nom, lieu, date, type, prix, nbSlots, idEtablissement, description,
-  } = req.body;
+  upload.array('images', 5)(req, res, async (err) => {
+    if (err instanceof multer.MulterError) {
+      return res.status(500).json({ message: err.message, test: 'erreur 1' });
+    }
+    if (err) {
+      return res.status(500).json({ message: err.message, test: 'erreur 2' });
+    }
+    const images = req.files;
+    if (images) {
+      /* eslint-disable prefer-const */
+      let {
+        nom, lieu, date, type, prix, nbSlots, idEtablissement, description,
+      } = req.body;
 
-  if (!nom || !lieu || !date || !type || !prix || !nbSlots || !description) {
-    return res
-      .status(400)
-      .json({ message: 'Veuillez remplir tous les champs' });
-  }
+      if (!nom || !lieu || !date || !type || !prix || !nbSlots || !description) {
+        return res
+          .status(400)
+          .json({ message: 'Veuillez remplir tous les champs' });
+      }
 
-  const parsedDate = DateTime.fromFormat(date, 'dd/MM/yyyy HH:mm:ss', {
-    zone: 'Europe/Paris',
-    locale: 'fr-FR',
-  });
-  if (!parsedDate.isValid) {
-    return res.status(400).json({ message: "La date n'est pas valide" });
-  }
-
-  const currentDate = DateTime.now().setZone('Europe/Paris');
-  if (parsedDate < currentDate) {
-    return res.status(400).json({
-      message:
-        "La date de l'événement ne peut pas être antérieure à la date actuelle",
-    });
-  }
-
-  const token = req.headers.authorization.split(' ')[1];
-  let decodedToken;
-  try {
-    decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-  } catch (err) {
-    return res.status(401).json({ message: "Votre token n'est pas valide" });
-  }
-
-  const idUser = decodedToken.id;
-  const user = await prisma.user.findUnique({
-    where: {
-      id: parseInt(idUser, 10),
-    },
-  });
-
-  if (!user || decodedToken.refRole !== 'Gérant') {
-    if (decodedToken.refRole !== 'SuperAdmin') {
-      return res.status(403).json({
-        message: "Vous n'avez pas les droits pour créer un événement",
-        data: decodedToken.refRole,
+      const parsedDate = DateTime.fromFormat(date, 'dd/MM/yyyy HH:mm:ss', {
+        zone: 'Europe/Paris',
+        locale: 'fr-FR',
       });
+      if (!parsedDate.isValid) {
+        return res.status(400).json({ message: "La date n'est pas valide" });
+      }
+
+      const currentDate = DateTime.now().setZone('Europe/Paris');
+      if (parsedDate < currentDate) {
+        return res.status(400).json({
+          message:
+        "La date de l'événement ne peut pas être antérieure à la date actuelle",
+        });
+      }
+
+      const token = req.headers.authorization.split(' ')[1];
+      let decodedToken;
+      try {
+        decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
+        /* eslint-disable no-shadow */
+      } catch (err) {
+        return res.status(401).json({ message: "Votre token n'est pas valide" });
+      }
+
+      const idUser = decodedToken.id;
+      const user = await prisma.user.findUnique({
+        where: {
+          id: parseInt(idUser, 10),
+        },
+      });
+
+      if (!user || decodedToken.refRole !== 'Gérant') {
+        if (decodedToken.refRole !== 'SuperAdmin') {
+          return res.status(403).json({
+            message: "Vous n'avez pas les droits pour créer un événement",
+            data: decodedToken.refRole,
+          });
+        }
+        if (!idEtablissement) {
+          return res
+            .status(400)
+            .json({ message: 'Vous devez spécifier un établissement' });
+        }
+
+        const etablissement = await prisma.etablissement.findUnique({
+          where: {
+            id: parseInt(idEtablissement, 10),
+          },
+        });
+
+        if (!etablissement) {
+          return res
+            .status(400)
+            .json({ message: "Cet établissement n'existe pas" });
+        }
+      }
+      prix = parseFloat(prix);
+      nbSlots = parseInt(nbSlots, 10);
+      if (prix <= 0) {
+        return res
+          .status(400)
+          .json({ message: 'Le prix ne peut pas être négatif ou nul' });
+      }
+      if (nbSlots <= 0) {
+        return res.status(400).json({
+          message: 'Le nombre de slots ne peut pas être négatif ou nul',
+        });
+      }
+      const eventData = {
+        nom,
+        lieu,
+        date: parsedDate.setZone('Europe/Paris').plus({ hours: 2 }).toISO(),
+        type,
+        prix,
+        nbSlots,
+        description,
+        idEtablissement: idEtablissement
+          ? parseInt(idEtablissement, 10)
+          : user.idEtablissement,
+        photo: images[0].path,
+      };
+
+      try {
+        const event = await prisma.event.create({ data: eventData });
+
+        // Générer le code QR
+        const qrCodeData = {
+          idEvent: event.id,
+          idEtablissement: event.idEtablissement,
+        };
+
+        const qrCodeString = JSON.stringify(qrCodeData);
+        const qrCodeImage = await QRCode.toDataURL(qrCodeString);
+
+        // Met à jour l'événement avec le code QR
+        const updatedEvent = await prisma.event.update({
+          where: { id: event.id },
+          data: { qrCode: qrCodeImage },
+        });
+
+        const qrCodeStream = fs.createWriteStream('./qrcodes/path-to-your-file.png');
+        // if (!fs.existsSync('../qrcodes')) {
+        //   fs.mkdirSync('../qrcodes');
+        // }
+        QRCode.toFileStream(qrCodeStream, qrCodeString);
+
+        return res.status(201).json({ message: 'Événement créé', data: updatedEvent });
+      } catch (err) {
+        return res.status(500).json({ message: err.message });
+      }
+    } else {
+      return res.status(400).json({ message: 'Veuillez ajouter une image' });
     }
-    if (!idEtablissement) {
-      return res
-        .status(400)
-        .json({ message: 'Vous devez spécifier un établissement' });
-    }
-
-    const etablissement = await prisma.etablissement.findUnique({
-      where: {
-        id: parseInt(idEtablissement, 10),
-      },
-    });
-
-    if (!etablissement) {
-      return res
-        .status(400)
-        .json({ message: "Cet établissement n'existe pas" });
-    }
-  }
-  if (prix <= 0) {
-    return res
-      .status(400)
-      .json({ message: 'Le prix ne peut pas être négatif ou nul' });
-  }
-  if (nbSlots <= 0) {
-    return res.status(400).json({
-      message: 'Le nombre de slots ne peut pas être négatif ou nul',
-    });
-  }
-
-  const eventData = {
-    nom,
-    lieu,
-    date: parsedDate.setZone('Europe/Paris').plus({ hours: 2 }).toISO(),
-    type,
-    prix,
-    nbSlots,
-    description,
-    idEtablissement: idEtablissement
-      ? parseInt(idEtablissement, 10)
-      : user.idEtablissement,
-  };
-
-  try {
-    const event = await prisma.event.create({ data: eventData });
-
-    // Générer le code QR
-    const qrCodeData = {
-      idEvent: event.id,
-      idEtablissement: event.idEtablissement,
-    };
-
-    const qrCodeString = JSON.stringify(qrCodeData);
-    const qrCodeImage = await QRCode.toDataURL(qrCodeString);
-
-    // Met à jour l'événement avec le code QR
-    const updatedEvent = await prisma.event.update({
-      where: { id: event.id },
-      data: { qrCode: qrCodeImage },
-    });
-
-    if (!fs.existsSync('./qrcodes')) {
-      fs.mkdirSync('./qrcodes');
-    }
-    const qrCodeStream = fs.createWriteStream('./qrcodes/path-to-your-file.png');
-    // if (!fs.existsSync('../qrcodes')) {
-    //   fs.mkdirSync('../qrcodes');
-    // }
-    QRCode.toFileStream(qrCodeStream, qrCodeString);
-
-    return res.status(201).json({ message: 'Événement créé', data: updatedEvent });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
+  });
 };
 
 module.exports.getAll = async (req, res) => {
@@ -352,6 +382,14 @@ module.exports.addUserToEvent = async (req, res) => {
         .status(400)
         .json({ message: "Cet utilisateur est déjà dans l'événement" });
     }
+    await prisma.user.update({
+      where: {
+        id: parseInt(idUser, 10),
+      },
+      data: {
+        lastScannedEventId: idEvent,
+      },
+    });
 
     const userEvent = await prisma.event.update({
       where: {
@@ -384,11 +422,10 @@ module.exports.addUserToEvent = async (req, res) => {
   }
 };
 
-
 module.exports.update = async (req, res) => {
   const { idEvent } = req.params;
   const {
-    nom, date, lieu, type, prix, nbSlots,
+    nom, date, lieu, type, prix, nbSlots, description,
   } = req.body;
   const data = {};
   if (!idEvent) {
@@ -452,6 +489,9 @@ module.exports.update = async (req, res) => {
         });
       }
       data.nbSlots = nbSlots;
+    }
+    if (description) {
+      data.description = description;
     }
     const updatedEvent = await prisma.event.update({
       where: {
@@ -619,8 +659,7 @@ module.exports.getEventActif = async (req, res) => {
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, process.env.TOKEN_SECRET);
-  }
-  catch (err) {
+  } catch (err) {
     return res.status(401).json({ message: "Votre token n'est pas valide" });
   }
   const idUser = decodedToken.id;
@@ -644,14 +683,32 @@ module.exports.getEventActif = async (req, res) => {
         Etablissement: true,
         enchere: true,
       },
-    })
+    });
     if (!event) {
-      return res.status(400).json({ message: "Cet événement n'existe pas" });
+      return res.status(404).json({ message: "Cet événement n'existe pas" });
     }
-    return res.status(200).json({ message: 'Événement récupéré', data: event });
-  }
-  catch (err) {
-    return res.status(500).json({ message: "Internal error BG", data: err.message });
-  }
+    const currentDate = DateTime.now()
+      .setZone('utc')
+      .plus({ hours: 12 })
+      .toISO();
+    const dateEvent = new Date(event.date);
+    const dateEventParsed = DateTime.fromJSDate(dateEvent)
+      .setZone('utc')
+      .toISO();
+    if (dateEventParsed < currentDate) {
+      await prisma.user.update({
+        where: {
+          id: parseInt(idUser, 10),
+        },
+        data: {
+          lastScannedEventId: null,
+        },
+      });
+      return res.status(400).json({ message: "Cet événement n'est plus actif" });
+    }
 
-}
+    return res.status(200).json({ message: 'Événement récupéré', data: event });
+  } catch (err) {
+    return res.status(500).json({ message: 'Internal error BG', data: err.message });
+  }
+};

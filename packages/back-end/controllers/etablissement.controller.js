@@ -15,7 +15,7 @@ module.exports.getAll = async (req, res) => {
     });
   });
 
-  return res.status(200).json({ data: etablissements });
+  return res.status(200).json({ message: 'Etablissements récupérés', data: etablissements });
 };
 
 module.exports.getOne = async (req, res) => {
@@ -35,7 +35,7 @@ module.exports.getOne = async (req, res) => {
   if (!etablissement) {
     return res.status(404).json({ message: "Cet établissement n'existe pas" });
   }
-  return res.status(200).json({ data: etablissement });
+  return res.status(200).json({ message: 'Etablissement récupéré', data: etablissement });
 };
 
 module.exports.update = async (req, res) => {
