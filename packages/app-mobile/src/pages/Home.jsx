@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
   View,
-  Text,
   ScrollView,
   StyleSheet,
   RefreshControl,
+  ImageBackground,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import * as Location from 'expo-location';
@@ -12,8 +12,7 @@ import axios from 'axios';
 import EventsCard from '../components/EventsCard';
 import { axiosApiInstance } from '../../axios.config';
 import { backendUrl } from '../backendUrl';
-import CodeQR from '../components/CodeQR';
-import { Button, Chip } from 'react-native-paper';
+import { Button, Chip, Text } from 'react-native-paper';
 
 export default function Home() {
   const [event, setEvent] = useState([]);
@@ -78,51 +77,54 @@ export default function Home() {
       setLoadingLocation(false);
     }
   };
+
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.logo}>DEDICATE</Text>
-        <Button
-          icon={({ size, color }) => (
-            <FontAwesome name="map-marker" size={size} color={color} />
-          )}
-          style={styles.locationButton}
-          onPress={getLocation}
-          mode="contained"
-        >
-          Localisation
-        </Button>
-      </View>
-      {city && (
-        <View style={styles.chipContainer}>
-          <Chip
-            icon={'trash-can-outline'}
-            mode="outlined"
-            onPress={() => setCity('')}
-            style={styles.chip}
-          >
-            {city}
-          </Chip>
-        </View>
-      )}
-      <ScrollView
-        style={styles.eventListHome}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+      <ImageBackground
+        source={require("../../assets/fondHome.jpg")}
+        style={styles.backgroundImage}
       >
-        {event.map((item, index) => (
-          <EventsCard item={item} key={index} />
-        ))}
-      </ScrollView>
-
-      <CodeQR />
-
-      {loadingLocation && (
-        <View style={styles.loadingContainer}>
-          <Text>Chargement...</Text>
+        <View style={styles.header}>
+          <Text style={styles.logo}>DEDICATE</Text>
+          <Button
+            icon={({ size, color }) => (
+              <FontAwesome name="map-marker" size={size} color={color} />
+            )}
+            style={styles.locationButton}
+            onPress={getLocation}
+            mode="contained"
+          >
+            Localisation
+          </Button>
         </View>
-      )}
+        {city && (
+          <View style={styles.chipContainer}>
+            <Chip
+              icon={'trash-can-outline'}
+              mode="outlined"
+              onPress={() => setCity('')}
+              style={styles.chip}
+            >
+              {city}
+            </Chip>
+          </View>
+        )}
+        <ScrollView
+          style={styles.eventListHome}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          {event.map((item, index) => (
+            <EventsCard item={item} key={index} />
+          ))}
+        </ScrollView>
+        {loadingLocation && (
+          <View style={styles.loadingContainer}>
+            <Text>Chargement...</Text>
+          </View>
+        )}
+      </ImageBackground>
     </View>
   );
 }
@@ -140,7 +142,7 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   logo: {
-    fontSize: 18,
+    fontSize: 30,
     fontWeight: 'bold',
   },
   eventList: {
@@ -167,6 +169,10 @@ const styles = StyleSheet.create({
     margin: 6,
   },
   chipContainer: {
-    overflow: 'hidden'
+    overflow: 'hidden',
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
   },
 });
