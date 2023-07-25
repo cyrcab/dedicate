@@ -1,18 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-<<<<<<<< HEAD:packages/front-end/src/pages/myEvents/component/Events.jsx
 import { IconButton } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
 import EditIcon from '@mui/icons-material/Edit';
 import { Link } from 'react-router-dom';
-import Table from '../../../Table/Table';
-import { backendUrl } from '../../../../backendUrl';
-import { axiosApiInstance } from '../../../../axios.config';
-========
-import Table from '../../components/Table';
-import { backendUrl } from '../../backendUrl';
-import { axiosApiInstance } from '../../axios.config';
->>>>>>>> 70749be (fix(web-app): 🐛 router structure optimised + adding morgan in backend):packages/front-end/src/pages/myEvents/Events.jsx
+import Table from '../../../components/Table';
+import { backendUrl } from '../../../backendUrl';
+import { axiosApiInstance } from '../../../axios.config';
 
 export const columns = [
   {
@@ -61,7 +55,7 @@ export const columns = [
     headerName: 'See More',
     width: 90,
     renderCell: (params) => (
-      <Link to={`/eventDetails/${params.row.id}`}>
+      <Link to={`/events/${params.row.id}`}>
         <IconButton>
           <InfoIcon />
         </IconButton>
@@ -78,9 +72,9 @@ export const columns = [
       const currentDate = new Date();
       const isEventPassed = eventDate < currentDate;
       return (
-          <Link to={isEventPassed ? '#' : `/updateEvent/${params.row.id}`}>
-              {isEventPassed ? 'Fini' : <EditIcon />}
-          </Link>
+        <Link to={isEventPassed ? '#' : `/events/edit/${params.row.id}`}>
+          {isEventPassed ? 'Fini' : <EditIcon />}
+        </Link>
       );
     },
   },
@@ -90,7 +84,7 @@ export default function Events() {
   // Initialisation de rows comme un état vide
   const [rows, setRows] = useState([]);
 
-  const idCompany = useSelector((state) => state.auth.idEtablissement);
+  const idCompany = useSelector((state) => state.auth.user.idEtablissement);
 
   useEffect(() => {
     axiosApiInstance

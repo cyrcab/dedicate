@@ -2,13 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   isSignedIn: false,
-  id: null,
-  idEtablissement: null,
-  mail: null,
-  nom: null,
-  prenom: null,
-  roleId: null,
-  tel: null,
+  user: {},
 };
 
 const authSlice = createSlice({
@@ -16,14 +10,18 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setSignedIn: (state, action) => {
-      if (action.type === 'auth/setSignedIn') {
-        state.isSignedIn = action.payload;
-      }
-      state = { ...state, ...action.payload };
+      state = { user: { ...action.payload }, isSignedIn: true };
+      return state;
+    },
+    setSignedOut: (state) => {
+      state = initialState;
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      return state;
     },
   },
 });
 
-export const { setSignedIn } = authSlice.actions;
+export const { setSignedIn, setSignedOut } = authSlice.actions;
 
 export default authSlice.reducer;

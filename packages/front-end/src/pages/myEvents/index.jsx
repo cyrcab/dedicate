@@ -8,7 +8,7 @@ import Events from './component/Events';
 export default function MyEvents() {
   return (
     <div className="myEvents">
-      <Link to={'/createEvent'}>
+      <Link to={'/events/create'}>
         <Card
           sx={{ m: 2, backgroundColor: 'rgba(202, 69, 186, 0.5)' }}
           className="createEvent"

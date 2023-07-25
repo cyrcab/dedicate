@@ -2,7 +2,7 @@
 import React from 'react';
 import { Grid, Box } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-import Header from '../header/Header';
+import Header from '../header';
 import Sidebar from '../sidebar';
 
 export default function Layout() {

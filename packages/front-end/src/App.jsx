@@ -3,9 +3,11 @@ import jwtDecode from 'jwt-decode';
 import { ThemeProvider } from '@mui/material/styles';
 import { useRoutes, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setSignedIn } from './store/reducer/reducer';
+import { setSignedIn, setSignedOut } from './store/reducer/reducer';
 import theme from './utils/appTheme';
 import route from './components/router';
+import { axiosApiInstance } from './axios.config';
+import { backendUrl } from './backendUrl';
 
 export default function App() {
   const routes = useRoutes(route);
@@ -14,18 +16,24 @@ export default function App() {
 
   const checkToken = () => {
     const token = localStorage.getItem('token');
+    const id = localStorage.getItem('userId');
     if (!token) {
-      dispatch(setSignedIn(false));
+      dispatch(setSignedOut());
       return;
     }
     const decodedToken = jwtDecode(token);
     const currentTime = Date.now() / 1000;
     if (decodedToken.exp < currentTime) {
-      dispatch(setSignedIn(false));
+      dispatch(setSignedOut());
       return;
     }
-    dispatch(setSignedIn(true));
-    navigate('/');
+    axiosApiInstance
+      .get(`${backendUrl}users/${id}`)
+      .then((res) => {
+        dispatch(setSignedIn(res.data.data));
+        navigate('/');
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
