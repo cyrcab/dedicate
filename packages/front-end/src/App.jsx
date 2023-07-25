@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import { RouterProvider } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
+import { ThemeProvider } from '@mui/material/styles';
+import { useRoutes, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { setSignedIn } from './store/reducer/reducer';
-import router from './components/router';
 import theme from './utils/appTheme';
+import route from './components/router';
 
 export default function App() {
+  const routes = useRoutes(route);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const checkToken = () => {
     const token = localStorage.getItem('token');
@@ -23,6 +25,7 @@ export default function App() {
       return;
     }
     dispatch(setSignedIn(true));
+    navigate('/');
   };
 
   useEffect(() => {
@@ -31,9 +34,7 @@ export default function App() {
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <RouterProvider router={router} />
-      </ThemeProvider>
+      <ThemeProvider theme={theme}>{routes}</ThemeProvider>
     </>
   );
 }
