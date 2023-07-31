@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { Button, TextField, Grid, Card, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { axiosApiInstance } from '../../../../axios.config';
-import { backendUrl } from '../../../../backendUrl';
+import { axiosApiInstance } from '../../../axios.config';
+import { backendUrl } from '../../../backendUrl';
 
 function CreateEvent() {
   const [dateTime, setDateTime] = useState();
@@ -28,7 +28,7 @@ function CreateEvent() {
       prix: parseFloat(data.get('prix')),
       description: data.get('description'),
       nbSlots: parseInt(data.get('nbSlots'), 10),
-      photo: data.get('photo'),
+      images: data.get('photo'),
     };
 
     axiosApiInstance

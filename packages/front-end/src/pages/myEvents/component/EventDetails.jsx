@@ -47,7 +47,7 @@ export default function EventDetails() {
                 <BlockIcon /> Update Event
               </Button>
             ) : (
-              <Link to={`/updateEvent/${id}`}>Update Event</Link>
+              <Link to={`/events/edit/${id}`}>Update Event</Link>
             )}
           </CardActions>
         </Card>
