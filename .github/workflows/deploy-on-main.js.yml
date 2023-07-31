@@ -8,13 +8,33 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to DigitalOcean Droplet
+      - name: Deploy backend to DigitalOcean Droplet
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.HOST}}
           username: ${{secrets.USERNAME}}
+          password: ${{ secrets.PASSWORD }}
           key: ${{secrets.KEY}}
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            sh ~/deploy_backend.sh
+            cd /var/www/dedicate-project/dedicate
+            git checkout dev
+
+            echo "Fetching modifications......"
+            git pull
+
+            echo "Remove unused package"
+            npm prune
+
+            echo "Dependencies installation......"
+            npm run install:all:build
+
+            echo "Build app......"
+            npm run build
+
+            echo "Prisma client initialisation......"
+            npm run init:prisma
+
+            echo "Restarting app......"
+            pm2 restart all

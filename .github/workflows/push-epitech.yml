@@ -1,0 +1,25 @@
+name: Push on Epitech repository
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+          ssh-key: ${{secrets.MY_KEY}}
+      - name: Commit files
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git checkout $CI_COMMIT_REF_NAME
+          git push --repo="git@github.com:EpitechMscProPromo2025/T-YEP-600-TLS-6-1-finalproject-aurelien.schmit.git" --force

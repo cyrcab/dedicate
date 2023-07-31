@@ -15,7 +15,7 @@ module.exports.getAll = async (req, res) => {
     });
   });
 
-  return res.status(200).json({ data: etablissements });
+  return res.status(200).json({ message: 'Etablissements récupérés', data: etablissements });
 };
 
 module.exports.getOne = async (req, res) => {
@@ -35,12 +35,14 @@ module.exports.getOne = async (req, res) => {
   if (!etablissement) {
     return res.status(404).json({ message: "Cet établissement n'existe pas" });
   }
-  return res.status(200).json({ data: etablissement });
+  return res.status(200).json({ message: 'Etablissement récupéré', data: etablissement });
 };
 
 module.exports.update = async (req, res) => {
   const { id } = req.params;
-  const { nom, adresse } = req.body;
+  const {
+    nom, adresse, ville, codePostal,
+  } = req.body;
   const etablissement = await prismaEta.findUnique({
     where: {
       id: parseInt(id, 10),
@@ -56,13 +58,21 @@ module.exports.update = async (req, res) => {
   if (adresse) {
     data.adresse = adresse;
   }
+  if (ville) {
+    data.ville = ville;
+  }
+  if (codePostal) {
+    data.codePostal = codePostal;
+  }
   const updatedEtablissement = await prismaEta.update({
     where: {
       id: parseInt(id, 10),
     },
     data,
   });
-  return res.status(200).json({ message: 'Etablissement modifié ', data: updatedEtablissement });
+  return res
+    .status(200)
+    .json({ message: 'Etablissement modifié ', data: updatedEtablissement });
 };
 
 module.exports.delete = async (req, res) => {
@@ -82,6 +92,8 @@ module.exports.delete = async (req, res) => {
     data: {
       nom: 'Entreprise supprimée',
       adresse: 'Entreprise supprimée',
+      ville: 'Entreprise supprimée',
+      codePostal: 'Entreprise supprimée',
       User: {
         updateMany: {
           data: {

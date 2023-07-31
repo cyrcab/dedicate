@@ -6,10 +6,12 @@
   ],
   "scripts": {
     "install:all": "npm i --dev lerna && lerna bootstrap && husky install",
+    "install:all:build": "npm i --dev lerna && lerna bootstrap",
     "start:front": "lerna run start --scope=front-end",
     "start:back": "lerna run start --scope=back-end",
     "start:app": "cd packages/app-mobile/ && npm run start",
     "test:front": "lerna run test --scope=front-end",
+    "test:back": "lerna run test --scope=back-end",
     "test": "lerna run test",
     "commit": "git add . && git-cz",
     "lint": "lerna run lint",
@@ -22,9 +24,11 @@
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "git-cz": "^4.9.0",
     "husky": "^8.0.3",
-    "lerna": "^6.6.2"
+    "lerna": "^6.6.2",
+    "prettier": "^3.0.0"
   },
   "dependencies": {
+    "expo-barcode-scanner": "^12.5.3",
     "yarn": "^1.22.19"
   }
 }
