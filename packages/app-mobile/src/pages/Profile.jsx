@@ -79,42 +79,4 @@ const ProfilePage = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
-  container: {
-    flex: 1,
-    padding: 16,
-    marginTop: 30,
-  },
-  profileHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    marginBottom: 16,
-  },
-  profileName: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  eventsTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  eventsContainer: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fun translucent background
-    borderRadius: 10,
-    paddingTop: 20
-  },
-  noEventsText: {
-    fontSize: 16,
-    color: 'black', // Fun text color
-    textAlign: 'center',
-  },
-});
-
 export default ProfilePage;
