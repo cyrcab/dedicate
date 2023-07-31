@@ -17,6 +17,11 @@ import AddDediCoin from '../pages/Wallet/AddDediCoin';
 import BankDetails from '../pages/Wallet/BankDetails';
 import PaymentMethodForm from '../pages/Wallet/PaymentMethodForm';
 
+import Wallet from "../pages/Wallet";
+import AddDediCoin from "../pages/AddDediCoin";
+import BankDetails from "../pages/BankDetails";
+import PaymentMethodForm from "../pages/PaymentMethodForm";
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
@@ -97,6 +102,7 @@ const AppNavigator = () => (
     <Tab.Screen name="Evénements" component={EventStack} />
     <Tab.Screen name="Portefeuille" component={WalletStack} />
     <Tab.Screen name="Profile" component={ProfileStack} />
+    <Tab.Screen name="Portefeuille" component={WalletStack} />
   </Tab.Navigator>
 );
 
