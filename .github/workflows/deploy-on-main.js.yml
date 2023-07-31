@@ -19,7 +19,7 @@ jobs:
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
             cd /var/www/dedicate-project/dedicate
-            git checkout dev
+            git checkout main
 
             echo "Fetching modifications......"
             git pull
