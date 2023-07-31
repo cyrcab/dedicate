@@ -4,6 +4,7 @@ import { MD3LightTheme as DefaultTheme, PaperProvider } from 'react-native-paper
 import store from "./src/store/store"
 import { colors } from './src/theme';
 import { Provider } from 'react-redux';
+import PermissionHandler from './src/components/PermissionHandler';
 
 const theme = {
   ...DefaultTheme,
@@ -14,7 +15,8 @@ function App() {
   return (
     <Provider store={store}>
       <PaperProvider theme={theme}>
-        <Main/>
+        <PermissionHandler />
+        <Main />
       </PaperProvider>
     </Provider>
   );
