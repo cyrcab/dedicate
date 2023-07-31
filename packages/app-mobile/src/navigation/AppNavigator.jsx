@@ -18,14 +18,14 @@ const Stack = createNativeStackNavigator();
 const ProfileStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="Profil" component={Profile} options={{ headerShown: false }}/>
-    <Stack.Screen name="Modifier profil" component={Settings} />
-    <Stack.Screen name="Informations de la soirée" component={EventInformation}/>
+    <Stack.Screen name="Modifier votre profil" component={Settings} />
+    <Stack.Screen name="Récapitulatif de la soirée" component={EventInformation}/>
   </Stack.Navigator>
 );
 const HomeStack = () => (
   <Stack.Navigator>
     <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
-    <Stack.Screen name="ReadMore" component={ReadMore} />
+    <Stack.Screen name="Information sur la soirée" component={ReadMore} />
   </Stack.Navigator>
 );
 

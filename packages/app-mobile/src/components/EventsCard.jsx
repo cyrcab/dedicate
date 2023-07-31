@@ -13,7 +13,7 @@ export default function EventsCard({ item }) {
   return (
     <Card
       onPress={() => {
-        navigation.navigate("ReadMore", { event: item });
+        navigation.navigate("Information sur la soirée", { event: item });
       }}
       style={styles.CardEvent}
       mode="elevated"
