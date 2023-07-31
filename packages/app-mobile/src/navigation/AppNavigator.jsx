@@ -30,7 +30,7 @@ const ProfileStack = () => (
 
 const HomeStack = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+    <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/>
     <Stack.Screen name="Information sur la soirée" component={ReadMore} />
   </Stack.Navigator>
 );

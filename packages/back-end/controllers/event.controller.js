@@ -376,7 +376,7 @@ module.exports.addUserToEvent = async (req, res) => {
         },
       },
     });
-    const check = checkUser.User.find((u) => u.id === parseInt(idUser, 10));
+     const check = checkUser.User.find((u) => u.id === parseInt(idUser, 10));
     if (check) {
       return res
         .status(400)
