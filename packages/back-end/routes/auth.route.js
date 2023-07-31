@@ -8,7 +8,7 @@ const authController = require('../controllers/auth.controller');
  * description: Gestion de l'authentification
  */
 
-router.post('/registerEta', authController.registerEta);
+// router.post('/registerEta', authController.registerEta);
 router.post('/register', authController.register);
 
 /**
