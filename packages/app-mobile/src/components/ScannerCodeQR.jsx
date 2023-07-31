@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 import { IconButton } from "react-native-paper";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function ScannerCodeQR({ startScanning, resetScanning }) {
     const [scanning, setScanning] = useState(false);
+    // const [hasPermission, setHasPermission] = useState(null);
     const navigation = useNavigation();
 
     const onScan = ({ type, data }) => {
@@ -24,9 +25,33 @@ export default function ScannerCodeQR({ startScanning, resetScanning }) {
     };
 
     const onError = (message) => {
-        console.log("Message d'erreur reçu du serveur:", message);
+        // console.log("Message d'erreur reçu du serveur:", message);
         Alert.alert("Erreur", message);
     };
+
+    // useEffect(() => {
+    //     (async () => {
+    //         Alert.alert(
+    //             "Accès à l'appareil photo",
+    //             "Nous avons besoin de votre permission pour accéder à l'appareil photo afin de scanner les codes QR.",
+    //             [
+    //                 {
+    //                     text: "Annuler",
+    //                     style: "cancel"
+    //                 },
+    //                 {
+    //                     text: "OK",
+    //                     onPress: async () => {
+    //                         const { status } = await BarCodeScanner.requestPermissionsAsync();
+    //                         setHasPermission(status === 'granted');
+    //                     }
+    //                 }
+    //             ],
+    //             { cancelable: false }
+    //         );
+    //     })();
+    // }, []);
+
 
     useEffect(() => {
         if (startScanning) {

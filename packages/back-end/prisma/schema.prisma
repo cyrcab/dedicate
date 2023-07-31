@@ -17,23 +17,27 @@ model Role {
 }
 
 model User {
-  id                 Int            @id @default(autoincrement())
+  id                 Int             @id @default(autoincrement())
   nom                String
   prenom             String
-  mail               String         @unique
-  tel                String         @unique
+  mail               String          @unique
+  tel                String          @unique
   password           String
   dateN              DateTime?
   photo              String?
   typePaiement       String?
-  Role               Role           @relation(fields: [roleId], references: [id])
+  eventActif         String?
+  Role               Role            @relation(fields: [roleId], references: [id])
   roleId             Int
   idEtablissement    Int?
-  Etablissement      Etablissement? @relation(fields: [idEtablissement], references: [id])
+  Etablissement      Etablissement?  @relation(fields: [idEtablissement], references: [id])
   enchere            Enchere[]
-  events             Event[]        @relation("EventUser")
+  events             Event[]         @relation("EventUser")
   lastScannedEventId Int?
-  LastScannedEvent   Event?         @relation(name: "LastScannedEvent", fields: [lastScannedEventId], references: [id])
+  LastScannedEvent   Event?          @relation(name: "LastScannedEvent", fields: [lastScannedEventId], references: [id])
+  dediCoins          Float           @default(0)
+  paymentMethods     PaymentMethod[]
+  transactions       Transaction[]
 }
 
 model Etablissement {
@@ -95,4 +99,21 @@ model Enchere {
   User      User    @relation(fields: [idUser], references: [id])
   Musique   Musique @relation(fields: [idMusique], references: [id])
   Event     Event   @relation(fields: [idEvent], references: [id])
+}
+
+model PaymentMethod {
+  id         Int    @id @default(autoincrement())
+  userId     Int
+  cardNumber String @db.VarChar(255) // Pour plus de sécurité, n'enregistrez que les 4 derniers chiffres de la carte
+  expDate    String
+  user       User   @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id     Int      @id @default(autoincrement())
+  userId Int
+  amount Float // Montant en DediCoins de la transaction
+  type   String // Peut être "purchase" ou "spend"
+  date   DateTime
+  user   User     @relation(fields: [userId], references: [id])
 }
