@@ -1,7 +1,7 @@
 import { Card } from "react-native-paper";
 import { Image, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import styles from "../pages/styles";
+import { backendUrlImages } from "../backendUrl";
 
 export default function EventsHistoric({ item }) {
   const navigation = useNavigation();
@@ -9,21 +9,25 @@ export default function EventsHistoric({ item }) {
   const jour = date.getDate().toString().padStart(2, "0"); // Ajoute un zéro devant le jour si nécessaire
   const mois = (date.getMonth() + 1).toString().padStart(2, "0"); // Ajoute un zéro devant le mois si nécessaire
   const annee = date.getFullYear();
+  const url = item.photo ? item.photo.replace(/\\/g, '/') : null;
+
   return (
     <Card
       onPress={() => {
-        navigation.navigate("Informations de la soirée", { event: item });
+        navigation.navigate("Récapitulatif de la soirée", { event: item });
       }}
-      style={styles.CardEvent}
+      style={{width : ('90%'), alignSelf:'center', marginBottom: 20 }}
     >
       <Card.Title
         title={item.nom}
         subtitle={item.type}
         left={() => (
-          <Image
-            source={require("../../assets/oclub.png")} // Remplacez le chemin par le chemin réel de votre image
-            style={{ width: 50, height: 50 }} // Spécifiez la largeur et la hauteur de l'image selon vos besoins
-          />
+          url ? (
+            <Image
+              source={{ uri: backendUrlImages + url }}
+              style={{ width: 50, height: 50 }}
+            />
+          ) : null
         )}
         right={() => (
           <Text style={{ marginRight: 10 }}>
