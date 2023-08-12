@@ -23,8 +23,8 @@ module.exports.createTransaction = async (req, res) => {
             userId,
             amount,
             type: 'purchase',
-            date: new Date()
-        }
+            date: new Date(),
+        },
     });
 
     // Récupérer l'utilisateur
@@ -36,7 +36,7 @@ module.exports.createTransaction = async (req, res) => {
     // Mettre à jour les dediCoins de l'utilisateur
     const updatedUser = await prisma.user.update({
         where: { id: userId },
-        data: { dediCoins: user.dediCoins + amount }
+        data: { dediCoins: user.dediCoins + amount },
     });
 
     // Retourner la transaction et le nouvel état de l'utilisateur
