@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, ScrollView, RefreshControl, Button } from "react-native";
-import PaymentMethodCard from "../components/PaymentMethodCard";
-import { axiosApiInstance } from "../../axios.config";
-import { backendUrl } from "../backendUrl";
+import PaymentMethodCard from "../../components/PaymentMethodCard";
+import { axiosApiInstance } from "../../../axios.config";
+import { backendUrl } from "../../backendUrl";
 import { useNavigation, useIsFocused } from "@react-navigation/native";
-import styles from "./styles";
+import { useSelector } from "react-redux";
+import styles from "../styles";
 
 export default function BankDetails() {
+    const userId = useSelector(state => state.auth.userId);
     const [methods, setMethods] = useState([]);
     const [refreshing, setRefreshing] = useState(false);
 
@@ -14,7 +16,6 @@ export default function BankDetails() {
     const isFocused = useIsFocused();
 
     function fetchPaymentMethods() {
-        const userId = 1; // Remplacez cette ligne par le moyen que vous utilisez pour obtenir l'ID de l'utilisateur actuellement connecté
         axiosApiInstance.get(backendUrl + "paymentMethods/user/" + userId)
             .then((response) => {
                 setMethods(response.data);
