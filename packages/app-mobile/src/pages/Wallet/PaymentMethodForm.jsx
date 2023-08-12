@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { TouchableWithoutFeedback, Keyboard, StyleSheet, KeyboardAvoidingView, Platform } from "react-native";
 import { TextInput, Button, Snackbar } from "react-native-paper";
-import { axiosApiInstance } from "../../axios.config";
-import { backendUrl } from "../backendUrl";
+import { axiosApiInstance } from "../../../axios.config";
+import { backendUrl } from "../../backendUrl";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector } from "react-redux";
 
 export default function PaymentMethodForm({ route }) {
     const navigation = useNavigation();
+    const userId = useSelector(state => state.auth.userId);
 
     const { id = null, cardNumber: cardNum = "", expDate: expiryDate = "" } = route.params ? route.params : {};
 
@@ -28,7 +30,7 @@ export default function PaymentMethodForm({ route }) {
 
     const handleAddMethod = () => {
         const data = {
-            userId: 1, // Remplacez cette ligne par le moyen que vous utilisez pour obtenir l'ID de l'utilisateur actuellement connecté
+            userId: userId,
             cardNumber: cardNumber,
             expDate: expDate,
         };
@@ -80,7 +82,7 @@ export default function PaymentMethodForm({ route }) {
                 />
                 <Button
                     mode="contained"
-                    onPress={handleAddMethod} // Appeler la fonction handleAddMethod lors du clic sur le bouton
+                    onPress={handleAddMethod}
                     style={styles.addButton}
                 >
                     {methodId ? "Modifier" : "Ajouter"}
