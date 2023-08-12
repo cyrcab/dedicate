@@ -17,10 +17,10 @@ import AddDediCoin from '../pages/Wallet/AddDediCoin';
 import BankDetails from '../pages/Wallet/BankDetails';
 import PaymentMethodForm from '../pages/Wallet/PaymentMethodForm';
 
-import Wallet from "../pages/Wallet";
-import AddDediCoin from "../pages/AddDediCoin";
-import BankDetails from "../pages/BankDetails";
-import PaymentMethodForm from "../pages/PaymentMethodForm";
+import Wallet from "../pages/Wallet/Wallet";
+import AddDediCoin from "../pages/Wallet/AddDediCoin";
+import BankDetails from "../pages/Wallet/BankDetails";
+import PaymentMethodForm from "../pages/Wallet/PaymentMethodForm";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

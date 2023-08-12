@@ -91,7 +91,6 @@ export default function AddDedicoin() {
             });
     }
 
-
     return (
         <View style={styles.containerHome}>
             <ScrollView
