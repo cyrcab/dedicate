@@ -13,8 +13,7 @@ export default function AddDedicoin() {
     const [defaultPaymentMethodId, setDefaultPaymentMethodId] = useState(null);
     const amounts = [10, 20, 30, 40, 50, 100];
 
-    const navigation = useNavigation(); // pour naviguer vers d'autres pages
-    const [showError, setShowError] = useState(false); // nouvel état pour le message d'erreur
+    const navigation = useNavigation();
 
     useEffect(() => {
         axiosApiInstance
@@ -38,21 +37,24 @@ export default function AddDedicoin() {
             .get(backendUrl + "paymentMethods/user/default/" + userId)
             .then((response) => {
                 if (response.data && response.data.id) {
-                    const data = {
-                        userId: userId,
-                        amount: amount,
-                        paymentMethodId: response.data.id,
-                    };
-
-                    axiosApiInstance
-                        .post(backendUrl + "transactions/", data)
-                        .then((response) => {
-                            console.log(response);
-                        })
-                        .catch((error) => {
-                            console.log(error);
-                        });
+                    // alerte pour la confirmation si un moyen de paiement valide est trouvé
+                    Alert.alert(
+                        "Confirmation d'achat",
+                        `Êtes-vous sûr de vouloir acheter ${amount} DediCoins pour ${amount} Euros ?`,
+                        [
+                            {
+                                text: "Annuler",
+                                style: "cancel"
+                            },
+                            {
+                                text: "Confirmer",
+                                onPress: () => processPurchase(amount, response.data.id) // procéder à l'achat
+                            }
+                        ],
+                        { cancelable: false }
+                    );
                 } else {
+                    // alerte si aucun moyen de paiement valide n'est trouvé
                     Alert.alert(
                         "Méthode de paiement manquante",
                         "Veuillez sélectionner une méthode de paiement par défaut ou en ajouter une.",
@@ -71,6 +73,24 @@ export default function AddDedicoin() {
                 console.log(error);
             });
     }
+
+    function processPurchase(amount, paymentMethodId) {
+        const data = {
+            userId: userId,
+            amount: amount,
+            paymentMethodId: paymentMethodId,
+        };
+
+        axiosApiInstance
+            .post(backendUrl + "transactions/", data)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
 
     return (
         <View style={styles.containerHome}>

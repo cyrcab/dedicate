@@ -68,13 +68,13 @@ module.exports.setDefaultPaymentMethod = async (req, res) => {
         // Set all other methods for this user to not default
         await prisma.paymentMethod.updateMany({
             where: { userId: Number(req.body.userId) },
-            data: { isDefault: false }
+            data: { isDefault: false },
         });
 
         // Set this method to default
         const paymentMethod = await prisma.paymentMethod.update({
             where: { id: Number(id) },
-            data: { isDefault: true }
+            data: { isDefault: true },
         });
         res.status(200).json(paymentMethod);
     } catch (error) {
