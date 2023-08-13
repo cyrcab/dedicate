@@ -81,29 +81,75 @@ export default function AddDedicoin() {
             paymentMethodId: paymentMethodId,
         };
 
-        axiosApiInstance
-            .post(backendUrl + "transactions/", data)
-            .then((response) => {
-                console.log(response);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
+        useEffect(() => {
+            axiosApiInstance
+                .get(backendUrl + "paymentMethods/user/default/" + userId)
+                .then((response) => {
+                    if (response.data && response.data.id) {
+                        setDefaultPaymentMethodId(response.data.id);
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }, []);
 
-    return (
-        <View style={styles.containerHome}>
-            <ScrollView
-                style={styles.eventListHome}
-            >
-                {amounts.map((amount, index) => (
-                    <TransactionCard
-                        key={index}
-                        amount={amount}
-                        onPress={addDedicoins}
-                    />
-                ))}
-            </ScrollView>
-        </View>
-    );
-}
+        const redirectToBankDetails = () => {
+            navigation.navigate('Bank Details');
+        }
+
+        function addDedicoins(amount) {
+            axiosApiInstance
+                .get(backendUrl + "paymentMethods/user/default/" + userId)
+                .then((response) => {
+                    if (response.data && response.data.id) {
+                        const data = {
+                            userId: userId,
+                            amount: amount,
+                            paymentMethodId: response.data.id,
+                        };
+
+                        axiosApiInstance
+                            .post(backendUrl + "transactions/", data)
+                            .then((response) => {
+                                console.log(response);
+                            })
+                            .catch((error) => {
+                                console.log(error);
+                            });
+                    } else {
+                        Alert.alert(
+                            "Méthode de paiement manquante",
+                            "Veuillez sélectionner une méthode de paiement par défaut ou en ajouter une.",
+                            [
+                                {
+                                    text: "Annuler",
+                                    style: "cancel"
+                                },
+                                { text: "Ajouter", onPress: redirectToBankDetails }
+                            ],
+                            { cancelable: false }
+                        );
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+
+        return (
+            <View style={styles.containerHome}>
+                <ScrollView
+                    style={styles.eventListHome}
+                >
+                    {amounts.map((amount, index) => (
+                        <TransactionCard
+                            key={index}
+                            amount={amount}
+                            onPress={addDedicoins}
+                        />
+                    ))}
+                </ScrollView>
+            </View>
+        );
+    }
