@@ -47,6 +47,41 @@ module.exports.getPaymentMethodsByUser = async (req, res) => {
     }
 };
 
+module.exports.getDefaultPaymentMethodByUser = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const defaultPaymentMethod = await prisma.paymentMethod.findFirst({
+            where: {
+                userId: Number(userId),
+                isDefault: true,
+            },
+        });
+        res.status(200).json(defaultPaymentMethod);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching default payment method' });
+    }
+};
+
+module.exports.setDefaultPaymentMethod = async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Set all other methods for this user to not default
+        await prisma.paymentMethod.updateMany({
+            where: { userId: Number(req.body.userId) },
+            data: { isDefault: false }
+        });
+
+        // Set this method to default
+        const paymentMethod = await prisma.paymentMethod.update({
+            where: { id: Number(id) },
+            data: { isDefault: true }
+        });
+        res.status(200).json(paymentMethod);
+    } catch (error) {
+        res.status(500).json({ error: 'Error setting default payment method' });
+    }
+};
+
 module.exports.updatePaymentMethod = async (req, res) => {
     const { id } = req.params;
     const { cardNumber, expDate } = req.body;

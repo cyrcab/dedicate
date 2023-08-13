@@ -102,11 +102,12 @@ model Enchere {
 }
 
 model PaymentMethod {
-  id         Int    @id @default(autoincrement())
+  id         Int     @id @default(autoincrement())
   userId     Int
-  cardNumber String @db.VarChar(255) // Pour plus de sécurité, n'enregistrez que les 4 derniers chiffres de la carte
+  cardNumber String  @db.VarChar(255)
   expDate    String
-  user       User   @relation(fields: [userId], references: [id])
+  isDefault  Boolean @default(false)
+  user       User    @relation(fields: [userId], references: [id])
 }
 
 model Transaction {
