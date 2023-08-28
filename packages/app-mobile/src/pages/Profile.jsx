@@ -5,15 +5,13 @@ import { axiosApiInstance } from '../../axios.config';
 import { backendUrl } from '../backendUrl';
 import EventsHistoric from '../components/EventHistoric';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useFocusEffect } from '@react-navigation/native';
 import background from '../../assets/fondHome.jpg'
 
 const ProfilePage = ({ navigation }) => {
   const [user, setUser] = useState({});
-  const [userId, setUserId] = useState('');
   const [event, setEvent] = useState([]);
 
-  const profileInfo = () => {
+  const profileInfo = (userId) => {
     axiosApiInstance
       .get(backendUrl + 'users/' + userId)
       .then((data) => {
@@ -24,7 +22,7 @@ const ProfilePage = ({ navigation }) => {
       });
   };
 
-  const historicalEventInfo = () => {
+  const historicalEventInfo = (userId) => {
     axiosApiInstance
       .get(backendUrl + 'events/me/' + userId)
       .then((response) => {
@@ -38,7 +36,8 @@ const ProfilePage = ({ navigation }) => {
   useEffect(() => {
     AsyncStorage.getItem('userId')
       .then((userId) => {
-        setUserId(userId);
+        profileInfo(userId)
+        historicalEventInfo(userId);
       })
       .catch((error) => {
         console.log(
@@ -47,13 +46,6 @@ const ProfilePage = ({ navigation }) => {
         );
       });
   }, []);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      profileInfo();
-      historicalEventInfo();
-    }, [userId]),
-  );
 
   return (
     <ImageBackground source={background} style={styles.backgroundImage}>
@@ -79,7 +71,7 @@ const ProfilePage = ({ navigation }) => {
           {event.length === 0 ? (
             <Text style={styles.noEventsText}>Vous n'avez participé à aucun événement</Text>
           ) : (
-            event.map((item, index) => <EventsHistoric item={item} key={index} />)
+            event.map((item, index) =>  <EventsHistoric item={item} key={index}  />)
           )}
         </ScrollView>
       </View>
@@ -122,7 +114,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black', // Fun text color
     textAlign: 'center',
-
   },
 });
 
