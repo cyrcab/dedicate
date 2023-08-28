@@ -53,7 +53,7 @@ export default function Event({ navigation }) {
         musicInfos();
       })
       .catch((error) => {
-        console.log(error);
+        // console.log(error);
       });
   }
 
