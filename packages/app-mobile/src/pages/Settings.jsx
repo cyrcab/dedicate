@@ -139,7 +139,7 @@ export default function Settings({ route }) {
             <View style={styles.centerView}>
               <Avatar.Image
                 size={100}
-                source={require("../../assets/oclub.png")}
+                source={require("../../assets/profile.jpg")}
               />
             </View>
             <TextInput
