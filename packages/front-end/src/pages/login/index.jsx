@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import axios from 'axios';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   Avatar,
@@ -21,10 +21,12 @@ import {
 } from '@mui/material';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import jwtDecode from 'jwt-decode';
 import club from '../../assets/club.jpg';
 import logo from '../../assets/logo.png';
 import { backendUrl } from '../../backendUrl';
-import { setSignedIn } from '../../store/reducer/reducer';
+import { setSignedIn, setSignedOut } from '../../store/reducer/reducer';
+import { axiosApiInstance } from '../../axios.config';
 
 function saveToLocalStorage(key, value) {
   localStorage.setItem(key, value);
@@ -53,10 +55,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [mdp, setMdp] = useState('');
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
-
-  const from = location.state?.from.pathName || '/';
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -71,6 +70,28 @@ export default function Login() {
 
   const onDismissAlert = () => setVisible(false);
 
+  const checkToken = () => {
+    const token = localStorage.getItem('token');
+    const id = localStorage.getItem('userId');
+    if (!token) {
+      dispatch(setSignedOut());
+      return;
+    }
+    const decodedToken = jwtDecode(token);
+    const currentTime = Date.now() / 1000;
+    if (decodedToken.exp < currentTime) {
+      dispatch(setSignedOut());
+      return;
+    }
+    axiosApiInstance
+      .get(`${backendUrl}users/${id}`)
+      .then((res) => {
+        dispatch(setSignedIn(res.data.data));
+        navigate('/');
+      })
+      .catch((err) => console.log(err));
+  };
+
   const handleLogin = (e) => {
     e.preventDefault();
     axios
@@ -79,7 +100,9 @@ export default function Login() {
         saveToLocalStorage('token', response.data.token);
         saveToLocalStorage('userId', response.data.data.id.toString());
         dispatch(setSignedIn(true));
-        navigate(from, { replace: true });
+      })
+      .then(() => {
+        checkToken();
       })
       .catch((error) => {
         setMessageError(error.response.data.message);
@@ -143,7 +166,7 @@ export default function Login() {
               name="password"
               label="Password"
               onChange={(e) => setMdp(e.target.value)}
-              type={showPassword ? 'password' : 'text'}
+              type={!showPassword ? 'password' : 'text'}
               id="password"
               autoComplete="current-password"
               InputProps={{
