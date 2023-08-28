@@ -19,6 +19,8 @@ export default function Header() {
         return 'Playlist';
       case '/events':
         return 'Événements';
+      case '/events/create':
+        return 'Création d\'un événement';
       case '/users':
         return 'Utilisateurs';
       case '/settings':
