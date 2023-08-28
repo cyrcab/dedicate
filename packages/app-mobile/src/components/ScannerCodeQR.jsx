@@ -66,7 +66,7 @@ export default function ScannerCodeQR({ startScanning, resetScanning }) {
 
         const scannedData = JSON.parse(data);
         try {
-            await axiosApiInstance.post(backendUrl + 'events/add/' + scannedData.idEvent);
+            await axiosApiInstance.put(backendUrl + 'events/add/' + scannedData.idEvent);
             onSuccess();
             navigation.navigate("Event");
         } catch (err) {
