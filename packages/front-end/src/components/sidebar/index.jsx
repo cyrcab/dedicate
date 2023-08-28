@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, CardMedia } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import LeaderboardIcon from '@mui/icons-material/Leaderboard';
+// import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import EventIcon from '@mui/icons-material/Event';
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -57,14 +57,14 @@ export default function Sidebar() {
           padding: '0 20px',
         }}
       >
-        <MySidebarLink
+        {/* <MySidebarLink
           isActive={isActive('/')}
           path={'/'}
           icon={<LeaderboardIcon />}
           pathName={'Accueil'}
-        />
+        /> */}
         <MySidebarLink
-          isActive={isActive('/events')}
+          isActive={isActive('/events') || isActive('/')}
           path={'/events'}
           icon={<EventIcon />}
           pathName={'Événements'}
