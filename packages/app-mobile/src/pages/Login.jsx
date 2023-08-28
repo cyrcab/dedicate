@@ -13,7 +13,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { backendUrl } from "../backendUrl";
-import { setSignedIn } from "../store/reducers/reducer";
+import { setSignedIn, setUserId } from "../store/reducers/reducer";
+
 
 export default function Login({ navigation }) {
   const [email, setEmail] = useState("");
@@ -39,10 +40,12 @@ export default function Login({ navigation }) {
     axios
       .post(backendUrl + "auth/login", data)
       .then((response) => {
-        dispatch({ type: "SET_USER_DATA", payload: response.data });
+        console.log(response.data);
         AsyncStorage.setItem("token", response.data.token);
         AsyncStorage.setItem("userId", response.data.data.id.toString());
         dispatch(setSignedIn(true));
+        dispatch(setUserId(response.data.data.id));
+
       })
       .catch((error) => {
         setMessageError(error.response.data.message);
@@ -50,6 +53,7 @@ export default function Login({ navigation }) {
         console.log(error);
       });
   };
+
 
   return (
     <TouchableWithoutFeedback onPress={dismissKeyboard}>

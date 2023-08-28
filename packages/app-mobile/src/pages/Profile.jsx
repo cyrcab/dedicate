@@ -64,7 +64,7 @@ const ProfilePage = ({ navigation }) => {
             icon="cog"
             size={30}
             onPress={() =>
-              navigation.navigate('Modifier votre profil', { user, setUser })
+              navigation.navigate('Modifier profil', { user, setUser })
             }
           />
         </View>
@@ -79,7 +79,7 @@ const ProfilePage = ({ navigation }) => {
           {event.length === 0 ? (
             <Text style={styles.noEventsText}>Vous n'avez participé à aucun événement</Text>
           ) : (
-            event.map((item, index) =>  <EventsHistoric item={item} key={index}  />)
+            event.map((item, index) => <EventsHistoric item={item} key={index} />)
           )}
         </ScrollView>
       </View>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: 'black', // Fun text color
     textAlign: 'center',
-    
+
   },
 });
 

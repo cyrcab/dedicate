@@ -174,3 +174,17 @@ module.exports.deleteUser = async (req, res) => {
   delete updatedUser.password;
   return res.status(200).json({ message: 'Utilisateur supprimé' });
 };
+
+// get dediCoins
+module.exports.getUserDediCoins = async (req, res) => {
+  const { id } = req.params;
+  const user = await prismaUser.findUnique({
+    where: {
+      id: parseInt(id, 10),
+    },
+  });
+  if (!user) {
+    return res.status(404).json({ message: "Cet utilisateur n'existe pas" });
+  }
+  return res.status(200).json({ data: user.dediCoins });
+}
