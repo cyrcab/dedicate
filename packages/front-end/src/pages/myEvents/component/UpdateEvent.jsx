@@ -13,6 +13,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { axiosApiInstance } from '../../../axios.config';
 import { backendUrl } from '../../../backendUrl';
+import MyCard from '../../../components/MyCard';
 
 function UpdateEvent() {
   const [dateTime, setDateTime] = useState();
@@ -76,12 +77,7 @@ function UpdateEvent() {
   };
 
   return (
-    <Card sx={{ m: 2 }}>
-      <Container>
-        <IconButton color="primary" onClick={() => navigate(-1)}>
-          <ArrowBackIosIcon />
-        </IconButton>
-      </Container>
+    <MyCard goBack>
       <Box container spacing={2} m={2}>
         <form onSubmit={handleSubmit} noValidate>
           <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -185,7 +181,7 @@ function UpdateEvent() {
           </Button>
         </form>
       </Box>
-    </Card>
+    </MyCard>
   );
 }
 

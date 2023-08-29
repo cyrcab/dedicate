@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import Button from '@mui/material/Button';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import EditIcon from '@mui/icons-material/Edit';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import {
   CardContent,
   CardMedia,
   Container,
   Divider,
   Typography,
-  IconButton,
   ButtonGroup,
   Dialog,
+  Skeleton,
+  Grid,
 } from '@mui/material';
 import { backendUrl } from '../../../backendUrl';
 import { axiosApiInstance } from '../../../axios.config';
 import formatDateForReadIt from '../../../utils/formatDateForReadItFr';
+import MyCard from '../../../components/MyCard';
 
 export default function EventDetails() {
   const [eventData, setEventData] = useState(null);
@@ -62,49 +61,57 @@ export default function EventDetails() {
   const isEventPassed = eventDate < currentDate;
 
   return (
-    <Container>
-      <Card>
-        <Container sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <IconButton color="primary" onClick={() => navigate(-1)}>
-            <ArrowBackIosIcon />
-          </IconButton>
-          <CardActions>
-            <ButtonGroup disabled={isEventPassed}>
-              <Button onClick={handleClickOpen}>
-                <QrCodeScannerIcon />
-              </Button>
-              <Button onClick={downloadFile}>
-                <FileDownloadIcon />
-              </Button>
-              <Button onClick={() => navigate(`/events/edit/${eventData.id}`)}>
-                <EditIcon />
-              </Button>
-            </ButtonGroup>
-          </CardActions>
-        </Container>
-        <Divider />
-        {eventData.photo && (
-          <CardMedia src={eventData.photo} component="img" alt="Event image" />
-        )}
-        <CardContent
-          sx={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-around',
-          }}
-        >
+    <MyCard
+      goBack
+      rightAction={
+        <ButtonGroup disabled={isEventPassed}>
+          <Button onClick={handleClickOpen}>
+            <QrCodeScannerIcon />
+          </Button>
+          <Button onClick={downloadFile}>
+            <FileDownloadIcon />
+          </Button>
+          <Button onClick={() => navigate(`/events/edit/${eventData.id}`)}>
+            <EditIcon />
+          </Button>
+        </ButtonGroup>
+      }
+    >
+      <Divider />
+      {false ? (
+        <CardMedia
+          src={eventData.photo}
+          component="img"
+          alt="Event image"
+          width="100%"
+          height={300}
+        />
+      ) : (
+        <Skeleton variant="rectangular" width="100%" height={300} />
+      )}
+      <CardContent>
+        <Container>
           <Typography variant="h1">{eventData.nom}</Typography>
-          <Typography>Date : {formatDateForReadIt(eventData.date)}</Typography>
-          <Typography>{eventData.type}</Typography>
-          <Typography>{eventData.description}</Typography>
-          <Typography>{eventData.prix}</Typography>
-          <Typography>{eventData.nbSlots}</Typography>
-          <Typography>{eventData.lieu}</Typography>
-        </CardContent>
-      </Card>
+          <Divider />
+          <Grid container sx={{ display: 'flex' }} mt={3}>
+            <Grid item sm={6}>
+              <Typography>
+                Date : {formatDateForReadIt(eventData.date)}
+              </Typography>
+              <Typography>Type de musique : {eventData.type}</Typography>
+              <Typography>Description : {eventData.description}</Typography>
+            </Grid>
+            <Grid item sm={6}>
+              <Typography>Prix minimum : {eventData.prix}</Typography>
+              <Typography>Nombre de musique : {eventData.nbSlots}</Typography>
+              <Typography>Lieu de l'événement : {eventData.lieu}</Typography>
+            </Grid>
+          </Grid>
+        </Container>
+      </CardContent>
       <Dialog open={open} onClose={handleClose}>
         <img src={eventData.qrCode} height={500} />
       </Dialog>
-    </Container>
+    </MyCard>
   );
 }
