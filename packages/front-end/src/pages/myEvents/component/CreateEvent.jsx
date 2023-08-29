@@ -34,8 +34,7 @@ function CreateEvent() {
     axiosApiInstance
       .post(`${backendUrl}events`, eventData)
       .then((response) => {
-        console.log(response.data);
-        navigate('/myEvents');
+        navigate('/events');
       })
       .catch((error) => {
         console.error('There was an error!', error);
