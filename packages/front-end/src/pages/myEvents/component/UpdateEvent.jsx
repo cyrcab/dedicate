@@ -1,25 +1,47 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Grid, Card, Box } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import {
+  Button,
+  TextField,
+  Grid,
+  Card,
+  Box,
+  Container,
+  IconButton,
+} from '@mui/material';
+import { useParams, useNavigate } from 'react-router-dom';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { axiosApiInstance } from '../../../axios.config';
 import { backendUrl } from '../../../backendUrl';
 
 function UpdateEvent() {
   const [dateTime, setDateTime] = useState();
-  const [eventData, setEventData] = useState({});
+  const [eventData, setEventData] = useState({
+    nom: '',
+    lieu: '',
+    date: '',
+    type: '',
+    prix: '',
+    description: '',
+    nbSlots: '',
+  });
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axiosApiInstance
       .get(`${backendUrl}events/one/${id}`)
       .then((response) => {
-        setEventData(response.data);
+        setEventData(response.data.data);
       })
       .catch((error) => {
         console.error('There was an error!', error);
       });
   }, [id]);
+
+  const handleChange = (event) => {
+    setEventData({ ...eventData, [event.target.name]: event.target.value });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -32,8 +54,8 @@ function UpdateEvent() {
       const formattedDate = `${day}/${month}/${year}`;
       return `${formattedDate} ${timePart}:00`;
     };
-    // eslint-disable-next-line no-shadow
-    const eventData = {
+
+    const eventDataToUpdate = {
       nom: data.get('nom'),
       lieu: data.get('lieu'),
       date: formatDateTime(data.get('date')),
@@ -44,7 +66,7 @@ function UpdateEvent() {
     };
 
     axiosApiInstance
-      .put(`${backendUrl}events/`, id)
+      .put(`${backendUrl}events/${id}`, { ...eventDataToUpdate })
       .then((response) => {
         console.log(response.data);
       })
@@ -55,6 +77,11 @@ function UpdateEvent() {
 
   return (
     <Card sx={{ m: 2 }}>
+      <Container>
+        <IconButton color="primary" onClick={() => navigate(-1)}>
+          <ArrowBackIosIcon />
+        </IconButton>
+      </Container>
       <Box container spacing={2} m={2}>
         <form onSubmit={handleSubmit} noValidate>
           <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -64,6 +91,7 @@ function UpdateEvent() {
               id="nom"
               label="Nom de l'événement"
               name="nom"
+              value={eventData.nom}
               autoComplete="nom"
               defaultValue={eventData.nom}
             />
@@ -76,6 +104,7 @@ function UpdateEvent() {
               label="Lieu"
               name="lieu"
               autoComplete="lieu"
+              value={eventData.lieu}
               defaultValue={eventData.lieu}
             />
           </Grid>
@@ -91,6 +120,7 @@ function UpdateEvent() {
               InputLabelProps={{
                 shrink: true,
               }}
+              value={eventData.date.slice(0, 16)}
               defaultValue={eventData.date}
             />
           </Grid>
@@ -101,7 +131,9 @@ function UpdateEvent() {
               id="type"
               label="Type de musique"
               name="type"
-              autoComplete="type"
+              value={eventData.type}
+              onChange={(e) => handleChange(e)}
+              // autoComplete="type"
               defaultValue={eventData.type}
             />
           </Grid>
@@ -113,6 +145,7 @@ function UpdateEvent() {
               label="Description"
               name="description"
               autoComplete="description"
+              value={eventData.description}
               defaultValue={eventData.description}
             />
           </Grid>
@@ -125,7 +158,8 @@ function UpdateEvent() {
               name="prix"
               autoComplete="prix"
               type="number"
-              defaultValue={eventData.prix}
+              value={eventData.prix}
+              defaultValue={eventData?.prix}
             />
           </Grid>
           <Grid item xs={12} style={{ marginBottom: '20px' }}>
@@ -137,6 +171,7 @@ function UpdateEvent() {
               name="nbSlots"
               autoComplete="nbSlots"
               type="number"
+              value={eventData.nbSlots}
               defaultValue={eventData.nbSlots}
             />
           </Grid>
