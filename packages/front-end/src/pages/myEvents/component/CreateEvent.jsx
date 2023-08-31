@@ -4,30 +4,24 @@ import { Button, TextField, Grid, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
 import { axiosApiInstance } from '../../../axios.config';
 import { backendUrl } from '../../../backendUrl';
 import 'dayjs/locale/fr';
 import MyCard from '../../../components/MyCard';
 
 function CreateEvent() {
-  const [dateTime, setDateTime] = useState();
   const navigate = useNavigate();
+  const [dateTime, setDateTime] = useState();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    // eslint-disable-next-line no-shadow
-    const formatDateTime = (dateTime) => {
-      const [datePart, timePart] = dateTime.split('T');
-      const [year, month, day] = datePart.split('-');
-      const formattedDate = `${day}/${month}/${year}`;
-      return `${formattedDate} ${timePart}:00`;
-    };
     const eventData = {
       nom: data.get('nom'),
       lieu: data.get('lieu'),
-      date: formatDateTime(data.get('date')),
+      date: dateTime.toLocaleString('fr'),
       type: data.get('type'),
       prix: parseFloat(data.get('prix')),
       description: data.get('description'),
@@ -37,7 +31,7 @@ function CreateEvent() {
 
     axiosApiInstance
       .post(`${backendUrl}events`, eventData)
-      .then((response) => {
+      .then(() => {
         navigate('/events');
       })
       .catch((error) => {
@@ -72,23 +66,14 @@ function CreateEvent() {
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
               <DateTimePicker
-                label="Basic date time picker"
+                label="Date de l'événement"
                 required
                 sx={{ width: '100%' }}
-              />
-              {/* <TextField
-                required
-                fullWidth
-                id="date"
                 name="date"
-                min="2021-10-01T00:00"
-                autoComplete="date"
-                type="datetime-local"
-                onChange={(event) => setDateTime(event.target.value)}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              /> */}
+                minDateTime={dayjs()}
+                minTime={dayjs().hour(0).minute(0)}
+                onChange={(event) => setDateTime(event.$d)}
+              />
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
               <TextField
