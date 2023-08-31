@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import Table from '../../components/Table';
 import { backendUrl } from '../../backendUrl';
 import { axiosApiInstance } from '../../axios.config';
+import formatDateForReadIt from '../../utils/formatDateForReadItFr';
 
 export default function MyEvents() {
   const [rows, setRows] = useState([]);
@@ -57,6 +58,7 @@ export default function MyEvents() {
     {
       field: 'date',
       headerName: 'Date',
+      valueFormatter: (item) => formatDateForReadIt(item.value),
     },
     {
       field: 'prix',
