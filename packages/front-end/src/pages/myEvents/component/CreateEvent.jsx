@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Button, TextField, Grid, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
@@ -9,9 +10,11 @@ import { axiosApiInstance } from '../../../axios.config';
 import { backendUrl } from '../../../backendUrl';
 import 'dayjs/locale/fr';
 import MyCard from '../../../components/MyCard';
+import { setDisplayNotification } from '../../../store/reducer/notification';
 
 function CreateEvent() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [dateTime, setDateTime] = useState();
 
   const handleSubmit = (event) => {
@@ -32,6 +35,12 @@ function CreateEvent() {
     axiosApiInstance
       .post(`${backendUrl}events`, eventData)
       .then(() => {
+        dispatch(
+          setDisplayNotification({
+            message: 'Événement créé avec succès',
+            severity: 'SUCCESS',
+          }),
+        );
         navigate('/events');
       })
       .catch((error) => {
