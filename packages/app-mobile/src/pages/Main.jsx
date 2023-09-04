@@ -6,13 +6,13 @@ import AppNavigator from "../navigation/AppNavigator";
 import AuthNavigator from "../navigation/AuthNavigator";
 import jwtDecode from "jwt-decode";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { setSignedIn } from "../store/reducers/reducer";
+import { setSignedIn, setUserId } from "../store/reducers/reducer";
 
 export default function Main() {
   const Stack = createNativeStackNavigator();
   const dispatch = useDispatch();
-  const isSignedIn = useSelector((state) => state.isSignedIn);
-  
+  const isSignedIn = useSelector((state) => state.auth.isSignedIn);
+
   useEffect(() => {
     checkToken();
   }, [isSignedIn]);
@@ -31,6 +31,9 @@ export default function Main() {
         return;
       }
       dispatch(setSignedIn(true));
+      if (decodedToken.id) {
+        dispatch(setUserId(decodedToken.id));
+      }
     } catch (error) {
       dispatch(setSignedIn(false));
     }
@@ -53,5 +56,5 @@ export default function Main() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
-  );  
+  );
 }

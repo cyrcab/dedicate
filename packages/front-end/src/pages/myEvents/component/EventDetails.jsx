@@ -34,23 +34,23 @@ export default function EventDetails() {
 
   return (
     <Box>
-        <Card
-          sx={{
-            m: 2,
-            backgroundColor: isEventPassed ? 'gray' : 'rgba(202, 69, 186, 0.5)',
-          }}
-          className="createEvent"
-        >
-          <CardActions>
-            {isEventPassed ? (
-              <Button disabled>
-                <BlockIcon /> Update Event
-              </Button>
-            ) : (
-              <Link to={`/events/edit/${id}`}>Update Event</Link>
-            )}
-          </CardActions>
-        </Card>
+      <Card
+        sx={{
+          m: 2,
+          backgroundColor: isEventPassed ? 'gray' : 'rgba(202, 69, 186, 0.5)',
+        }}
+        className="createEvent"
+      >
+        <CardActions>
+          {isEventPassed ? (
+            <Button disabled>
+              <BlockIcon /> Update Event
+            </Button>
+          ) : (
+            <Link to={`/events/edit/${id}`}>Update Event</Link>
+          )}
+        </CardActions>
+      </Card>
       <Typography variant="h1">Nom de event : {eventData.nom}</Typography>
       <Typography variant="h2">Date : {eventData.date}</Typography>
       <Typography variant="h2">Type de musique : {eventData.type}</Typography>
@@ -60,6 +60,7 @@ export default function EventDetails() {
       <Typography variant="h2">
         Prix Minimum par musique : {eventData.prix}
       </Typography>
+      {eventData && <img src={eventData?.qrCode} />}
       <Typography variant="h2">Nombre de slot : {eventData.nbSlots}</Typography>
       <Typography variant="h2">Lieu : {eventData.lieu}</Typography>
     </Box>

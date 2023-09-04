@@ -10,6 +10,8 @@ const etablissementRoutes = require('./routes/etablissement.route');
 const authRoutes = require('./routes/auth.route');
 const eventRoutes = require('./routes/event.route');
 const enchereRoutes = require('./routes/enchere.route');
+const paymentMethodRoutes = require('./routes/paymentMethod.route');
+const transactionRoutes = require('./routes/transaction.route');
 
 const app = express();
 
@@ -73,6 +75,8 @@ app.use('/api/etablissements', etablissementRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/encheres', enchereRoutes);
+app.use('/api/paymentMethods', paymentMethodRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 app.listen(5001, () => {
   console.log('Server started on port 5001');

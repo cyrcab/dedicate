@@ -1,21 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Image } from "react-native";
-import { IconButton, Avatar } from "react-native-paper";
-import { axiosApiInstance } from "../../axios.config";
-import { backendUrl } from "../backendUrl";
-import EventsHistoric from "../components/EventHistoric";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useFocusEffect } from "@react-navigation/native"; 
-
+import React, { useEffect, useState } from 'react';
+import { View, Text, ScrollView, Image, StyleSheet, ImageBackground } from 'react-native';
+import { IconButton, Avatar } from 'react-native-paper';
+import { axiosApiInstance } from '../../axios.config';
+import { backendUrl } from '../backendUrl';
+import EventsHistoric from '../components/EventHistoric';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import background from '../../assets/fondHome.jpg'
 
 const ProfilePage = ({ navigation }) => {
   const [user, setUser] = useState({});
-  const [userId, setUserId] = useState("");
   const [event, setEvent] = useState([]);
 
-  const profileInfo = () => {
+  const profileInfo = (userId) => {
     axiosApiInstance
-      .get(backendUrl + "users/" + userId)
+      .get(backendUrl + 'users/' + userId)
       .then((data) => {
         setUser(data.data.data);
       })
@@ -24,9 +22,9 @@ const ProfilePage = ({ navigation }) => {
       });
   };
 
-  const historicalEventInfo = () => {
+  const historicalEventInfo = (userId) => {
     axiosApiInstance
-      .get(backendUrl + "events/me/" + userId)
+      .get(backendUrl + 'events/me/' + userId)
       .then((response) => {
         setEvent(response.data.data);
       })
@@ -36,58 +34,87 @@ const ProfilePage = ({ navigation }) => {
   };
 
   useEffect(() => {
-    AsyncStorage.getItem("userId")
+    AsyncStorage.getItem('userId')
       .then((userId) => {
-        setUserId(userId);
+        profileInfo(userId)
+        historicalEventInfo(userId);
       })
       .catch((error) => {
         console.log(
           "Une erreur s'est produite lors de la récupération de userId :",
-          error
+          error,
         );
       });
   }, []);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      profileInfo();
-      historicalEventInfo();
-    }, [userId])
-  );
-
   return (
-    <View style={{ flex: 1, padding: 16, marginTop: 30 }}>
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-around",
-          marginBottom: 16,
-        }}
-      >
-        <Avatar.Image size={100} source={require("../../assets/oclub.png")} />
-        <IconButton
-          icon="cog"
-          size={30}
-          onPress={() =>
-            navigation.navigate("Modifier profil", { user, setUser })
-          }
-        />
+    <ImageBackground source={background} style={styles.backgroundImage}>
+      <View style={styles.container}>
+        <View style={styles.profileHeader}>
+          <Avatar.Image size={100} source={require("../../assets/profile.jpg")} />
+          <IconButton
+            icon="cog"
+            size={30}
+            onPress={() =>
+              navigation.navigate('Modifier profil', { user, setUser })
+            }
+          />
+        </View>
+
+        <Text style={styles.profileName}>
+          {user.nom} {user.prenom}
+        </Text>
+
+        <Text style={styles.eventsTitle}>Vos derniers événements</Text>
+
+        <ScrollView style={styles.eventsContainer}>
+          {event.length === 0 ? (
+            <Text style={styles.noEventsText}>Vous n'avez participé à aucun événement</Text>
+          ) : (
+            event.map((item, index) =>  <EventsHistoric item={item} key={index}  />)
+          )}
+        </ScrollView>
       </View>
-
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 16 }}>
-        {user.nom} {user.prenom}
-      </Text>
-
-      <Text>Vos derniers événements</Text>
-
-      <ScrollView>
-        {event.map((item, index) => (
-          <EventsHistoric item={item} key={index}  />
-        ))}
-      </ScrollView>
-    </View>
+    </ImageBackground>
   );
 };
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  container: {
+    flex: 1,
+    padding: 16,
+    marginTop: 30,
+  },
+  profileHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    marginBottom: 16,
+  },
+  profileName: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  eventsTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  eventsContainer: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fun translucent background
+    borderRadius: 10,
+    paddingTop: 20
+  },
+  noEventsText: {
+    fontSize: 16,
+    color: 'black', // Fun text color
+    textAlign: 'center',
+  },
+});
 
 export default ProfilePage;

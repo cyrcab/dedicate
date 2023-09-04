@@ -144,4 +144,6 @@ router.put('/password/:id', checkMe, userController.updatePassword);
  */
 router.delete('/:id', checkMe, userController.deleteUser);
 
+router.get('/dedicoins/:id', checkMe, userController.getUserDediCoins);
+
 module.exports = router;
