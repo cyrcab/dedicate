@@ -6,7 +6,7 @@ import { backendUrlImages } from "../backendUrl";
 
 export default function EventsCard({ item }) {
   const navigation = useNavigation();
-  const url = item.photo ? item.photo.replace(/\\/g, '/') : null;
+  const url = item.photo === "defaultEvent.jpg" ? item.photo = "images/default.jpeg" : item.photo.replace(/\\/g, '/') ;
   const date = new Date(item.date);
   const jour = date.getDate().toString().padStart(2, "0"); // Ajoute un zéro devant le jour si nécessaire
   const mois = (date.getMonth() + 1).toString().padStart(2, "0"); // Ajoute un zéro devant le mois si nécessaire
@@ -25,7 +25,7 @@ export default function EventsCard({ item }) {
           url ? (
             <Image
               source={{ uri: backendUrlImages + url }}
-              style={{ width: 50, height: 50 }}
+              style={{ width: 50, height: 50, borderRadius: 10}}
             />
           ) : null
         )}

@@ -1,10 +1,5 @@
 import React, { useState, useRef } from 'react';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  Image,
-} from 'react-native';
+import { ScrollView, StyleSheet, Text, Image, ImageBackground } from 'react-native';
 import { axiosApiInstance } from '../../axios.config';
 import { backendUrl } from '../backendUrl';
 import { Button, Card } from 'react-native-paper';
@@ -62,7 +57,7 @@ export default function Event({ navigation }) {
     const id = setInterval(() => {
       musicInfos();
     }, intervalDelay);
-  
+
     setIntervalId(id);
   }
 
@@ -85,61 +80,62 @@ export default function Event({ navigation }) {
     }, []),
   );
   return (
-    <ScrollView
-      contentContainerStyle={styles.container}
+    <ImageBackground
+      source={require('../../assets/fondHome.jpg')}
+      style={styles.backgroundImage}
     >
-      {idEvent !== 0 ? (
-        <>
-          <Text style={styles.eventName}>{event.nom}</Text>
+      <ScrollView contentContainerStyle={styles.container}>
+        {idEvent !== 0 ? (
+          <>
+            <Text style={styles.eventName}>{event.nom}</Text>
 
-          {music.map((item, index) => {
-            const isTopTen = index < event.nbSlots;
+            {music.map((item, index) => {
+              const isTopTen = index < event.nbSlots;
 
-            return (
-              <Card
-                key={index}
-                style={[styles.card, isTopTen && styles.topTenCard]}
-                onPress={() =>
-                  navigation.navigate('Enchérir', {
-                    event: event,
-                    item: item,
-                    index: index,
-                  })
-                }
-              >
-                <Card.Title
-                  title={item.Musique.artiste}
-                  subtitle={item.Musique.titre}
-                  left={() => (
-                    <Image
-                      source={{ uri: item.Musique.album }}
-                      style={{ width: 50, height: 50 }}
-                    />
-                  )}
-                  right={() => (
-                    <Text style={{ marginRight: 10 }}>{item.prix}€</Text>
-                  )}
-                />
-              </Card>
-            );
-          })}
+              return (
+                <Card
+                  key={index}
+                  style={[styles.card, isTopTen && styles.topTenCard]}
+                  onPress={() =>
+                    navigation.navigate('Enchérir', {
+                      event: event,
+                      item: item,
+                      index: index,
+                    })
+                  }
+                >
+                  <Card.Title
+                    title={item.Musique.artiste}
+                    subtitle={item.Musique.titre}
+                    left={() => (
+                      <Image
+                        source={{ uri: item.Musique.album }}
+                        style={{ width: 50, height: 50, borderRadius: 10 }}
+                      />
+                    )}
+                    right={() => (
+                      <Text style={{ marginRight: 10 }}>{item.prix}€</Text>
+                    )}
+                  />
+                </Card>
+              );
+            })}
 
-          <Button
-            mode="contained"
-            style={styles.button}
-            onPress={() =>
-              navigation.navigate('SlotsInformation', { event: event })
-            }
-          >
-            Ajoutez un titre
-          </Button>
-        </>
-      ) : (
-        <Text style={styles.noEventMessage}>
-          Vous n'avez aucun événement actif
-        </Text>
-      )}
-    </ScrollView>
+            <Button
+              mode="contained"
+              style={styles.button}
+              onPress={() => navigation.navigate('Musique', { event: event })}
+            >
+              Ajoutez un titre
+            </Button>
+          </>
+        ) : (
+          <Text style={styles.noEventMessage}>
+            Vous n'avez aucun événement actif
+          </Text>
+        )}
+      </ScrollView>
+    </ImageBackground>
   );
 }
 
@@ -174,5 +170,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: 'gray',
     marginTop: 100,
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
   },
 });
