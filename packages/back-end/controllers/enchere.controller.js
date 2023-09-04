@@ -162,6 +162,7 @@ module.exports.getVotes = async (req, res) => {
     });
 
     const filteredVotes = votes.map((vote) => ({
+      id: vote.id,
       prix: vote.prix,
       User: vote.User,
       Musique: vote.Musique,
