@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { Button, TextField, Grid, Box } from '@mui/material';
+import { Button, TextField, Grid, Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -16,6 +16,31 @@ function CreateEvent() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [dateTime, setDateTime] = useState();
+  const [genre, setGenre] = useState('');
+
+  const handleChange = (event) => {
+    setGenre(event.target.value);
+  };
+
+  const genres = [
+    'pop',
+    'rock',
+    'rap/hip-hop',
+    'Electronique/EDM',
+    'R&B',
+    'country',
+    'jazz',
+    'classique',
+    'reggae',
+    'blues',
+    'metal',
+    'soul',
+    'funk',
+    'Punk',
+    'Indie/Alternatif',
+    'gospel',
+    'Techno',
+  ];
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -85,14 +110,23 @@ function CreateEvent() {
               />
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
-              <TextField
-                required
-                fullWidth
-                id="type"
-                label="Type de musique"
-                name="type"
-                autoComplete="type"
-              />
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Genre</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={genre}
+                    name="type"
+                    label="Genre"
+                    onChange={handleChange}
+                  >
+                    {genres.map((genreOption) => (
+                      <MenuItem key={genreOption} value={genreOption}>
+                        {genreOption}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
               <TextField
@@ -124,16 +158,6 @@ function CreateEvent() {
                 name="nbSlots"
                 autoComplete="nbSlots"
                 type="number"
-              />
-            </Grid>
-            <Grid item xs={12} style={{ marginBottom: '20px' }}>
-              <TextField
-                fullWidth
-                id="photo"
-                label="Photo"
-                name="photo"
-                autoComplete="photo"
-                type="file"
               />
             </Grid>
             <Button
