@@ -100,7 +100,6 @@ export default function Event({ navigation }) {
                     navigation.navigate('Enchérir', {
                       event: event,
                       item: item,
-                      index: index,
                     })
                   }
                 >
