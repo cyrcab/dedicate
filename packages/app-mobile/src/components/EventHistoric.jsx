@@ -9,7 +9,7 @@ export default function EventsHistoric({ item }) {
   const jour = date.getDate().toString().padStart(2, "0"); // Ajoute un zéro devant le jour si nécessaire
   const mois = (date.getMonth() + 1).toString().padStart(2, "0"); // Ajoute un zéro devant le mois si nécessaire
   const annee = date.getFullYear();
-  const url = item.photo ? item.photo.replace(/\\/g, '/') : null;
+  const url = item.photo === "defaultEvent.jpg" ? item.photo = "images/default.jpeg" : item.photo.replace(/\\/g, '/') ;
 
   return (
     <Card
@@ -25,7 +25,7 @@ export default function EventsHistoric({ item }) {
           url ? (
             <Image
               source={{ uri: backendUrlImages + url }}
-              style={{ width: 50, height: 50 }}
+              style={{ width: 50, height: 50, borderRadius: 10 }}
             />
           ) : null
         )}
