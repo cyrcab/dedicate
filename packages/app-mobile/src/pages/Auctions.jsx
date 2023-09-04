@@ -15,7 +15,7 @@ import { backendUrl } from '../backendUrl';
 import { useNavigation } from '@react-navigation/native';
 
 export default function Auctions({ route }) {
-  const { event, item, index } = route.params;
+  const { event, item } = route.params;
   const [enchere, setEnchere] = useState(0);
   const navigation = useNavigation();
   const [visible, setVisible] = useState(false);
@@ -31,7 +31,7 @@ export default function Auctions({ route }) {
           nomMusique: item.Musique.titre,
           artisteMusique: item.Musique.artiste,
           album: item.Musique.album,
-          enchereId: event.enchere[index].id,
+          enchereId: item.id,
         };
         axiosApiInstance
           .post(backendUrl + 'encheres', musicVoted)
