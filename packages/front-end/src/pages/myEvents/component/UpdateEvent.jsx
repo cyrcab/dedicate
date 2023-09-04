@@ -6,6 +6,8 @@ import 'dayjs/locale/fr';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setDisplayNotification } from '../../../store/reducer/notification';
 import { axiosApiInstance } from '../../../axios.config';
 import { backendUrl } from '../../../backendUrl';
 import MyCard from '../../../components/MyCard';
@@ -21,6 +23,7 @@ function UpdateEvent() {
     nbSlots: '',
   });
   const { id } = useParams();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     axiosApiInstance
@@ -54,10 +57,18 @@ function UpdateEvent() {
     axiosApiInstance
       .put(`${backendUrl}events/${id}`, { ...eventDataToUpdate })
       .then((response) => {
-        console.log(response.data);
+        dispatch(
+          setDisplayNotification({
+            message: 'Événement modifié avec succès',
+            severity: 'SUCCESS',
+          }),
+        );
       })
       .catch((error) => {
-        console.error('There was an error!', error);
+        setDisplayNotification({
+          message: `Erreur lors de la modification de l'événement: ${error.response.data.message}`,
+          severity: 'ERROR',
+        });
       });
   };
 
