@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
-import { Grid, Box } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import Header from '../header';
 import Sidebar from '../sidebar';
@@ -17,10 +17,8 @@ export default function Layout() {
         <Grid item xs={12} height={'10%'}>
           <Header activeTab={activeTab} />
         </Grid>
-        <Grid item xs={12} height={'90%'} style={{ padding: '0 20px' }}>
-          <Box>
-            <Outlet />
-          </Box>
+        <Grid item xs={12} height={'90%'} style={{ padding: '10px' }}>
+          <Outlet />
         </Grid>
       </Grid>
     </Grid>

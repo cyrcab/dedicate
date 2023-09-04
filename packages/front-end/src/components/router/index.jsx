@@ -1,6 +1,5 @@
 import RequireAuth from './RequireAuth';
 import Layout from '../layout';
-import Home from '../../pages/home';
 import Login from '../../pages/login';
 import Register from '../../pages/register';
 import Playlist from '../../pages/playlist';
@@ -19,7 +18,7 @@ const routes = [
         path: '/',
         element: (
           <RequireAuth>
-            <Home />
+            <MyEvents />
           </RequireAuth>
         ),
       },
