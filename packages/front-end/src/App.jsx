@@ -8,6 +8,7 @@ import theme from './utils/appTheme';
 import route from './components/router';
 import { axiosApiInstance } from './axios.config';
 import { backendUrl } from './backendUrl';
+import SnackBarDisplayer from './components/SnackBarDisplayer';
 
 export default function App() {
   const routes = useRoutes(route);
@@ -43,6 +44,7 @@ export default function App() {
   return (
     <>
       <ThemeProvider theme={theme}>{routes}</ThemeProvider>
+      <SnackBarDisplayer />
     </>
   );
 }
