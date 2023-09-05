@@ -14,7 +14,7 @@ import formatDateForReadIt from '../../utils/formatDateForReadItFr';
 export default function MyEvents() {
   const [rows, setRows] = useState([]);
 
-  const idCompany = useSelector((state) => state.auth.user.idEtablissement);
+  const idCompany = useSelector((state) => state.user.idEtablissement);
 
   useEffect(() => {
     axiosApiInstance
