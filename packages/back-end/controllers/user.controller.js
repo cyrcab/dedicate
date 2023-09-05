@@ -42,9 +42,7 @@ module.exports.getUser = async (req, res) => {
 
 module.exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const {
-    nom, prenom, email, tel,
-  } = req.body;
+  const { nom, prenom, mail, tel } = req.body;
   const data = {};
   const user = await prismaUser.findUnique({
     where: {
@@ -54,10 +52,10 @@ module.exports.updateUser = async (req, res) => {
   if (!user) {
     return res.status(404).json({ message: "Cet utilisateur n'existe pas" });
   }
-  if (email) {
+  if (mail) {
     const emailAlreadyTaken = await prismaUser.findUnique({
       where: {
-        mail: email,
+        mail: mail,
       },
     });
     if (emailAlreadyTaken) {
@@ -82,11 +80,11 @@ module.exports.updateUser = async (req, res) => {
   if (prenom) {
     data.prenom = prenom;
   }
-  if (email) {
-    if (!regex.test(email)) {
+  if (mail) {
+    if (!regex.test(mail)) {
       return res.status(400).json({ message: 'Email invalide' });
     }
-    data.mail = email;
+    data.mail = mail;
   }
   if (tel) {
     if (!regexTel.test(tel)) {
@@ -97,6 +95,10 @@ module.exports.updateUser = async (req, res) => {
   const updatedUser = await prismaUser.update({
     where: {
       id: parseInt(id, 10),
+    },
+    include: {
+      Role: true,
+      Etablissement: true,
     },
     data,
   });
@@ -187,4 +189,4 @@ module.exports.getUserDediCoins = async (req, res) => {
     return res.status(404).json({ message: "Cet utilisateur n'existe pas" });
   }
   return res.status(200).json({ data: user.dediCoins });
-}
+};

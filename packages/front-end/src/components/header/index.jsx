@@ -8,7 +8,7 @@ import ProfileComponent from './components/ProfileComponent';
 
 export default function Header() {
   const location = useLocation();
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.user);
   const getTitle = () => {
     const { pathname } = location;
 
@@ -20,13 +20,17 @@ export default function Header() {
       case '/events':
         return 'Événements';
       case '/events/create':
-        return 'Création d\'un événement';
+        return "Création d'un événement";
       case '/users':
         return 'Utilisateurs';
       case '/settings':
         return 'Paramètres';
       case '/profile':
         return 'Profil';
+      case '/settings/style':
+        return 'Paramètres Style';
+      case '/settings/profile':
+        return 'Paramètres Profil';
       default:
         return '';
     }

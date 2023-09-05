@@ -3,9 +3,9 @@ import { Box, Typography, CardMedia } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 // import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import EventIcon from '@mui/icons-material/Event';
-import QueueMusicIcon from '@mui/icons-material/QueueMusic';
+// import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import SettingsIcon from '@mui/icons-material/Settings';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+// import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import logo from './assets/logo.png';
 import MySidebarLink from './components/MySidebarLink';
 
@@ -51,35 +51,16 @@ export default function Sidebar() {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'space-between',
           height: '50%',
           marginTop: '2rem',
           padding: '0 20px',
         }}
       >
-        {/* <MySidebarLink
-          isActive={isActive('/')}
-          path={'/'}
-          icon={<LeaderboardIcon />}
-          pathName={'Accueil'}
-        /> */}
         <MySidebarLink
           isActive={isActive('/events') || isActive('/')}
           path={'/events'}
           icon={<EventIcon />}
           pathName={'Événements'}
-        />
-        <MySidebarLink
-          isActive={isActive('/playlist')}
-          path={'/playlist'}
-          icon={<QueueMusicIcon />}
-          pathName={'Playlist'}
-        />
-        <MySidebarLink
-          isActive={isActive('/users')}
-          path={'/users'}
-          icon={<AccountCircleIcon />}
-          pathName={'Utilisateurs'}
         />
         <MySidebarLink
           isActive={isActive('/settings')}

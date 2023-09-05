@@ -26,6 +26,7 @@ import { backendUrl } from '../../backendUrl';
 import { setSignedIn, setSignedOut } from '../../store/reducer/reducer';
 import { setDisplayNotification } from '../../store/reducer/notification';
 import { axiosApiInstance } from '../../axios.config';
+import { setUser } from '../../store/reducer/user.reducer';
 
 function saveToLocalStorage(key, value) {
   localStorage.setItem(key, value);
@@ -80,7 +81,8 @@ export default function Login() {
     axiosApiInstance
       .get(`${backendUrl}users/${id}`)
       .then((res) => {
-        dispatch(setSignedIn(res.data.data));
+        dispatch(setSignedIn(true));
+        dispatch(setUser(res.data.data));
         navigate('/');
       })
       .catch((err) => console.log(err));
@@ -93,7 +95,6 @@ export default function Login() {
       .then((response) => {
         saveToLocalStorage('token', response.data.token);
         saveToLocalStorage('userId', response.data.data.id.toString());
-        dispatch(setSignedIn(true));
       })
       .then(() => {
         checkToken();

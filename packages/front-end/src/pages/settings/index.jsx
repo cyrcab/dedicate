@@ -1,19 +1,27 @@
 import React from 'react';
-import './style/settings.css';
-import { Button } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import { setSignedOut } from '../../store/reducer/reducer';
+import SettingListWithTitle from './components/SettingListWithTitle';
+
+const parameters = [
+  {
+    title: 'Paramètres du compte',
+    settingList: [
+      {
+        title: 'Profil',
+        path: 'profile',
+      },
+    ],
+  },
+  {
+    title: "Paramètres de l'application",
+    settingList: [
+      {
+        title: 'Style',
+        path: 'style',
+      },
+    ],
+  },
+];
 
 export default function Settings() {
-  const dispatch = useDispatch();
-
-  return (
-    <Button
-      variant="contained"
-      color="primary"
-      onClick={() => dispatch(setSignedOut())}
-    >
-      Déconnexion
-    </Button>
-  );
+  return <SettingListWithTitle parameters={parameters} />;
 }
