@@ -34,7 +34,7 @@ export default function App() {
       .then((res) => {
         dispatch(setUser(res.data.data));
         dispatch(setSignedIn());
-        navigate('/');
+        navigate('/', { replace: true });
       })
       .catch((err) => console.log(err));
   };

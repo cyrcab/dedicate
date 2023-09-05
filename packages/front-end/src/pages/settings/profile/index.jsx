@@ -5,41 +5,56 @@ import MyCard from '../../../components/MyCard';
 import { axiosApiInstance } from '../../../axios.config';
 import { backendUrl } from '../../../backendUrl';
 import { setDisplayNotification } from '../../../store/reducer/notification';
+import { setUser } from '../../../store/reducer/user.reducer';
 
 export default function Profile() {
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [userData, setUserData] = useState(user);
+  const [fieldsToUpdate, setFieldsToUpdate] = useState([]);
 
   const handleChange = (event) => {
     setUserData({
       ...userData,
       [event.target.name]: event.target.value,
     });
+    if (fieldsToUpdate.includes(event.target.name)) return;
+    setFieldsToUpdate([...fieldsToUpdate, event.target.name]);
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const userDataToPut = {
-      nom: data.get('nom'),
-      prenom: data.get('prenom'),
-      mail: data.get('mail'),
-      tel: data.get('tel'),
-    };
+    if (fieldsToUpdate.length === 0) {
+      dispatch(
+        setDisplayNotification({
+          message: 'Aucun champ modifié',
+          severity: 'INFO',
+        }),
+      );
+      return;
+    }
+
+    const userDataToPut = {};
+
+    fieldsToUpdate.forEach((field) => {
+      userDataToPut[field] = data.get(field);
+    });
 
     axiosApiInstance
       .put(`${backendUrl}users/${user.id}`, {
         ...userDataToPut,
       })
-      .then(() => {
+      .then((response) => {
         dispatch(
           setDisplayNotification({
             message: 'Utilisateur modifié avec succès',
             severity: 'SUCCESS',
           }),
         );
+        dispatch(setUser(response.data.data));
+        setFieldsToUpdate([]);
       })
       .catch((error) => {
         dispatch(
@@ -87,6 +102,7 @@ export default function Profile() {
           <Grid item xs={12} pb={2}>
             <TextField
               required
+              disabled
               fullWidth
               id="mail"
               label="Mail"
