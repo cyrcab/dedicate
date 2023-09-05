@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "expo-barcode-scanner": "^12.5.3",
+    "react-native-confetti-cannon": "^1.5.2",
     "yarn": "^1.22.19"
   }
 }
