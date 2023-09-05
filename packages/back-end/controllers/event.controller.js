@@ -396,6 +396,7 @@ module.exports.addUserToEvent = async (req, res) => {
         lastScannedEventId: parseInt(idEvent, 10),
       },
     });
+    delete userEvent.qrCode;
     return res.status(200).json({
       message: "Utilisateur ajouté à l'événement",
       data: userEvent,
@@ -421,6 +422,9 @@ module.exports.update = async (req, res) => {
     });
     if (!event) {
       return res.status(400).json({ message: "Cet événement n'existe pas" });
+    }
+    if(!event.isActive){
+      return res.status(400).json({ message: "Cet événement n'est plus actif" });
     }
     if (nom) {
       data.nom = nom;

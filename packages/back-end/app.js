@@ -12,6 +12,7 @@ const eventRoutes = require('./routes/event.route');
 const enchereRoutes = require('./routes/enchere.route');
 const paymentMethodRoutes = require('./routes/paymentMethod.route');
 const transactionRoutes = require('./routes/transaction.route');
+const diffuserRoutes = require('./routes/diffuser.route');
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.use('/api/events', eventRoutes);
 app.use('/api/encheres', enchereRoutes);
 app.use('/api/paymentMethods', paymentMethodRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/diffuser', diffuserRoutes);
 
 app.listen(5001, () => {
   console.log('Server started on port 5001');

@@ -4,6 +4,7 @@ const { PrismaClient } = require('@prisma/client');
 const prismaEta = new PrismaClient().etablissement;
 const prismaUser = new PrismaClient().user;
 const prismaEvent = new PrismaClient().event;
+const prismaEnchere = new PrismaClient().enchere;
 
 module.exports.authTokenUser = (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -268,3 +269,64 @@ module.exports.checkTokenForUpdateEvents = async (req, res, next) => {
   });
   next();
 };
+
+module.exports.checkTokenDiffuser = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
+  if (token == null) {
+    return res.status(401).json({ message: "Vous n'êtes pas connecté" });
+  }
+  if (!req.params.idEvent) {
+    return res.status(404).json({ message: "Cet events n'existe pas" });
+  }
+  const event = await prismaEvent.findUnique({
+    where: {
+      id: parseInt(req.params.idEvent, 10),
+    },
+  });
+  if (!event) {
+    return res.status(404).json({ message: "Cet events n'existe pas" });
+  }
+  const encheres = await prismaEnchere.findMany({
+    where: {
+      idEvent: parseInt(req.params.idEvent, 10),
+    },
+  });
+  if(!encheres) {
+    return res.status(404).json({ message: "Il n'y a pas d'enchères pour cette événement" });
+  }
+  req.body.encheres = encheres;
+  jwt.verify(token, process.env.TOKEN_SECRET, async (err, user) => {
+    if (err) {
+      return res
+        .status(403)
+        .json({ message: "Vous n'êtes pas authorisé à faire ça 1" });
+    }
+    if (user.refRole.toLowerCase() !== 'superadmin') {
+        try{
+            const checkUser = await prismaUser.findUnique({
+                where: {
+                    id: parseInt(user.id, 10),
+                },
+            });
+            if (!checkUser) {
+                return res.status(404).json({ message: "Cet user n'existe pas" });
+            }
+            if (checkUser.idEtablissement !== event.idEtablissement) {
+                return res
+                    .status(403)
+                    .json({ message: "Vous n'êtes pas authorisé à faire ça 2" });
+            }
+        }
+        catch (e) {
+            return res
+                .status(403)
+                .json({ message: "Vous n'êtes pas authorisé à faire ça 3" });
+        }
+    }
+    next();
+  });
+}
+
+
+
