@@ -48,6 +48,7 @@ module.exports.diffuser = async (req, res) => {
                     idEvent: parseInt(idEvent, 10),
                     idUser: lstEnchere.idUser,
                     idMusique: lstEnchere.idMusique,
+                    idEnchere: lstEnchere.id,
                     slot: enchereDiffusees.indexOf(lstEnchere) + 1,
                 },
             });
@@ -103,28 +104,34 @@ module.exports.vote = async (req, res) => {
                                 prenom: true,
                             },
                         },
-                        Musique: {
+                        musique: {
                             select: {
                                 titre: true,
                                 artiste: true,
                                 album: true,
                             },
                         },
+                        Enchere: {
+                            select: {
+                                prix: true,
+                            },
+                        },
                     },
                     orderBy: {
-                        prix: 'desc',
+                        slot: 'asc',
                     },
                 },
             },
         })
         return res.status(200).json({message: 'Les enchères ont bien été diffusées', enchere});
-    }
-    catch (e) {
+    }catch(e){
         return res.status(500).json({message: "Une erreur s'est produite", error: e});
     }
-    finally {
+    finally{
         await prisma.$disconnect();
     }
+   
+    
 
 
 };

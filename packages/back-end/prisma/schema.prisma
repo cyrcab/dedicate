@@ -57,11 +57,13 @@ model Diffuser {
   idEvent   Int
   slot      Int
   idUser    Int
+  idEnchere Int
+  Enchere   Enchere @relation(fields: [idEnchere], references: [id])
   User      User    @relation(fields: [idUser], references: [id])
   musique   Musique @relation(fields: [idMusique], references: [id])
   Event     Event   @relation(fields: [idEvent], references: [id])
 
-  @@id([idMusique, idEvent, idUser])
+  @@id([idMusique, idEvent, idUser, idEnchere])
 }
 
 model Musique {
@@ -104,6 +106,7 @@ model Enchere {
   User      User    @relation(fields: [idUser], references: [id])
   Musique   Musique @relation(fields: [idMusique], references: [id])
   Event     Event   @relation(fields: [idEvent], references: [id])
+  Diffuser  Diffuser[]
 }
 
 model PaymentMethod {
