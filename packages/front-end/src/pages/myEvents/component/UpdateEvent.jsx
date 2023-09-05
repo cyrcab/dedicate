@@ -65,10 +65,12 @@ function UpdateEvent() {
         );
       })
       .catch((error) => {
-        setDisplayNotification({
-          message: `Erreur lors de la modification de l'événement: ${error.response.data.message}`,
-          severity: 'ERROR',
-        });
+        dispatch(
+          setDisplayNotification({
+            message: `Erreur lors de la modification de l'événement: ${error.response.data.message}`,
+            severity: 'ERROR',
+          }),
+        );
       });
   };
 
@@ -172,12 +174,7 @@ function UpdateEvent() {
                 defaultValue={eventData.nbSlots}
               />
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              style={{ backgroundColor: 'rgba(202, 69, 186, 0.5)' }}
-            >
+            <Button type="submit" fullWidth variant="contained">
               Modifier un événement
             </Button>
           </form>
