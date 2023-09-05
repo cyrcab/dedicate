@@ -12,7 +12,7 @@ module.exports.vote = async (req, res) => {
     return res.status(400).json({ message: 'Il manque des informations' });
   }
   try {
-    const [event, user] = await Promise.all([
+    const [user, event] = await Promise.all([
       prisma.user.findUnique({ where: { id: parseInt(userId, 10) } }),
       prisma.event.findUnique({ where: { id: parseInt(eventId, 10) } }),
     ]);
@@ -180,6 +180,11 @@ module.exports.getVotes = async (req, res) => {
             album: true,
           },
         },
+        Event: {
+          select: {
+            isActive: true,
+          },
+        },
       },
       orderBy: { prix: 'desc' },
     });
@@ -189,11 +194,15 @@ module.exports.getVotes = async (req, res) => {
       prix: vote.prix,
       User: vote.User,
       Musique: vote.Musique,
-
     }));
-
-    return res.status(200).json({ votes: filteredVotes });
-  } catch (error) {
+    const isACtive = await prisma.event.findUnique({
+      where: { id: parseInt(id, 10) },
+      select : {
+        isActive:true,
+      },
+    })
+    return res.status(200).json({ votes: filteredVotes, actif : isACtive});
+  }catch(error){
     console.error("Une erreur s'est produite :", error);
     return res.status(500).json({ message: "Une erreur s'est produite" });
   } finally {

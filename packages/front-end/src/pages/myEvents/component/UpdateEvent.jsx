@@ -112,8 +112,7 @@ function UpdateEvent() {
                   name="date"
                   minDateTime={dayjs()}
                   minTime={dayjs().hour(0).minute(0)}
-                  onChange={(event) =>
-                    setEventData({ ...eventData, date: event.$d })
+                  onChange={(event) => setEventData({ ...eventData, date: event.$d })
                   }
                   defaultValue={dayjs(eventData.date)}
                 />

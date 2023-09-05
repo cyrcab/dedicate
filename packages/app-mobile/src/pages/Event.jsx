@@ -8,6 +8,7 @@ import { useFocusEffect } from '@react-navigation/native';
 export default function Event({ navigation }) {
   const [idEvent, setIdEvent] = useState(0);
   const [music, setMusic] = useState([]);
+  const [isActive, setIsActive] = useState(true);
   const [event, setEvent] = useState([]);
   const idEventRef = useRef(0);
   const [intervalId, setIntervalId] = useState(null);
@@ -22,6 +23,7 @@ export default function Event({ navigation }) {
       .get(backendUrl + 'encheres/' + idEventRef.current)
       .then((response) => {
         setMusic(response.data.votes);
+        setIsActive(response.data.actif.isActive)
       })
       .catch((error) => {
         console.log(error);
@@ -79,6 +81,8 @@ export default function Event({ navigation }) {
       };
     }, []),
   );
+
+  console.log(music)
   return (
     <ImageBackground
       source={require('../../assets/fondHome.jpg')}
@@ -87,6 +91,9 @@ export default function Event({ navigation }) {
       <ScrollView contentContainerStyle={styles.container}>
         {idEvent !== 0 ? (
           <>
+          {isActive ?
+            (
+              <>
             <Text style={styles.eventName}>{event.nom}</Text>
 
             {music.map((item, index) => {
@@ -127,6 +134,10 @@ export default function Event({ navigation }) {
             >
               Ajoutez un titre
             </Button>
+            </>
+             ): (<Text>salut</Text>)
+
+            }
           </>
         ) : (
           <Text style={styles.noEventMessage}>
