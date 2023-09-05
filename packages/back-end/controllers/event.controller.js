@@ -334,8 +334,8 @@ module.exports.addUserToEvent = async (req, res) => {
   if (!idEvent) {
     return res.status(400).json({ message: 'Veuillez spécifier un evenement' });
   }
-  try {
-    const event = await prisma.event.findUnique({
+ try {
+  const event = await prisma.event.findUnique({
       where: {
         id: parseInt(idEvent, 10),
       },
@@ -658,7 +658,7 @@ module.exports.getEventActif = async (req, res) => {
   if (!user.lastScannedEventId) {
     return res
       .status(400)
-      .json({ message: "Cet utilisateur n'a pas de dernier événement scanné" });
+      .json({ message: "Cet utilisateur n'a pas de dernier événement scanné", user });
   }
   try {
     const event = await prisma.event.findFirst({
