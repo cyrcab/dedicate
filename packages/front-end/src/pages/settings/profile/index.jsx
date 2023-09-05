@@ -102,7 +102,6 @@ export default function Profile() {
           <Grid item xs={12} pb={2}>
             <TextField
               required
-              disabled
               fullWidth
               id="mail"
               label="Mail"
