@@ -1,12 +1,11 @@
-import { createTheme } from '@mui/material';
-
-const theme = createTheme({
+const themeGeneration = (settings) => ({
   palette: {
+    mode: settings.mode || 'light',
     primary: {
-      main: '#C45BAA',
+      main: settings.mainColor || '#C45BAA',
     },
     secondary: {
-      main: '#F8F8F8',
+      main: settings.secondaryColor || '#F8F8F8',
     },
     error: {
       main: '#FF0000',
@@ -87,4 +86,4 @@ const theme = createTheme({
   },
 });
 
-export default theme;
+export default themeGeneration;

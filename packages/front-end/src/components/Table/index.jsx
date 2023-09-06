@@ -43,6 +43,12 @@ export default function Table({ rows, columns, headerButton }) {
         <DataGrid
           rows={rows}
           columns={updatedCol}
+          sortModel={[
+            {
+              field: 'date',
+              sort: 'desc',
+            },
+          ]}
           rowSelection={false}
           hideFooterSelectedRowCount
           headerClassName="custom-header"
