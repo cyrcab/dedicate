@@ -29,6 +29,7 @@ export default function MyEvents() {
           nbSlots: item.nbSlots,
           date: item.date,
           prix: item.prix,
+          isActive: item.isActive,
         }));
         setRows(formattedData);
       })
@@ -83,16 +84,11 @@ export default function MyEvents() {
       field: 'edit',
       headerName: 'Edit',
       sortable: false,
-      renderCell: (params) => {
-        const eventDate = new Date(params.row.date);
-        const currentDate = new Date();
-        const isEventPassed = eventDate < currentDate;
-        return (
-          <Link to={isEventPassed ? '#' : `/events/edit/${params.row.id}`}>
-            {isEventPassed ? 'Fini' : <EditIcon />}
-          </Link>
-        );
-      },
+      renderCell: (params) => (
+        <Link to={params.row.isActive ? `/events/edit/${params.row.id}` : null}>
+          {params.row.isActive ? <EditIcon /> : 'Fini'}
+        </Link>
+      ),
     },
   ];
   return (

@@ -1,4 +1,5 @@
 import React from 'react';
+import MyCard from '../../components/MyCard';
 import SettingListWithTitle from './components/SettingListWithTitle';
 
 const parameters = [
@@ -23,5 +24,9 @@ const parameters = [
 ];
 
 export default function Settings() {
-  return <SettingListWithTitle parameters={parameters} />;
+  return (
+    <MyCard>
+      <SettingListWithTitle parameters={parameters} />
+    </MyCard>
+  );
 }
