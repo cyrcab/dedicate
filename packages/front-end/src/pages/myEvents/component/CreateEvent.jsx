@@ -1,6 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
-import { Button, TextField, Grid, Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Grid,
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -112,21 +121,21 @@ function CreateEvent() {
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Genre</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={genre}
-                    name="type"
-                    label="Genre"
-                    onChange={handleChange}
-                  >
-                    {genres.map((genreOption) => (
-                      <MenuItem key={genreOption} value={genreOption}>
-                        {genreOption}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={genre}
+                  name="type"
+                  label="Genre"
+                  onChange={handleChange}
+                >
+                  {genres.map((genreOption) => (
+                    <MenuItem key={genreOption} value={genreOption}>
+                      {genreOption}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
               <TextField
@@ -160,12 +169,7 @@ function CreateEvent() {
                 type="number"
               />
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              style={{ backgroundColor: 'rgba(202, 69, 186, 0.5)' }}
-            >
+            <Button type="submit" fullWidth variant="contained">
               Créer un événement
             </Button>
           </form>

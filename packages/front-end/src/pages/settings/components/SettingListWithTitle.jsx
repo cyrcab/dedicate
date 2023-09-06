@@ -6,7 +6,7 @@ const SettingListWithTitle = ({ parameters }) => {
   const theme = useTheme();
 
   return (
-    <Grid container>
+    <Grid container padding={2}>
       {parameters.map((parameter, i) => (
         <Grid item sm={12} md={6} lg={4} key={i}>
           <Typography variant="h4" color={theme.palette.primary.main}>

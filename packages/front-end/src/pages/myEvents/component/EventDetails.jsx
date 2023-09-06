@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import EditIcon from '@mui/icons-material/Edit';
+import BlockIcon from '@mui/icons-material/Block';
 import {
   CardContent,
   CardMedia,
@@ -15,15 +16,18 @@ import {
   Skeleton,
   Grid,
 } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import { backendUrl } from '../../../backendUrl';
 import { axiosApiInstance } from '../../../axios.config';
 import formatDateForReadIt from '../../../utils/formatDateForReadItFr';
 import MyCard from '../../../components/MyCard';
+import { setDisplayNotification } from '../../../store/reducer/notification';
 
 export default function EventDetails() {
   const [eventData, setEventData] = useState(null);
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -31,6 +35,27 @@ export default function EventDetails() {
   };
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleDeactivate = () => {
+    axiosApiInstance
+      .get(`${backendUrl}diffuser/${id}`)
+      .then(() => {
+        dispatch(
+          setDisplayNotification({
+            message: "L'événement a été désactivé",
+            severity: 'SUCCESS',
+          }),
+        );
+      })
+      .catch((error) => {
+        dispatch(
+          setDisplayNotification({
+            message: `Erreur lors de la modification de l'événement: ${error.response.data.message}`,
+            severity: 'ERROR',
+          }),
+        );
+      });
   };
 
   useEffect(() => {
@@ -55,16 +80,11 @@ export default function EventDetails() {
     elm.click();
   };
 
-  const eventDate = new Date(eventData.date);
-  const currentDate = new Date();
-
-  const isEventPassed = eventDate < currentDate;
-
   return (
     <MyCard
       goBack
       rightAction={
-        <ButtonGroup disabled={isEventPassed}>
+        <ButtonGroup disabled={!eventData.isActive}>
           <Button onClick={handleClickOpen}>
             <QrCodeScannerIcon />
           </Button>
@@ -73,6 +93,9 @@ export default function EventDetails() {
           </Button>
           <Button onClick={() => navigate(`/events/edit/${eventData.id}`)}>
             <EditIcon />
+          </Button>
+          <Button onClick={handleDeactivate}>
+            <BlockIcon />
           </Button>
         </ButtonGroup>
       }

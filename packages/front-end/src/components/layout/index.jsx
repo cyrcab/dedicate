@@ -21,7 +21,10 @@ export default function Layout() {
           item
           xs={12}
           height={'90%'}
-          style={{ padding: '10px', overflow: 'scroll' }}
+          style={{
+            padding: '10px',
+            overflow: 'scroll',
+          }}
         >
           <Outlet />
         </Grid>

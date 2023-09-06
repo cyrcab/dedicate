@@ -8,7 +8,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:@localhost:3306/dedicate"
+  url      = env("DATABASE_URL")
 }
 
 model Role {
@@ -98,14 +98,14 @@ model Event {
 }
 
 model Enchere {
-  id        Int     @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   prix      Float
   idUser    Int
   idMusique Int
   idEvent   Int
-  User      User    @relation(fields: [idUser], references: [id])
-  Musique   Musique @relation(fields: [idMusique], references: [id])
-  Event     Event   @relation(fields: [idEvent], references: [id])
+  User      User       @relation(fields: [idUser], references: [id])
+  Musique   Musique    @relation(fields: [idMusique], references: [id])
+  Event     Event      @relation(fields: [idEvent], references: [id])
   Diffuser  Diffuser[]
 }
 
