@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
 import axios from 'axios';
 import { axiosApiInstance } from '../../axios.config';
+import { useFocusEffect } from '@react-navigation/native'; // Importez useFocusEffect depuis React Navigation
 
 export default function SlotInformation({ route }) {
   const { event } = route.params;
@@ -70,7 +71,7 @@ export default function SlotInformation({ route }) {
   async function search() {
     try {
       const response = await axios.get(
-        `https://api.spotify.com/v1/search?q=genre:${event.type}%20${searchQuery}&type=track&market=FR`,
+        `https://api.spotify.com/v1/search?q=track:"${searchQuery}" genre:${event.type}&type=track&market=FR`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -131,7 +132,7 @@ export default function SlotInformation({ route }) {
     Keyboard.dismiss();
   }
 
-  function handleEncherir() {
+  async function handleEncherir() {
     AsyncStorage.getItem('userId')
       .then((userId) => {
         const musicVoted = {
@@ -145,6 +146,10 @@ export default function SlotInformation({ route }) {
         axiosApiInstance
           .post(backendUrl + 'encheres', musicVoted)
           .then((response) => {
+            // Déchargez le son lorsque vous avez terminé avec lui
+            if (sound) {
+              sound.unloadAsync();
+            }
             navigation.navigate('Event');
           })
           .catch((error) => {
@@ -159,6 +164,17 @@ export default function SlotInformation({ route }) {
   }
 
   const onDismissSnackBar = () => setVisible(false);
+
+  // Utilisez useFocusEffect pour décharger le son lorsque la page perd le focus
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        if (sound) {
+          sound.unloadAsync();
+        }
+      };
+    }, [])
+  );
 
   return (
     <KeyboardAvoidingView style={styles.container} behavior="padding">
@@ -267,7 +283,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   input: {
-    marginTop: 40,
+    marginTop: 0,
     marginBottom: 16,
   },
   scrollView: {

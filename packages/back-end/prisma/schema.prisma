@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// url      = env("DATABASE_URL")
 
 generator client {
   provider = "prisma-client-js"
@@ -7,7 +8,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL")
+  url      = "mysql://root:@localhost:3306/dedicate"
 }
 
 model Role {
@@ -17,23 +18,28 @@ model Role {
 }
 
 model User {
-  id                 Int            @id @default(autoincrement())
+  id                 Int             @id @default(autoincrement())
   nom                String
   prenom             String
-  mail               String         @unique
-  tel                String         @unique
+  mail               String          @unique
+  tel                String          @unique
   password           String
   dateN              DateTime?
   photo              String?
   typePaiement       String?
-  Role               Role           @relation(fields: [roleId], references: [id])
+  Role               Role            @relation(fields: [roleId], references: [id])
   roleId             Int
   idEtablissement    Int?
-  Etablissement      Etablissement? @relation(fields: [idEtablissement], references: [id])
+  Etablissement      Etablissement?  @relation(fields: [idEtablissement], references: [id])
   enchere            Enchere[]
-  events             Event[]        @relation("EventUser")
+  events             Event[]         @relation("EventUser")
   lastScannedEventId Int?
-  LastScannedEvent   Event?         @relation(name: "LastScannedEvent", fields: [lastScannedEventId], references: [id])
+  LastScannedEvent   Event?          @relation(name: "LastScannedEvent", fields: [lastScannedEventId], references: [id])
+  dediCoins          Float           @default(0)
+  paymentMethods     PaymentMethod[]
+  transactions       Transaction[]
+
+  Diffuser Diffuser[]
 }
 
 model Etablissement {
@@ -50,10 +56,14 @@ model Diffuser {
   idMusique Int
   idEvent   Int
   slot      Int
+  idUser    Int
+  idEnchere Int
+  Enchere   Enchere @relation(fields: [idEnchere], references: [id])
+  User      User    @relation(fields: [idUser], references: [id])
   musique   Musique @relation(fields: [idMusique], references: [id])
   Event     Event   @relation(fields: [idEvent], references: [id])
 
-  @@id([idMusique, idEvent])
+  @@id([idMusique, idEvent, idUser, idEnchere])
 }
 
 model Musique {
@@ -79,6 +89,7 @@ model Event {
   description      String?
   idEtablissement  Int?
   qrCode           String?        @db.VarChar(1800)
+  isActive         Boolean        @default(true)
   Etablissement    Etablissement? @relation(fields: [idEtablissement], references: [id])
   diffuser         Diffuser[]
   enchere          Enchere[]
@@ -95,4 +106,23 @@ model Enchere {
   User      User    @relation(fields: [idUser], references: [id])
   Musique   Musique @relation(fields: [idMusique], references: [id])
   Event     Event   @relation(fields: [idEvent], references: [id])
+  Diffuser  Diffuser[]
+}
+
+model PaymentMethod {
+  id         Int     @id @default(autoincrement())
+  userId     Int
+  cardNumber String  @db.VarChar(255)
+  expDate    String
+  isDefault  Boolean @default(false)
+  user       User    @relation(fields: [userId], references: [id])
+}
+
+model Transaction {
+  id     Int      @id @default(autoincrement())
+  userId Int
+  amount Float // Montant en DediCoins de la transaction
+  type   String // Peut être "purchase" ou "spend"
+  date   DateTime
+  user   User     @relation(fields: [userId], references: [id])
 }

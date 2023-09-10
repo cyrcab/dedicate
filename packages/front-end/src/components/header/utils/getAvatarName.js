@@ -1,7 +1,8 @@
 const getAvatar = (user) => {
-  const { lastName, firstName } = user;
-  const firstLetter = firstName.charAt(0);
-  const secondLetter = lastName.charAt(0);
+  if (!user) return '';
+  const { nom, prenom } = user;
+  const firstLetter = prenom?.charAt(0);
+  const secondLetter = nom?.charAt(0);
 
   return `${firstLetter}${secondLetter}`;
 };
