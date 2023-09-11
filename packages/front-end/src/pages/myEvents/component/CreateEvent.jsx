@@ -20,6 +20,7 @@ import { backendUrl } from '../../../backendUrl';
 import 'dayjs/locale/fr';
 import MyCard from '../../../components/MyCard';
 import { setDisplayNotification } from '../../../store/reducer/notification';
+import genres from '../constant/genres';
 
 function CreateEvent() {
   const navigate = useNavigate();
@@ -30,26 +31,6 @@ function CreateEvent() {
   const handleChange = (event) => {
     setGenre(event.target.value);
   };
-
-  const genres = [
-    'pop',
-    'rock',
-    'rap/hip-hop',
-    'Electronique/EDM',
-    'R&B',
-    'country',
-    'jazz',
-    'classique',
-    'reggae',
-    'blues',
-    'metal',
-    'soul',
-    'funk',
-    'Punk',
-    'Indie/Alternatif',
-    'gospel',
-    'Techno',
-  ];
 
   const handleSubmit = (event) => {
     event.preventDefault();

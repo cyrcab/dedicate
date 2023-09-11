@@ -1,7 +1,4 @@
-/* eslint-disable import/order */
-/* eslint-disable indent */
 import React from 'react';
-import './style/playlist.css';
 import Table from '../../components/Table';
 
 const columns = [
@@ -47,7 +44,7 @@ const rows = [
   },
 ];
 
-export default function Playlist() {
+export default function Playlists() {
   // TODO : multiple rows selection
   // TODO : fetch data from backend
   return <Table rows={rows} columns={columns} />;
