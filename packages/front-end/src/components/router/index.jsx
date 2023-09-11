@@ -2,7 +2,8 @@ import RequireAuth from './RequireAuth';
 import Layout from '../layout';
 import Login from '../../pages/login';
 import Register from '../../pages/register';
-// import Playlist from '../../pages/playlist';
+import Playlists from '../../pages/playlist';
+import PlaylistDetails from '../../pages/playlist/components/PlaylistDetails';
 import MyEvents from '../../pages/myEvents';
 // import Users from '../../pages/users';
 import Settings from '../../pages/settings';
@@ -53,6 +54,22 @@ const routes = [
         element: (
           <RequireAuth>
             <EventDetails />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'playlists',
+        element: (
+          <RequireAuth>
+            <Playlists />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'playlists/:id',
+        element: (
+          <RequireAuth>
+            <PlaylistDetails />
           </RequireAuth>
         ),
       },

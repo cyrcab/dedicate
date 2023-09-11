@@ -1,6 +1,15 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
-import { Button, TextField, Grid, Box } from '@mui/material';
+import {
+  Button,
+  TextField,
+  Grid,
+  Box,
+  FormControl,
+  MenuItem,
+  Select,
+  InputLabel,
+} from '@mui/material';
 import { LocalizationProvider, DateTimePicker } from '@mui/x-date-pickers';
 import 'dayjs/locale/fr';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -11,6 +20,7 @@ import { setDisplayNotification } from '../../../store/reducer/notification';
 import { axiosApiInstance } from '../../../axios.config';
 import { backendUrl } from '../../../backendUrl';
 import MyCard from '../../../components/MyCard';
+import genres from '../constant/genres';
 
 function UpdateEvent() {
   const [eventData, setEventData] = useState({
@@ -114,24 +124,31 @@ function UpdateEvent() {
                   name="date"
                   minDateTime={dayjs()}
                   minTime={dayjs().hour(0).minute(0)}
-                  onChange={(event) => setEventData({ ...eventData, date: event.$d })
-                  }
+                  onChange={(event) => {
+                    setEventData({ ...eventData, date: event.$d });
+                  }}
                   defaultValue={dayjs(eventData.date)}
                 />
               )}
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
-              <TextField
-                required
-                fullWidth
-                id="type"
-                label="Type de musique"
-                name="type"
-                value={eventData.type}
-                onChange={(e) => handleChange(e)}
-                // autoComplete="type"
-                defaultValue={eventData.type}
-              />
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Genre</InputLabel>
+                <Select
+                  id="type"
+                  value={eventData.type}
+                  name="type"
+                  label="Genre"
+                  defaultValue={eventData.type}
+                  onChange={(e) => handleChange(e)}
+                >
+                  {genres.map((genreOption) => (
+                    <MenuItem key={genreOption} value={genreOption}>
+                      {genreOption}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12} style={{ marginBottom: '20px' }}>
               <TextField
