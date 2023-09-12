@@ -32,7 +32,6 @@ const settingStyleSlice = createSlice({
   },
 });
 
-export const { setStyle, removeStyle, setDarkMode, setLightMode } =
-  settingStyleSlice.actions;
+export const { setStyle, removeStyle, setDarkMode, setLightMode } = settingStyleSlice.actions;
 
 export default settingStyleSlice.reducer;
