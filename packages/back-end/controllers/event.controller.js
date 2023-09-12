@@ -248,8 +248,20 @@ module.exports.getOne = async (req, res) => {
       },
       include: {
         Etablissement: true,
-        diffuser: true,
-        enchere: true,
+        diffuser: {
+          include: {
+            musique: true,
+          },
+        },
+        enchere: {
+          include: {
+            User: {
+              select: {
+                prenom: true,
+              },
+            },
+          },
+        },
       },
     });
     if (!event) {
@@ -334,8 +346,8 @@ module.exports.addUserToEvent = async (req, res) => {
   if (!idEvent) {
     return res.status(400).json({ message: 'Veuillez spécifier un evenement' });
   }
- try {
-  const event = await prisma.event.findUnique({
+  try {
+    const event = await prisma.event.findUnique({
       where: {
         id: parseInt(idEvent, 10),
       },
@@ -368,7 +380,7 @@ module.exports.addUserToEvent = async (req, res) => {
         },
       },
     });
-     const check = checkUser.User.find((u) => u.id === parseInt(idUser, 10));
+    const check = checkUser.User.find((u) => u.id === parseInt(idUser, 10));
     if (check) {
       return res
         .status(400)
@@ -423,8 +435,10 @@ module.exports.update = async (req, res) => {
     if (!event) {
       return res.status(400).json({ message: "Cet événement n'existe pas" });
     }
-    if(!event.isActive){
-      return res.status(400).json({ message: "Cet événement n'est plus actif" });
+    if (!event.isActive) {
+      return res
+        .status(400)
+        .json({ message: "Cet événement n'est plus actif" });
     }
     if (nom) {
       data.nom = nom;
@@ -656,9 +670,10 @@ module.exports.getEventActif = async (req, res) => {
     return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
   }
   if (!user.lastScannedEventId) {
-    return res
-      .status(400)
-      .json({ message: "Cet utilisateur n'a pas de dernier événement scanné", user });
+    return res.status(400).json({
+      message: "Cet utilisateur n'a pas de dernier événement scanné",
+      user,
+    });
   }
   try {
     const event = await prisma.event.findFirst({
