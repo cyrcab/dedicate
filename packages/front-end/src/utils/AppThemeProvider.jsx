@@ -41,7 +41,7 @@ const AppThemeProvider = ({ children }) => {
   const theme = themeGeneration({
     secondaryColor: secondary,
     mainColor: main,
-    mode: mode,
+    mode,
   });
 
   return (
