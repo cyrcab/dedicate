@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "expo-barcode-scanner": "^12.5.3",
+    "supertest": "^6.3.3",
     "yarn": "^1.22.19"
   }
 }

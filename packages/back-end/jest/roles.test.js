@@ -1,5 +1,7 @@
 const request = require('supertest');
-const app = require('./app'); // Remplacez ./app par le chemin vers votre application Express contenant les fonctions createRole, getRoles, getRole, updateRole et deleteRole
+/* eslint-disable */
+const URL = 'http://localhost:5001/api/roles';
+const { PrismaClient } = require('@prisma/client');
 
 describe("Test de l'API des rôles", () => {
   describe('POST /createRole', () => {
@@ -132,3 +134,4 @@ describe("Test de l'API des rôles", () => {
     });
   });
 });
+module.exports = app;

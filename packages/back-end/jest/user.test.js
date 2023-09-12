@@ -1,5 +1,7 @@
 const request = require('supertest');
-const app = require('./app'); // Remplacez ./app par le chemin vers votre application Express contenant les fonctions getAllUsers, getUser, updateUser, updatePassword et deleteUser
+/* eslint-disable */
+const URL = 'http://localhost:5001/api/users';
+const { PrismaClient } = require('@prisma/client');
 
 describe("Test de l'API des utilisateurs", () => {
   describe('GET /getAllUsers', () => {

@@ -1,5 +1,7 @@
 const request = require('supertest');
-const app = require('./app'); // Remplacez ./app par le chemin vers votre application Express contenant les fonctions vote et getVotes
+/* eslint-disable */
+const URL = 'http://localhost:5001/api/enchere';
+const { PrismaClient } = require('@prisma/client');
 
 describe("Test de l'API d'enchères", () => {
   describe('POST /vote', () => {
@@ -18,6 +20,7 @@ describe("Test de l'API d'enchères", () => {
       });
 
       expect(response.status).toBe(404);
+      // eslint-disable-next-line no-undef
       expect(response.body.message).toMatch(
         /Cet utilisateur n'existe pas|Cet événement n'existe pas/,
       );
@@ -47,3 +50,4 @@ describe("Test de l'API d'enchères", () => {
     });
   });
 });
+module.exports = app;

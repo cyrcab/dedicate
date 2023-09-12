@@ -1,5 +1,7 @@
 const request = require('supertest');
-const app = require('./app'); // Remplacez ./app par le chemin vers votre application Express contenant les fonctions getAll, getOne, update et delete
+/* eslint-disable */
+const URL = 'http://localhost:5001/api/etablissement';
+const { PrismaClient } = require('@prisma/client');
 
 describe("Test de l'API des établissements", () => {
   describe('GET /getAll', () => {
@@ -79,3 +81,4 @@ describe("Test de l'API des établissements", () => {
     });
   });
 });
+module.exports = app;
