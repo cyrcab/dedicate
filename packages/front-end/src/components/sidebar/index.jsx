@@ -3,7 +3,6 @@ import { Box, Typography, CardMedia } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import EventIcon from '@mui/icons-material/Event';
 import SettingsIcon from '@mui/icons-material/Settings';
-import LibraryMusicIcon from '@mui/icons-material/LibraryMusic';
 import logo from '../../assets/logov1.png';
 import MySidebarLink from './components/MySidebarLink';
 
@@ -58,12 +57,6 @@ export default function Sidebar() {
           path={'/events'}
           icon={<EventIcon />}
           pathName={'Événements'}
-        />
-        <MySidebarLink
-          isActive={isActive('/playlists')}
-          path={'/playlists'}
-          icon={<LibraryMusicIcon />}
-          pathName={'Playlists'}
         />
         <MySidebarLink
           isActive={isActive('/settings')}
