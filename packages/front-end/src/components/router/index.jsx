@@ -1,15 +1,15 @@
 import RequireAuth from './RequireAuth';
 import Layout from '../layout';
-import Home from '../../pages/home';
 import Login from '../../pages/login';
 import Register from '../../pages/register';
-import Playlist from '../../pages/playlist';
 import MyEvents from '../../pages/myEvents';
-import Users from '../../pages/users';
+// import Users from '../../pages/users';
 import Settings from '../../pages/settings';
 import CreateEvent from '../../pages/myEvents/component/CreateEvent';
 import UpdateEvent from '../../pages/myEvents/component/UpdateEvent';
 import EventDetails from '../../pages/myEvents/component/EventDetails';
+import StyleSettings from '../../pages/settings/style';
+import ProfileSettings from '../../pages/settings/profile';
 
 const routes = [
   {
@@ -19,7 +19,7 @@ const routes = [
         path: '/',
         element: (
           <RequireAuth>
-            <Home />
+            <MyEvents />
           </RequireAuth>
         ),
       },
@@ -56,26 +56,26 @@ const routes = [
         ),
       },
       {
-        path: 'playlist',
-        element: (
-          <RequireAuth>
-            <Playlist />
-          </RequireAuth>
-        ),
-      },
-      {
-        path: 'users',
-        element: (
-          <RequireAuth>
-            <Users />
-          </RequireAuth>
-        ),
-      },
-      {
         path: 'settings',
         element: (
           <RequireAuth>
             <Settings />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'settings/style',
+        element: (
+          <RequireAuth>
+            <StyleSettings />
+          </RequireAuth>
+        ),
+      },
+      {
+        path: 'settings/profile',
+        element: (
+          <RequireAuth>
+            <ProfileSettings />
           </RequireAuth>
         ),
       },

@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// url      = env("DATABASE_URL")
 
 generator client {
   provider = "prisma-client-js"
@@ -26,7 +27,6 @@ model User {
   dateN              DateTime?
   photo              String?
   typePaiement       String?
-  eventActif         String?
   Role               Role            @relation(fields: [roleId], references: [id])
   roleId             Int
   idEtablissement    Int?
@@ -38,6 +38,8 @@ model User {
   dediCoins          Float           @default(0)
   paymentMethods     PaymentMethod[]
   transactions       Transaction[]
+
+  Diffuser Diffuser[]
 }
 
 model Etablissement {
@@ -54,10 +56,14 @@ model Diffuser {
   idMusique Int
   idEvent   Int
   slot      Int
+  idUser    Int
+  idEnchere Int
+  Enchere   Enchere @relation(fields: [idEnchere], references: [id])
+  User      User    @relation(fields: [idUser], references: [id])
   musique   Musique @relation(fields: [idMusique], references: [id])
   Event     Event   @relation(fields: [idEvent], references: [id])
 
-  @@id([idMusique, idEvent])
+  @@id([idMusique, idEvent, idUser, idEnchere])
 }
 
 model Musique {
@@ -83,6 +89,7 @@ model Event {
   description      String?
   idEtablissement  Int?
   qrCode           String?        @db.VarChar(1800)
+  isActive         Boolean        @default(true)
   Etablissement    Etablissement? @relation(fields: [idEtablissement], references: [id])
   diffuser         Diffuser[]
   enchere          Enchere[]
@@ -91,14 +98,15 @@ model Event {
 }
 
 model Enchere {
-  id        Int     @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   prix      Float
   idUser    Int
   idMusique Int
   idEvent   Int
-  User      User    @relation(fields: [idUser], references: [id])
-  Musique   Musique @relation(fields: [idMusique], references: [id])
-  Event     Event   @relation(fields: [idEvent], references: [id])
+  User      User       @relation(fields: [idUser], references: [id])
+  Musique   Musique    @relation(fields: [idMusique], references: [id])
+  Event     Event      @relation(fields: [idEvent], references: [id])
+  Diffuser  Diffuser[]
 }
 
 model PaymentMethod {

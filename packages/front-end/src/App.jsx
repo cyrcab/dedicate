@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 import jwtDecode from 'jwt-decode';
-import { ThemeProvider } from '@mui/material/styles';
 import { useRoutes, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setSignedIn, setSignedOut } from './store/reducer/reducer';
-import theme from './utils/appTheme';
+import { setUser } from './store/reducer/user.reducer';
 import route from './components/router';
 import { axiosApiInstance } from './axios.config';
 import { backendUrl } from './backendUrl';
+import SnackBarDisplayer from './components/SnackBarDisplayer';
+import AppThemeProvider from './utils/AppThemeProvider';
 
 export default function App() {
   const routes = useRoutes(route);
@@ -30,8 +31,9 @@ export default function App() {
     axiosApiInstance
       .get(`${backendUrl}users/${id}`)
       .then((res) => {
-        dispatch(setSignedIn(res.data.data));
-        navigate('/');
+        dispatch(setUser(res.data.data));
+        dispatch(setSignedIn());
+        navigate('/', { replace: true });
       })
       .catch((err) => console.log(err));
   };
@@ -42,7 +44,8 @@ export default function App() {
 
   return (
     <>
-      <ThemeProvider theme={theme}>{routes}</ThemeProvider>
+      <AppThemeProvider>{routes}</AppThemeProvider>
+      <SnackBarDisplayer />
     </>
   );
 }

@@ -4,7 +4,6 @@ const prisma = new PrismaClient();
 const { DateTime } = require('luxon');
 const jwt = require('jsonwebtoken');
 const QRCode = require('qrcode');
-const fs = require('fs');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
@@ -14,8 +13,7 @@ const storage = multer.diskStorage({
   filename(req, file, cb) {
     const uniqueFileName = `${Date.now()}-${Math.round(
       Math.random() * 1e9,
-    )}${file.originalname.substring(file.originalname.lastIndexOf('.'))
-      }`;
+    )}${file.originalname.substring(file.originalname.lastIndexOf('.'))}`;
     cb(null, uniqueFileName);
   },
 });
@@ -35,9 +33,8 @@ module.exports.create = async (req, res) => {
     const images = req.files;
 
     /* eslint-disable prefer-const */
-    let {
-      nom, lieu, date, type, prix, nbSlots, idEtablissement, description,
-    } = req.body;
+    let { nom, lieu, date, type, prix, nbSlots, idEtablissement, description } =
+      req.body;
 
     if (!nom || !lieu || !date || !type || !prix || !nbSlots || !description) {
       return res
@@ -146,13 +143,9 @@ module.exports.create = async (req, res) => {
         data: { qrCode: qrCodeImage },
       });
 
-      const qrCodeStream = fs.createWriteStream('./qrcodes/path-to-your-file.png');
-      // if (!fs.existsSync('../qrcodes')) {
-      //   fs.mkdirSync('../qrcodes');
-      // }
-      QRCode.toFileStream(qrCodeStream, qrCodeString);
-
-      return res.status(201).json({ message: 'Événement créé', data: updatedEvent });
+      return res
+        .status(201)
+        .json({ message: 'Événement créé', data: updatedEvent });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }
@@ -256,8 +249,20 @@ module.exports.getOne = async (req, res) => {
       },
       include: {
         Etablissement: true,
-        diffuser: true,
-        enchere: true,
+        diffuser: {
+          include: {
+            musique: true,
+          },
+        },
+        enchere: {
+          include: {
+            User: {
+              select: {
+                prenom: true,
+              },
+            },
+          },
+        },
       },
     });
     if (!event) {
@@ -404,6 +409,7 @@ module.exports.addUserToEvent = async (req, res) => {
         lastScannedEventId: parseInt(idEvent, 10),
       },
     });
+    delete userEvent.qrCode;
     return res.status(200).json({
       message: "Utilisateur ajouté à l'événement",
       data: userEvent,
@@ -416,9 +422,7 @@ module.exports.addUserToEvent = async (req, res) => {
 
 module.exports.update = async (req, res) => {
   const { idEvent } = req.params;
-  const {
-    nom, date, lieu, type, prix, nbSlots, description,
-  } = req.body;
+  const { nom, date, lieu, type, prix, nbSlots, description } = req.body;
   const data = {};
   if (!idEvent) {
     return res.status(400).json({ message: 'Veuillez spécifier un événement' });
@@ -431,6 +435,11 @@ module.exports.update = async (req, res) => {
     });
     if (!event) {
       return res.status(400).json({ message: "Cet événement n'existe pas" });
+    }
+    if (!event.isActive) {
+      return res
+        .status(400)
+        .json({ message: "Cet événement n'est plus actif" });
     }
     if (nom) {
       data.nom = nom;
@@ -592,7 +601,6 @@ module.exports.getNextEvent = async (req, res) => {
               codePostal: true,
             },
           },
-
         },
         orderBy: {
           date: 'asc',
@@ -632,7 +640,6 @@ module.exports.getMyEvent = async (req, res) => {
               Musique: true,
             },
           },
-
         },
       });
     if (!user) {
@@ -664,7 +671,10 @@ module.exports.getEventActif = async (req, res) => {
     return res.status(400).json({ message: "Cet utilisateur n'existe pas" });
   }
   if (!user.lastScannedEventId) {
-    return res.status(400).json({ message: "Cet utilisateur n'a pas de dernier événement scanné" });
+    return res.status(400).json({
+      message: "Cet utilisateur n'a pas de dernier événement scanné",
+      user,
+    });
   }
   try {
     const event = await prisma.event.findFirst({
@@ -681,13 +691,14 @@ module.exports.getEventActif = async (req, res) => {
     }
     const currentDate = DateTime.now()
       .setZone('utc')
-      .plus({ hours: 12 })
+      .plus({ hours: 2 })
       .toISO();
     const dateEvent = new Date(event.date);
     const dateEventParsed = DateTime.fromJSDate(dateEvent)
       .setZone('utc')
+      .plus({ days: 1 })
       .toISO();
-    if (dateEventParsed < currentDate) {
+    if (currentDate > dateEventParsed) {
       await prisma.user.update({
         where: {
           id: parseInt(idUser, 10),
@@ -696,11 +707,15 @@ module.exports.getEventActif = async (req, res) => {
           lastScannedEventId: null,
         },
       });
-      return res.status(400).json({ message: "Cet événement n'est plus actif" });
+      return res
+        .status(400)
+        .json({ message: "Cet événement n'est plus actif" });
     }
 
-    return res.status(200).json({ message: 'Événement récupéré', data: event });
+    return res.status(200).json({ message: 'Événement récupéré', data: event, date: currentDate, dateEventParsed });
   } catch (err) {
-    return res.status(500).json({ message: 'Internal error BG', data: err.message });
+    return res
+      .status(500)
+      .json({ message: 'Internal error BG', data: err.message });
   }
 };
