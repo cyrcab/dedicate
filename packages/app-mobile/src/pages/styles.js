@@ -184,4 +184,22 @@ export default StyleSheet.create({
     width: 'auto',
     alignSelf: 'center',
   },
+
+  // pages\Wallet.jsx
+  contentCentered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  centeredText: {
+    fontSize: 20, // Ou toute autre valeur que vous préférez
+    textAlign: 'center',
+  },
+
+  // actionsCentered: {
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  //   flexDirection: 'row',
+  // }
 });
