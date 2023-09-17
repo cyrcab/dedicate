@@ -91,7 +91,6 @@ const AppNavigator = () => (
     <Tab.Screen name="Evénements" component={EventStack} />
     <Tab.Screen name="Portefeuille" component={WalletStack} />
     <Tab.Screen name="Profile" component={ProfileStack} />
-    <Tab.Screen name="Portefeuille" component={WalletStack} />
   </Tab.Navigator>
 );
 
