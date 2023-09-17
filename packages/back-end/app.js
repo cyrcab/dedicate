@@ -13,6 +13,8 @@ const enchereRoutes = require('./routes/enchere.route');
 const paymentMethodRoutes = require('./routes/paymentMethod.route');
 const transactionRoutes = require('./routes/transaction.route');
 
+const paymentRoutes = require('./routes/payment.route');
+
 const app = express();
 
 const swaggerOptions = {
@@ -77,6 +79,8 @@ app.use('/api/events', eventRoutes);
 app.use('/api/encheres', enchereRoutes);
 app.use('/api/paymentMethods', paymentMethodRoutes);
 app.use('/api/transactions', transactionRoutes);
+app.use('/api/payments', paymentRoutes);
+
 
 app.listen(5001, () => {
   console.log('Server started on port 5001');
