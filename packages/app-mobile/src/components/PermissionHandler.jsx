@@ -7,24 +7,29 @@ export default function PermissionHandler() {
 
     useEffect(() => {
         (async () => {
-            Alert.alert(
-                "Accès à l'appareil photo",
-                "Nous avons besoin de votre permission pour accéder à l'appareil photo afin de scanner les codes QR.",
-                [
-                    {
-                        text: "Annuler",
-                        style: "cancel"
-                    },
-                    {
-                        text: "OK",
-                        onPress: async () => {
-                            const { status } = await BarCodeScanner.requestPermissionsAsync();
-                            setHasPermission(status === 'granted');
+            const { status } = await BarCodeScanner.getPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert(
+                    "Accès à l'appareil photo",
+                    "Nous avons besoin de votre permission pour accéder à l'appareil photo afin de scanner les codes QR.",
+                    [
+                        {
+                            text: "Annuler",
+                            style: "cancel"
+                        },
+                        {
+                            text: "OK",
+                            onPress: async () => {
+                                const response = await BarCodeScanner.requestPermissionsAsync();
+                                setHasPermission(response.status === 'granted');
+                            }
                         }
-                    }
-                ],
-                { cancelable: false }
-            );
+                    ],
+                    { cancelable: false }
+                );
+            } else {
+                setHasPermission(true);
+            }
         })();
     }, []);
 
