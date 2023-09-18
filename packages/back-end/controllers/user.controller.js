@@ -55,7 +55,7 @@ module.exports.updateUser = async (req, res) => {
   if (mail) {
     const emailAlreadyTaken = await prismaUser.findUnique({
       where: {
-        mail: mail,
+        mail,
       },
     });
     if (emailAlreadyTaken) {

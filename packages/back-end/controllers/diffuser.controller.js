@@ -10,7 +10,6 @@ module.exports.diffuser = async (req, res) => {
         return res.status(400).json({message: 'Il manque des informations'});
     }
     try{
-        // Je veux recuperer les enchères de l'event enregistrer dans la base diffuser les nbslots premières enchères et rembourser les autres
 
         const enchere = await prisma.enchere.findMany({
             where: {
@@ -123,7 +122,7 @@ module.exports.vote = async (req, res) => {
                 },
             },
         })
-        return res.status(200).json({message: 'Les enchères ont bien été diffusées', enchere});
+        return res.status(200).json({message: 'Les musiques diffusées ont bien été récupéré ', enchere});
     }catch(e){
         return res.status(500).json({message: "Une erreur s'est produite", error: e});
     }

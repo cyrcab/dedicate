@@ -64,8 +64,7 @@ const ProfileComponent = ({ user }) => {
         onClose={handleClose}
       >
         <MenuItem
-          onClick={() =>
-            mode === 'dark' ? dispatch(setLightMode()) : dispatch(setDarkMode())
+          onClick={() => (mode === 'dark' ? dispatch(setLightMode()) : dispatch(setDarkMode()))
           }
         >
           {mode === 'light' ? (
