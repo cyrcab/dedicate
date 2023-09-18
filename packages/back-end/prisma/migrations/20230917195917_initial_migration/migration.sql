@@ -18,7 +18,6 @@ CREATE TABLE `User` (
     `dateN` DATETIME(3) NULL,
     `photo` VARCHAR(191) NULL,
     `typePaiement` VARCHAR(191) NULL,
-    `eventActif` VARCHAR(191) NULL,
     `roleId` INTEGER NOT NULL,
     `idEtablissement` INTEGER NULL,
     `lastScannedEventId` INTEGER NULL,
@@ -45,8 +44,10 @@ CREATE TABLE `Diffuser` (
     `idMusique` INTEGER NOT NULL,
     `idEvent` INTEGER NOT NULL,
     `slot` INTEGER NOT NULL,
+    `idUser` INTEGER NOT NULL,
+    `idEnchere` INTEGER NOT NULL,
 
-    PRIMARY KEY (`idMusique`, `idEvent`)
+    PRIMARY KEY (`idMusique`, `idEvent`, `idUser`, `idEnchere`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
@@ -74,6 +75,7 @@ CREATE TABLE `Event` (
     `description` VARCHAR(191) NULL,
     `idEtablissement` INTEGER NULL,
     `qrCode` VARCHAR(1800) NULL,
+    `isActive` BOOLEAN NOT NULL DEFAULT true,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -95,7 +97,7 @@ CREATE TABLE `PaymentMethod` (
     `userId` INTEGER NOT NULL,
     `cardNumber` VARCHAR(255) NOT NULL,
     `expDate` VARCHAR(191) NOT NULL,
-    `cvv` VARCHAR(191) NOT NULL,
+    `isDefault` BOOLEAN NOT NULL DEFAULT false,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -128,6 +130,12 @@ ALTER TABLE `User` ADD CONSTRAINT `User_idEtablissement_fkey` FOREIGN KEY (`idEt
 
 -- AddForeignKey
 ALTER TABLE `User` ADD CONSTRAINT `User_lastScannedEventId_fkey` FOREIGN KEY (`lastScannedEventId`) REFERENCES `Event`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Diffuser` ADD CONSTRAINT `Diffuser_idEnchere_fkey` FOREIGN KEY (`idEnchere`) REFERENCES `Enchere`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Diffuser` ADD CONSTRAINT `Diffuser_idUser_fkey` FOREIGN KEY (`idUser`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Diffuser` ADD CONSTRAINT `Diffuser_idMusique_fkey` FOREIGN KEY (`idMusique`) REFERENCES `Musique`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

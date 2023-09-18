@@ -69,7 +69,7 @@ export default function Auctions({ route }) {
             <View style={styles.bidContainer}>
               <TextInput
                 style={styles.bidInput}
-                label={`Minimum ${item.prix + 1  }€`}
+                label={`Minimum ${item.prix + 1}€`}
                 value={enchere}
                 mode="outlined"
                 onChangeText={(text) => setEnchere(parseFloat(text))}
@@ -78,7 +78,7 @@ export default function Auctions({ route }) {
               <Button
                 mode="contained"
                 onPress={handleEncherir}
-                disabled={enchere < item.prix + 1|| isNaN(enchere)}
+                disabled={enchere < item.prix + 1 || isNaN(enchere)}
               >
                 Enchérir
               </Button>

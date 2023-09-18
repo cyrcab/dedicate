@@ -1,10 +1,10 @@
 /* eslint-disable indent */
 import React, { useState, useEffect } from 'react';
 import './style/myEvents.css';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import InfoIcon from '@mui/icons-material/Info';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Table from '../../components/Table';
 import { backendUrl } from '../../backendUrl';
@@ -13,6 +13,7 @@ import formatDateForReadIt from '../../utils/formatDateForReadItFr';
 
 export default function MyEvents() {
   const [rows, setRows] = useState([]);
+  const navigate = useNavigate();
 
   const idCompany = useSelector((state) => state.user.idEtablissement);
 
@@ -73,22 +74,31 @@ export default function MyEvents() {
       field: 'seeMore',
       headerName: 'See More',
       renderCell: (params) => (
-        <Link to={`/events/${params.row.id}`}>
-          <IconButton>
-            <InfoIcon />
-          </IconButton>
-        </Link>
+        <IconButton onClick={() => navigate(`/events/${params.row.id}`)}>
+          <InfoIcon />
+        </IconButton>
       ),
     },
     {
       field: 'edit',
       headerName: 'Edit',
       sortable: false,
-      renderCell: (params) => (
-        <Link to={params.row.isActive ? `/events/edit/${params.row.id}` : null}>
-          {params.row.isActive ? <EditIcon /> : 'Fini'}
-        </Link>
-      ),
+      renderCell: (params) => {
+        if (params.row.isActive) {
+          return (
+            <IconButton
+              onClick={() => navigate(`/events/edit/${params.row.id}`)}
+            >
+              <EditIcon />
+            </IconButton>
+          );
+        }
+        return (
+          <Typography variant="body1" align="center">
+            Fini
+          </Typography>
+        );
+      },
     },
   ];
   return (

@@ -10,6 +10,7 @@ export default function EventsCard({ item }) {
   const date = new Date(item.date);
   const jour = date.getDate().toString().padStart(2, "0"); // Ajoute un zéro devant le jour si nécessaire
   const mois = (date.getMonth() + 1).toString().padStart(2, "0"); // Ajoute un zéro devant le mois si nécessaire
+
   return (
     <Card
       onPress={() => {

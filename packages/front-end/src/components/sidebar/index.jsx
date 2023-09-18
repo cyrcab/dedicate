@@ -3,7 +3,7 @@ import { Box, Typography, CardMedia } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import EventIcon from '@mui/icons-material/Event';
 import SettingsIcon from '@mui/icons-material/Settings';
-import logo from './assets/logo.png';
+import logo from '../../assets/logov1.png';
 import MySidebarLink from './components/MySidebarLink';
 
 export default function Sidebar() {
@@ -35,11 +35,12 @@ export default function Sidebar() {
         <CardMedia
           image={logo}
           sx={{
-            height: '35px',
-            width: '35px',
+            height: '45px',
+            width: '45px',
+            backgroundSize: 'contain',
           }}
         />
-        <Typography variant="h4">DEDICATE</Typography>
+        <Typography variant="h5">DEDICATE</Typography>
       </Box>
 
       <Box

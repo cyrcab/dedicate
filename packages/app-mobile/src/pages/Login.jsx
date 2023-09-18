@@ -52,6 +52,7 @@ export default function Login({ navigation }) {
       });
   };
 
+
   return (
     <ImageBackground
       source={require('../../assets/login.jpg')}
