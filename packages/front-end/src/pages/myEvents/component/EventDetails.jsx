@@ -7,16 +7,22 @@ import EditIcon from '@mui/icons-material/Edit';
 import BlockIcon from '@mui/icons-material/Block';
 import {
   CardContent,
-  CardMedia,
   Container,
   Divider,
   Typography,
   ButtonGroup,
   Dialog,
-  Skeleton,
+  Box,
   Grid,
+  ListItem,
+  List,
+  ListItemAvatar,
+  ListItemText,
+  Avatar,
+  ListItemIcon,
 } from '@mui/material';
 import { useDispatch } from 'react-redux';
+import PaidIcon from '@mui/icons-material/Paid';
 import { backendUrl } from '../../../backendUrl';
 import { axiosApiInstance } from '../../../axios.config';
 import formatDateForReadIt from '../../../utils/formatDateForReadItFr';
@@ -101,20 +107,9 @@ export default function EventDetails() {
       }
     >
       <Divider />
-      {false ? (
-        <CardMedia
-          src={eventData.photo}
-          component="img"
-          alt="Event image"
-          width="100%"
-          height={300}
-        />
-      ) : (
-        <Skeleton variant="rectangular" width="100%" height={300} />
-      )}
       <CardContent>
         <Container>
-          <Typography variant="h1">{eventData.nom}</Typography>
+          <Typography variant="h2">{eventData.nom}</Typography>
           <Divider />
           <Grid container sx={{ display: 'flex' }} mt={3}>
             <Grid item sm={6}>
@@ -128,6 +123,75 @@ export default function EventDetails() {
               <Typography>Prix minimum : {eventData.prix}</Typography>
               <Typography>Nombre de musique : {eventData.nbSlots}</Typography>
               <Typography>Lieu de l'événement : {eventData.lieu}</Typography>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              mt: 10,
+            }}
+          >
+            <Grid item sm={5}>
+              <Box mt={3}>
+                <Typography variant="h2">Playlist</Typography>
+                <Divider />
+              </Box>
+              {eventData.diffuser.length > 0 && (
+                <List>
+                  {eventData.diffuser.map((diffuser) => (
+                    <>
+                      <ListItem key={diffuser.idEnchere}>
+                        <ListItemAvatar>
+                          <Avatar src={diffuser.musique.album} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={diffuser.musique.titre}
+                          secondary={diffuser.musique.artiste}
+                        />
+                      </ListItem>
+                      <Divider />
+                    </>
+                  ))}
+                </List>
+              )}
+            </Grid>
+            <Grid
+              item
+              sm={1}
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <Divider orientation="vertical" />
+            </Grid>
+            <Grid item sm={5}>
+              <Box mt={3}>
+                <Typography variant="h2">Enchères</Typography>
+                <Divider />
+              </Box>
+              {eventData.diffuser.length > 0 && (
+                <List>
+                  {eventData.enchere
+                    .sort((a, b) => b.prix - a.prix)
+                    .map((enchere) => (
+                      <>
+                        <ListItem key={enchere.idEnchere}>
+                          <ListItemIcon>
+                            <PaidIcon />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={enchere.prix}
+                            secondary={enchere.User.prenom}
+                          />
+                        </ListItem>
+                        <Divider />
+                      </>
+                    ))}
+                </List>
+              )}
             </Grid>
           </Grid>
         </Container>
