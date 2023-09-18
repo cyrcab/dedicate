@@ -13,15 +13,6 @@ import SlotInformation from '../pages/SlotInformation';
 import Auctions from '../pages/Auctions';
 
 import Wallet from '../pages/Wallet/Wallet';
-import AddDediCoin from '../pages/Wallet/AddDediCoin';
-import BankDetails from '../pages/Wallet/BankDetails';
-import PaymentMethodForm from '../pages/Wallet/PaymentMethodForm';
-
-import Wallet from "../pages/Wallet/Wallet";
-
-
-import PaymentMethodForm from "../pages/Wallet/PaymentMethodForm";
-import StripeCheckout from "../pages/Wallet/StripeCheckout";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -72,10 +63,6 @@ const WalletStack = () => (
       component={Wallet}
       options={{ headerShown: false }}
     />
-    <Stack.Screen name="Ajouter" component={AddDediCoin} />
-    <Stack.Screen name="Bank Details" component={BankDetails} />
-    <Stack.Screen name="PaymentMethodForm" component={PaymentMethodForm} />
-    <Stack.Screen name="StripeCheckout" component={StripeCheckout} />
   </Stack.Navigator>
 );
 
