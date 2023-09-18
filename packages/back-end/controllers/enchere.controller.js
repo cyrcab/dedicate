@@ -147,7 +147,7 @@ module.exports.vote = async (req, res) => {
       data: { dediCoins: { decrement: prix } },
     });
 
-    return res.status(200).json({ message: "L'enchère a bien été créée", enchere: newEnchere, musique });
+    return res.status(201).json({ message: "L'enchère a bien été créée", enchere: newEnchere, musique });
   } catch (error) {
     console.error("Une erreur s'est produite :", error);
     return res.status(500).json({ message: "Une erreur s'est produite" });

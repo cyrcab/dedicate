@@ -300,7 +300,7 @@ module.exports.checkTokenDiffuser = async (req, res, next) => {
     if (err) {
       return res
         .status(403)
-        .json({ message: "Vous n'êtes pas authorisé à faire ça 1" });
+        .json({ message: "Vous n'êtes pas authorisé à faire ça" });
     }
     if (user.refRole.toLowerCase() !== 'superadmin') {
         try{
@@ -315,7 +315,7 @@ module.exports.checkTokenDiffuser = async (req, res, next) => {
             if (checkUser.idEtablissement !== event.idEtablissement) {
                 return res
                     .status(403)
-                    .json({ message: "Vous n'êtes pas authorisé à faire ça 2" });
+                    .json({ message: "Vous n'êtes pas authorisé à faire ça" });
             }
         }
         catch (e) {
