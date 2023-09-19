@@ -45,7 +45,7 @@ module.exports.createTransaction = async (req, res) => {
     });
 
     // Retourner la transaction et le nouvel état de l'utilisateur
-    return res.json({ transaction, user: updatedUser });
+    return res.status(201).json({ transaction, user: updatedUser });
 };
 
 module.exports.createStripeSession = async (req, res) => {
