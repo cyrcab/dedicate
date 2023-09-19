@@ -16,7 +16,7 @@ describe("Test de l'API des utilisateurs", () => {
 
   describe('GET /getUser/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID de l'utilisateur n'existe pas", async () => {
-      const invalidUserId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
+      const invalidUserId = a; // Remplacez par un ID qui n'existe pas dans votre base de données
       const response = await request(URL).get(`/getUser/${invalidUserId}`);
 
       expect(response.status).toBe(404);
@@ -24,7 +24,7 @@ describe("Test de l'API des utilisateurs", () => {
     });
 
     it("devrait renvoyer les détails d'un utilisateur spécifique", async () => {
-      const userId = 1; // Remplacez par un ID valide d'un utilisateur existant dans votre base de données
+      const userId = 18; // Remplacez par un ID valide d'un utilisateur existant dans votre base de données
       const response = await request(URL).get(`/getUser/${userId}`);
 
       expect(response.status).toBe(200);
@@ -47,8 +47,8 @@ describe("Test de l'API des utilisateurs", () => {
     });
 
     it("devrait renvoyer une erreur 400 si l'adresse email est invalide", async () => {
-      const userId = 1; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
-      const invalidEmail = 'email.invalide'; // Remplacez par une adresse email invalide
+      const userId = 18; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
+      const invalidEmail = 'email.com'; // Remplacez par une adresse email invalide
       const response = await request(URL)
         .put(`/updateUser/${userId}`)
         .send({ email: invalidEmail });
@@ -58,12 +58,12 @@ describe("Test de l'API des utilisateurs", () => {
     });
 
     it("devrait mettre à jour les détails d'un utilisateur spécifique", async () => {
-      const userId = 1; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
+      const userId = 18; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
       const updatedUser = {
         nom: 'NouveauNom', // Remplacez par le nouveau nom que vous souhaitez donner à l'utilisateur
         prenom: 'NouveauPrenom', // Remplacez par le nouveau prénom que vous souhaitez donner à l'utilisateur
         email: 'nouveau@email.com', // Remplacez par la nouvelle adresse email que vous souhaitez donner à l'utilisateur
-        tel: '1234567890', // Remplacez par le nouveau numéro de téléphone que vous souhaitez donner à l'utilisateur
+        tel: '0767895643', // Remplacez par le nouveau numéro de téléphone que vous souhaitez donner à l'utilisateur
       };
       const response = await request(URL)
         .put(`/updateUser/${userId}`)
@@ -90,7 +90,7 @@ describe("Test de l'API des utilisateurs", () => {
     });
 
     it('devrait renvoyer une erreur 400 si le champ "password" est manquant', async () => {
-      const userId = 1; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
+      const userId = 18; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
       const response = await request(URL).put(`/updatePassword/${userId}`);
 
       expect(response.status).toBe(400);

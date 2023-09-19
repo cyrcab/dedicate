@@ -42,7 +42,7 @@ describe("Test pour l'enregistrement d'un établissement", () => {
     const response = await request(URL).post('/registerEta').send({
       nom: 'LOUCIF',
       prenom: 'Inasse',
-      email: 'inasse15@gmail.com',
+      email: 'inasse.com',
       tel: '0667391563',
       nomEta: 'La Tartiflette de tls',
       adresse: '3 rue des Potiers',
