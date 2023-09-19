@@ -6,7 +6,7 @@ const { PrismaClient } = require('@prisma/client');
 describe("Test de l'API des rôles", () => {
   describe('POST /createRole', () => {
     it('devrait renvoyer une erreur 400 si le champ "nom" est manquant', async () => {
-      const response = await request(app).post('/createRole').send({
+      const response = await request(URL).post('/createRole').send({
         // Envoyez ici un objet qui manque le champ "nom".
       });
 
@@ -15,8 +15,8 @@ describe("Test de l'API des rôles", () => {
     });
 
     it('devrait renvoyer une erreur 400 si le rôle existe déjà', async () => {
-      const existingRoleName = 'Admin'; // Remplacez par le nom d'un rôle existant dans votre base de données
-      const response = await request(app)
+      const existingRoleName = 'Client'; // Remplacez par le nom d'un rôle existant dans votre base de données
+      const response = await request(URL)
         .post('/createRole')
         .send({ nom: existingRoleName });
 
@@ -26,7 +26,7 @@ describe("Test de l'API des rôles", () => {
 
     it('devrait créer un nouveau rôle avec succès', async () => {
       const newRoleName = 'NouveauRole'; // Remplacez par un nom de rôle valide qui n'existe pas déjà dans votre base de données
-      const response = await request(app)
+      const response = await request(URL)
         .post('/createRole')
         .send({ nom: newRoleName });
 
@@ -39,7 +39,7 @@ describe("Test de l'API des rôles", () => {
 
   describe('GET /getRoles', () => {
     it('devrait renvoyer une liste de tous les rôles', async () => {
-      const response = await request(app).get('/getRoles');
+      const response = await request(URL).get('/getRoles');
 
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
@@ -49,8 +49,8 @@ describe("Test de l'API des rôles", () => {
 
   describe('GET /getRole/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID du rôle n'existe pas", async () => {
-      const invalidRoleId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app).get(`/getRole/${invalidRoleId}`);
+      const invalidRoleId = a; // Remplacez par un ID qui n'existe pas dans votre base de données
+      const response = await request(URL).get(`/getRole/${invalidRoleId}`);
 
       expect(response.status).toBe(404);
       expect(response.body.message).toBe("Ce rôle n'existe pas");
@@ -58,7 +58,7 @@ describe("Test de l'API des rôles", () => {
 
     it("devrait renvoyer les détails d'un rôle spécifique", async () => {
       const roleId = 1; // Remplacez par un ID valide d'un rôle existant dans votre base de données
-      const response = await request(app).get(`/getRole/${roleId}`);
+      const response = await request(URL).get(`/getRole/${roleId}`);
 
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
@@ -68,8 +68,8 @@ describe("Test de l'API des rôles", () => {
 
   describe('PUT /updateRole/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID du rôle n'existe pas", async () => {
-      const invalidRoleId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app)
+      const invalidRoleId = a; // Remplacez par un ID qui n'existe pas dans votre base de données
+      const response = await request(URL)
         .put(`/updateRole/${invalidRoleId}`)
         .send({
           // Envoyez ici un objet avec les mises à jour que vous souhaitez apporter au rôle.
@@ -81,7 +81,7 @@ describe("Test de l'API des rôles", () => {
 
     it('devrait renvoyer une erreur 400 si le rôle ne peut pas être modifié', async () => {
       const roleId = 1; // Remplacez par l'ID d'un rôle qui ne peut pas être modifié selon la logique de votre application
-      const response = await request(app).put(`/updateRole/${roleId}`).send({
+      const response = await request(URL).put(`/updateRole/${roleId}`).send({
         // Envoyez ici un objet avec les mises à jour que vous souhaitez apporter au rôle.
       });
 
@@ -92,7 +92,7 @@ describe("Test de l'API des rôles", () => {
     it("devrait mettre à jour les détails d'un rôle spécifique", async () => {
       const roleId = 3; // Remplacez par l'ID d'un rôle existant dans votre base de données qui peut être modifié
       const updatedRoleName = 'RoleModifie'; // Remplacez par le nom mis à jour que vous souhaitez donner au rôle
-      const response = await request(app)
+      const response = await request(URL)
         .put(`/updateRole/${roleId}`)
         .send({ nom: updatedRoleName });
 
@@ -106,7 +106,7 @@ describe("Test de l'API des rôles", () => {
   describe('DELETE /deleteRole/:id', () => {
     it("devrait renvoyer une erreur 400 si l'ID du rôle ne peut pas être supprimé", async () => {
       const roleId = 1; // Remplacez par l'ID d'un rôle qui ne peut pas être supprimé selon la logique de votre application
-      const response = await request(app).delete(`/deleteRole/${roleId}`);
+      const response = await request(URL).delete(`/deleteRole/${roleId}`);
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe(
@@ -115,8 +115,8 @@ describe("Test de l'API des rôles", () => {
     });
 
     it("devrait renvoyer une erreur 404 si l'ID du rôle n'existe pas", async () => {
-      const invalidRoleId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app).delete(
+      const invalidRoleId = a; // Remplacez par un ID qui n'existe pas dans votre base de données
+      const response = await request(URL).delete(
         `/deleteRole/${invalidRoleId}`,
       );
 
@@ -125,8 +125,8 @@ describe("Test de l'API des rôles", () => {
     });
 
     it('devrait supprimer un rôle spécifique', async () => {
-      const roleId = 3; // Remplacez par l'ID d'un rôle existant dans votre base de données qui peut être supprimé
-      const response = await request(app).delete(`/deleteRole/${roleId}`);
+      const roleId = 4; // Remplacez par l'ID d'un rôle existant dans votre base de données qui peut être supprimé
+      const response = await request(URL).delete(`/deleteRole/${roleId}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Le rôle a bien été supprimé');
@@ -134,4 +134,3 @@ describe("Test de l'API des rôles", () => {
     });
   });
 });
-module.exports = app;

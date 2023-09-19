@@ -6,7 +6,7 @@ const { PrismaClient } = require('@prisma/client');
 describe("Test de l'API d'enchères", () => {
   describe('POST /vote', () => {
     it('devrait renvoyer une erreur 400 si des informations sont manquantes', async () => {
-      const response = await request(app).post('/vote').send({
+      const response = await request(URL).post('/vote').send({
         // Envoyez ici un objet qui manque des informations requises pour l'enchère.
       });
 
@@ -15,7 +15,7 @@ describe("Test de l'API d'enchères", () => {
     });
 
     it("devrait renvoyer une erreur 404 si l'utilisateur ou l'événement n'existe pas", async () => {
-      const response = await request(app).post('/vote').send({
+      const response = await request(URL).post('/vote').send({
         // Envoyez ici un objet avec des IDs d'utilisateur et d'événement inexistants.
       });
 
@@ -32,7 +32,7 @@ describe("Test de l'API d'enchères", () => {
 
   describe('GET /getVotes/:id', () => {
     it("devrait renvoyer une erreur 400 si l'ID de l'événement est manquant", async () => {
-      const response = await request(app).get('/getVotes');
+      const response = await request(URL).get('/getVotes');
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('Il manque des informations');
@@ -50,4 +50,3 @@ describe("Test de l'API d'enchères", () => {
     });
   });
 });
-module.exports = app;

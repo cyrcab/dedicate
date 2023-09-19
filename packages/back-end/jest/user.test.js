@@ -6,7 +6,7 @@ const { PrismaClient } = require('@prisma/client');
 describe("Test de l'API des utilisateurs", () => {
   describe('GET /getAllUsers', () => {
     it('devrait renvoyer une liste de tous les utilisateurs', async () => {
-      const response = await request(app).get('/getAllUsers');
+      const response = await request(URL).get('/getAllUsers');
 
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
@@ -17,7 +17,7 @@ describe("Test de l'API des utilisateurs", () => {
   describe('GET /getUser/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID de l'utilisateur n'existe pas", async () => {
       const invalidUserId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app).get(`/getUser/${invalidUserId}`);
+      const response = await request(URL).get(`/getUser/${invalidUserId}`);
 
       expect(response.status).toBe(404);
       expect(response.body.message).toBe("Cet utilisateur n'existe pas");
@@ -25,7 +25,7 @@ describe("Test de l'API des utilisateurs", () => {
 
     it("devrait renvoyer les détails d'un utilisateur spécifique", async () => {
       const userId = 1; // Remplacez par un ID valide d'un utilisateur existant dans votre base de données
-      const response = await request(app).get(`/getUser/${userId}`);
+      const response = await request(URL).get(`/getUser/${userId}`);
 
       expect(response.status).toBe(200);
       expect(response.body.data).toBeDefined();
@@ -36,10 +36,10 @@ describe("Test de l'API des utilisateurs", () => {
   describe('PUT /updateUser/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID de l'utilisateur n'existe pas", async () => {
       const invalidUserId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app)
+      const response = await request(URL)
         .put(`/updateUser/${invalidUserId}`)
         .send({
-          // Envoyez ici un objet avec les mises à jour que vous souhaitez apporter à l'utilisateur.
+          // Envoyez ici un objet avec les mises à jour que vous souhaitez URLorter à l'utilisateur.
         });
 
       expect(response.status).toBe(404);
@@ -49,7 +49,7 @@ describe("Test de l'API des utilisateurs", () => {
     it("devrait renvoyer une erreur 400 si l'adresse email est invalide", async () => {
       const userId = 1; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
       const invalidEmail = 'email.invalide'; // Remplacez par une adresse email invalide
-      const response = await request(app)
+      const response = await request(URL)
         .put(`/updateUser/${userId}`)
         .send({ email: invalidEmail });
 
@@ -65,7 +65,7 @@ describe("Test de l'API des utilisateurs", () => {
         email: 'nouveau@email.com', // Remplacez par la nouvelle adresse email que vous souhaitez donner à l'utilisateur
         tel: '1234567890', // Remplacez par le nouveau numéro de téléphone que vous souhaitez donner à l'utilisateur
       };
-      const response = await request(app)
+      const response = await request(URL)
         .put(`/updateUser/${userId}`)
         .send(updatedUser);
 
@@ -79,7 +79,7 @@ describe("Test de l'API des utilisateurs", () => {
   describe('PUT /updatePassword/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID de l'utilisateur n'existe pas", async () => {
       const invalidUserId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app)
+      const response = await request(URL)
         .put(`/updatePassword/${invalidUserId}`)
         .send({
           // Envoyez ici un objet avec le nouveau mot de passe que vous souhaitez donner à l'utilisateur.
@@ -91,7 +91,7 @@ describe("Test de l'API des utilisateurs", () => {
 
     it('devrait renvoyer une erreur 400 si le champ "password" est manquant', async () => {
       const userId = 1; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
-      const response = await request(app).put(`/updatePassword/${userId}`);
+      const response = await request(URL).put(`/updatePassword/${userId}`);
 
       expect(response.status).toBe(400);
       expect(response.body.message).toBe('Missing field');
@@ -100,7 +100,7 @@ describe("Test de l'API des utilisateurs", () => {
     it("devrait mettre à jour le mot de passe d'un utilisateur spécifique", async () => {
       const userId = 1; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez mettre à jour
       const newPassword = 'NouveauMotDePasse'; // Remplacez par le nouveau mot de passe que vous souhaitez donner à l'utilisateur
-      const response = await request(app)
+      const response = await request(URL)
         .put(`/updatePassword/${userId}`)
         .send({ password: newPassword });
 
@@ -113,7 +113,7 @@ describe("Test de l'API des utilisateurs", () => {
   describe('DELETE /deleteUser/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID de l'utilisateur n'existe pas", async () => {
       const invalidUserId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app).delete(
+      const response = await request(URL).delete(
         `/deleteUser/${invalidUserId}`,
       );
 
@@ -123,7 +123,7 @@ describe("Test de l'API des utilisateurs", () => {
 
     it('devrait supprimer un utilisateur spécifique', async () => {
       const userId = 1; // Remplacez par l'ID d'un utilisateur existant dans votre base de données que vous souhaitez supprimer
-      const response = await request(app).delete(`/deleteUser/${userId}`);
+      const response = await request(URL).delete(`/deleteUser/${userId}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Utilisateur supprimé');

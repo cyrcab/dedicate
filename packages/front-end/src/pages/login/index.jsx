@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import {
   Avatar,
-  Snackbar,
   Button,
   TextField,
   FormControlLabel,
@@ -15,7 +14,6 @@ import {
   Box,
   Grid,
   Typography,
-  Alert,
   IconButton,
   InputAdornment,
 } from '@mui/material';
@@ -26,7 +24,9 @@ import club from '../../assets/club.jpg';
 import logo from '../../assets/logo.png';
 import { backendUrl } from '../../backendUrl';
 import { setSignedIn, setSignedOut } from '../../store/reducer/reducer';
+import { setDisplayNotification } from '../../store/reducer/notification';
 import { axiosApiInstance } from '../../axios.config';
+import { setUser } from '../../store/reducer/user.reducer';
 
 function saveToLocalStorage(key, value) {
   localStorage.setItem(key, value);
@@ -65,11 +65,6 @@ export default function Login() {
     event.preventDefault();
   };
 
-  const [visible, setVisible] = useState(false);
-  const [messageError, setMessageError] = useState('');
-
-  const onDismissAlert = () => setVisible(false);
-
   const checkToken = () => {
     const token = localStorage.getItem('token');
     const id = localStorage.getItem('userId');
@@ -86,7 +81,8 @@ export default function Login() {
     axiosApiInstance
       .get(`${backendUrl}users/${id}`)
       .then((res) => {
-        dispatch(setSignedIn(res.data.data));
+        dispatch(setSignedIn(true));
+        dispatch(setUser(res.data.data));
         navigate('/');
       })
       .catch((err) => console.log(err));
@@ -99,16 +95,17 @@ export default function Login() {
       .then((response) => {
         saveToLocalStorage('token', response.data.token);
         saveToLocalStorage('userId', response.data.data.id.toString());
-        dispatch(setSignedIn(true));
       })
       .then(() => {
         checkToken();
       })
       .catch((error) => {
-        setMessageError(error.response.data.message);
-        setVisible(true);
-        // eslint-disable-next-line no-console
-        console.log(error);
+        dispatch(
+          setDisplayNotification({
+            message: `Erreur lors de la connexion: ${error.response.data.message}`,
+            severity: 'ERROR',
+          }),
+        );
       });
   };
 
@@ -210,16 +207,6 @@ export default function Login() {
           </Box>
         </Box>
       </Grid>
-      <Snackbar
-        open={visible}
-        autoHideDuration={6000}
-        onClose={onDismissAlert}
-        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-      >
-        <Alert onClose={onDismissAlert} severity="error">
-          {messageError}
-        </Alert>
-      </Snackbar>
     </Grid>
   );
 }

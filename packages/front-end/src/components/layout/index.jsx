@@ -17,7 +17,15 @@ export default function Layout() {
         <Grid item xs={12} height={'10%'}>
           <Header activeTab={activeTab} />
         </Grid>
-        <Grid item xs={12} height={'90%'} style={{ padding: '10px' }}>
+        <Grid
+          item
+          xs={12}
+          height={'90%'}
+          style={{
+            padding: '10px',
+            overflow: 'scroll',
+          }}
+        >
           <Outlet />
         </Grid>
       </Grid>

@@ -3,10 +3,30 @@ import styles from "./styles";
 import { Avatar, Button } from "react-native-paper";
 import MusicList from "../components/MusicList";
 import { backendUrlImages } from '../backendUrl';
+import { useState, useEffect } from "react";
+import { axiosApiInstance } from "../../axios.config";
+import { backendUrl } from "../backendUrl";
 
 export default function EventInformation({ route }) {
   const { event } = route.params;
   const url = event.photo ? event.photo.replace(/\\/g, '/') : null;
+  const [music, setMusic] = useState([]);
+
+  useEffect(() => {
+    musicInfos();
+  }, []);
+
+  function musicInfos() {
+    axiosApiInstance
+      .get(backendUrl + 'diffuser/vote/' + event.id)
+      .then((response) => {
+        setMusic(response.data.enchere.diffuser);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
 
   return (
     <ImageBackground
@@ -33,7 +53,7 @@ export default function EventInformation({ route }) {
               </Button>
             </View>
       <ScrollView>
-        {event.enchere.map((item, index) => (
+        {music.map((item, index) => (
           <MusicList item={item} key={index} />
         ))}
       </ScrollView>

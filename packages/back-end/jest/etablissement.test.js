@@ -6,7 +6,7 @@ const { PrismaClient } = require('@prisma/client');
 describe("Test de l'API des établissements", () => {
   describe('GET /getAll', () => {
     it("devrait renvoyer une liste d'établissements avec les informations utilisateur et les événements inclus", async () => {
-      const response = await request(app).get('/getAll');
+      const response = await request(URL).get('/getAll');
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Etablissements récupérés');
@@ -18,7 +18,7 @@ describe("Test de l'API des établissements", () => {
   describe('GET /getOne/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID de l'établissement n'existe pas", async () => {
       const invalidId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app).get(`/getOne/${invalidId}`);
+      const response = await request(URL).get(`/getOne/${invalidId}`);
 
       expect(response.status).toBe(404);
       expect(response.body.message).toBe("Cet établissement n'existe pas");
@@ -26,7 +26,7 @@ describe("Test de l'API des établissements", () => {
 
     it("devrait renvoyer les détails d'un établissement spécifique avec les informations utilisateur et les événements inclus", async () => {
       const etablissementId = 1; // Remplacez par un ID valide d'un établissement existant dans votre base de données
-      const response = await request(app).get(`/getOne/${etablissementId}`);
+      const response = await request(URL).get(`/getOne/${etablissementId}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Etablissement récupéré');
@@ -37,8 +37,8 @@ describe("Test de l'API des établissements", () => {
 
   describe('PUT /update/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID de l'établissement n'existe pas", async () => {
-      const invalidId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app).put(`/update/${invalidId}`).send({
+      const invalidId = 23; // Remplacez par un ID qui n'existe pas dans votre base de données
+      const response = await request(URL).put(`/update/${invalidId}`).send({
         // Envoyez ici un objet avec les mises à jour que vous souhaitez apporter à l'établissement.
       });
 
@@ -51,7 +51,7 @@ describe("Test de l'API des établissements", () => {
       const updatedData = {
         // Remplacez ceci par les mises à jour que vous souhaitez apporter à l'établissement.
       };
-      const response = await request(app)
+      const response = await request(URL)
         .put(`/update/${etablissementId}`)
         .send(updatedData);
 
@@ -65,15 +65,15 @@ describe("Test de l'API des établissements", () => {
   describe('DELETE /delete/:id', () => {
     it("devrait renvoyer une erreur 404 si l'ID de l'établissement n'existe pas", async () => {
       const invalidId = 999999; // Remplacez par un ID qui n'existe pas dans votre base de données
-      const response = await request(app).delete(`/delete/${invalidId}`);
+      const response = await request(URL).delete(`/delete/${invalidId}`);
 
       expect(response.status).toBe(404);
       expect(response.body.message).toBe("Cet établissement n'existe pas");
     });
 
     it('devrait supprimer un établissement spécifique et mettre à jour les informations utilisateur associées', async () => {
-      const etablissementId = 1; // Remplacez par un ID valide d'un établissement existant dans votre base de données
-      const response = await request(app).delete(`/delete/${etablissementId}`);
+      const etablissementId = 2; // Remplacez par un ID valide d'un établissement existant dans votre base de données
+      const response = await request(URL).delete(`/delete/${etablissementId}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Etablissement supprimé');
@@ -81,4 +81,3 @@ describe("Test de l'API des établissements", () => {
     });
   });
 });
-module.exports = app;
