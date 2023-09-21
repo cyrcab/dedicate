@@ -17,8 +17,6 @@ export default function Header() {
     switch (pathname) {
       case '/':
         return 'Tableau de bord';
-      case '/playlist':
-        return 'Playlist';
       case '/events':
         return 'Événements';
       case '/events/create':

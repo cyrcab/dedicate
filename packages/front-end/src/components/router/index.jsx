@@ -2,7 +2,6 @@ import RequireAuth from './RequireAuth';
 import Layout from '../layout';
 import Login from '../../pages/login';
 import Register from '../../pages/register';
-// import Playlist from '../../pages/playlist';
 import MyEvents from '../../pages/myEvents';
 // import Users from '../../pages/users';
 import Settings from '../../pages/settings';

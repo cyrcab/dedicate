@@ -248,8 +248,20 @@ module.exports.getOne = async (req, res) => {
       },
       include: {
         Etablissement: true,
-        diffuser: true,
-        enchere: true,
+        diffuser: {
+          include: {
+            musique: true,
+          },
+        },
+        enchere: {
+          include: {
+            User: {
+              select: {
+                prenom: true,
+              },
+            },
+          },
+        },
       },
     });
     if (!event) {
@@ -374,7 +386,6 @@ module.exports.addUserToEvent = async (req, res) => {
         .status(400)
         .json({ message: "Cet utilisateur est déjà dans l'événement" });
     }
-
     const userEvent = await prisma.event.update({
       where: {
         id: parseInt(idEvent, 10),
@@ -675,13 +686,14 @@ module.exports.getEventActif = async (req, res) => {
     }
     const currentDate = DateTime.now()
       .setZone('utc')
-      .plus({ hours: 12 })
+      .plus({ hours: 2 })
       .toISO();
     const dateEvent = new Date(event.date);
     const dateEventParsed = DateTime.fromJSDate(dateEvent)
       .setZone('utc')
+      .plus({days: 1 })
       .toISO();
-    if (dateEventParsed < currentDate) {
+    if (currentDate > dateEventParsed) {
       await prisma.user.update({
         where: {
           id: parseInt(idUser, 10),
@@ -695,7 +707,7 @@ module.exports.getEventActif = async (req, res) => {
         .json({ message: "Cet événement n'est plus actif" });
     }
 
-    return res.status(200).json({ message: 'Événement récupéré', data: event });
+    return res.status(200).json({ message: 'Événement récupéré', data: event, date : currentDate, dateEventParsed});
   } catch (err) {
     return res
       .status(500)
