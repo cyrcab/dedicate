@@ -691,7 +691,7 @@ module.exports.getEventActif = async (req, res) => {
     const dateEvent = new Date(event.date);
     const dateEventParsed = DateTime.fromJSDate(dateEvent)
       .setZone('utc')
-      .plus({days: 1 })
+      .plus({ days: 1 })
       .toISO();
     if (currentDate > dateEventParsed) {
       await prisma.user.update({
@@ -707,7 +707,7 @@ module.exports.getEventActif = async (req, res) => {
         .json({ message: "Cet événement n'est plus actif" });
     }
 
-    return res.status(200).json({ message: 'Événement récupéré', data: event, date : currentDate, dateEventParsed});
+    return res.status(200).json({ message: 'Événement récupéré', data: event, date: currentDate, dateEventParsed });
   } catch (err) {
     return res
       .status(500)
